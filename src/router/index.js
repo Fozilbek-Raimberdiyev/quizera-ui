@@ -30,7 +30,25 @@ const router = createRouter({
               {
                 path : "/movies",
                 component : () => import("../pages/movies/List.vue"),
-                name : "movies"
+                name : "movies",
+                children : [
+                  {
+                path : "/movies/:id",
+                // component : () => import("../pages/movies/MovieSingle.vue"),
+                redirect : {name : "moviesingle"},
+                component : {
+                  render(c) {
+                    return c("router-view")
+                  }
+                },
+                name : "movieinfo"
+              },
+              {
+                path : "moviesingle", 
+                component : () => import("../pages/movies/MovieSingle.vue"),
+                name : "moviesingle" 
+              }
+                ]
               },
               {
                 path : "/weather",

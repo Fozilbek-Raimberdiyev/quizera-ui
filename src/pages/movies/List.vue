@@ -13,8 +13,9 @@
         <div>
             <div class="movies" v-if="movieStore.list.length">
             <div class="movie" v-for="(movie) in movieStore?.list" :key="movie?.id">
-            <!-- <pre>{{ movie }}</pre> -->
+            <router-link :to="`/movies/${movie.id}`">
             <p class="title">{{ movie.original_title }}</p>
+            </router-link>
             <img :src="`https://image.tmdb.org/t/p/w500/${movie?.backdrop_path}`" alt="Photo">
             <p class="desc">{{ movie.overview }}</p>
             <p class="rating">{{ movie.vote_average }}</p>

@@ -14,7 +14,7 @@ export const reqinterceptor = axios.interceptors.request.use(function (config) {
   //   return Promise.reject(error);
   // }
   );
-
+``
 export const resInterceptor =  axios.interceptors.response.use(function (response) {
     loading = false;
     console.log("request ended", loading)

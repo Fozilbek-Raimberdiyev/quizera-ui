@@ -2,8 +2,8 @@
 <div class="cont_principal" :class="{'cont_principal cont_error_active' : isStarted}">
 <div class="cont_error">
   
-<h1>Oops</h1>  
-  <p>The Page you're looking for isn't here.</p>
+<h1 class="title">Xatolik yuz berdi</h1>  
+  <p>Siz izlayotgan sahifa bu yerda emas.</p>
   </div>
 <div class="cont_aura_1"></div>
 <div class="cont_aura_2"></div>
@@ -16,7 +16,7 @@
       name: 'NotFound',
       data() {
         return {
-            isStarted : false
+          isStarted : false
         }
       },
       created() {
@@ -32,9 +32,11 @@
   margin:0px auto;
   padding: 0px;
 text-align:center;
+overflow-x: hidden;
 }
 body {
   background-color: #D4D9ED;
+  overflow-x: hidden;
 }
 .cont_principal {
 position: absolute;  
@@ -54,7 +56,7 @@ position: absolute;
  font-family: 'Lato', sans-serif;  
 font-weight: 400;
   font-size:150px;
-color:#fff;
+color:#ccc;
 position: relative;
 left:-100%;
 transition: all 0.5s;
