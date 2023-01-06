@@ -1,12 +1,14 @@
 import axios from "axios";
 import { ElNotification } from "element-plus";
-export var loading = false;
 import { useToast } from "vue-toastification";
+import { app } from "../main";
+import { loadingStore } from "../stores/loading.store";
 const toast = useToast()
 
 export const reqinterceptor = axios.interceptors.request.use(function (config) {
-    loading = true;
-    console.log("request started" ,loading)
+    const loadStore = loadingStore()
+    loadStore.$patch({loading : true})
+    // loadStore.setLoader()
     return config;
   }
   // , function (error) {
@@ -16,16 +18,32 @@ export const reqinterceptor = axios.interceptors.request.use(function (config) {
   );
 ``
 export const resInterceptor =  axios.interceptors.response.use(function (response) {
-    loading = false;
-    console.log("request ended", loading)
+  const loadStore = loadingStore()
+  loadStore.$patch({loading : false})
     return response;
   }, function (error) {
+    const loadStore = loadingStore()
+    loadStore.$patch({loading : false})
     // ElNotification({
     //   title : "Error",
     //   message : error.message || "Xatolik yuz berdi",
     //   type : "error",
-    //   customClass : "notitifacation"
     // })
     toast.error(error.message || "Xatolik yuz berdi")
     return Promise.reject(error);
   });
+
+  export let $watchLoader = () => {
+    let loadStore = loadingStore()
+    setInterval(() => {
+      if(loadStore.loading) {
+        app.config.globalProperties.$loading.show({
+          container : false
+        })
+      } else {
+        app.config.globalProperties.$loading.show({
+          container : false
+        }).hide()
+      }
+    }, 1000);
+  }

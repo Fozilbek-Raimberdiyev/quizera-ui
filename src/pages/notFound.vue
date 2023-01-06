@@ -4,6 +4,7 @@
   
 <h1 class="title">Xatolik yuz berdi</h1>  
   <p>Siz izlayotgan sahifa bu yerda emas.</p>
+  <el-button native-type="reset" type="warning" @click="$router.go(-1)">Orqaga qaytish</el-button>
   </div>
 <div class="cont_aura_1"></div>
 <div class="cont_aura_2"></div>

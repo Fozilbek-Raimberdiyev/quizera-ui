@@ -1,8 +1,13 @@
 <template>
-    <div v-for="(route, index) in routes" :key="index">
+    <!-- <div class="breadcrumbs" v-for="(route, index) in $route.matched" :key="index">
         <router-link :to="route?.path">{{ route.name }}</router-link>
-        <breadcrumbs v-if="route?.children" :routes="route?.children"></breadcrumbs>
-    </div>
+    </div> -->
+    <el-breadcrumb separator="/">
+    <el-breadcrumb-item v-show="route.name!='index'" style="text-transform: capitalize;" v-for="(route, index) in $route.matched" :key="index" :to="route.path">{{ route.name }}
+        {{ route?.children.matched }}
+    <el-breadcrumb-item v-if="route.children.matched">Children</el-breadcrumb-item>
+    </el-breadcrumb-item>
+  </el-breadcrumb>
 </template>
 <script>
 export default {
@@ -13,11 +18,18 @@ export default {
             default : []
         }
     },
+    computed : {
+        routesC() {
+            return this.$route
+        }
+    },
     created() {
-        console.log(this.routes)
+
     }
 }
 </script>
-<style>
-    
+<style scoped>
+    .breadcrumbs {
+        display: flex;
+    }
 </style>

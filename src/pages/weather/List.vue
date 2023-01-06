@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1>Weather</h1>
-        <Map></Map>
+        <!-- <Map></Map> -->
     </div>
 </template>
 <script>

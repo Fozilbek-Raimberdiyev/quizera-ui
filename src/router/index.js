@@ -7,7 +7,7 @@ const router = createRouter({
     {
       path : "/",
       component : () => import("../pages/homeView.vue"),
-      name : "home",
+      name : "Dashboard",
       meta : {
         requiresAuth : true
       },
@@ -41,7 +41,7 @@ const router = createRouter({
                     return c("router-view")
                   }
                 },
-                name : "movieinfo"
+                name : "movieinfo",
               },
               {
                 path : "moviesingle", 

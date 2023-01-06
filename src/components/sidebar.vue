@@ -377,4 +377,8 @@ export default {
 li.router-link-active, .router-link-exact-active span{
   color: yellow !important;
 }
+
+.router-link-active:hover, .router-link-exact-active:hover{
+  color: #11101D !important;
+}
 </style>

@@ -67,7 +67,6 @@ export default {
     watch: {
         "movieStore.search"() {
             if (!this.movieStore.search) {
-                this.movieStore.isStartedSearch = false;
                 // this.movieStore.total = this.movieStore.movies?.total_results;
                 this.getMovies()
             }
