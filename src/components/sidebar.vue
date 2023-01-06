@@ -6,7 +6,7 @@
     <div class="logo-details">
       <i class='bx bxl-vuejs' ></i>
         <div class="logo_name">Raimberdiyev</div>
-        <i class="bx bx-menu-alt-right" @click="toggleMenu"></i>
+        <!-- <i class="bx bx-menu-alt-right" @click="toggleMenu"></i> -->
     </div>
     <ul class="nav-list">
       <li>

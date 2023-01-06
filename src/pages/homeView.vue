@@ -1,23 +1,29 @@
 <template>
     <div class="wrapper">
-      <aside v-if="authStore.isAuth" class="left sidebar" :class="{open : menuState, close : !menuState}">
+      <aside  class="left sidebar" :class="{open : menuState, close : !menuState}">
         <sidebar @getState="getState"></sidebar>
       </aside>
-      <aside class="right main-content" :class="{open : menuState, close : !menuState}">
-        <div class="top-sidebar" :class="{open : menuState, close : !menuState}">
+      <aside ref="loadingContainer" class="right main-content" :class="{open : menuState, close : !menuState}">
+        <div class="header" :class="{open : menuState, close : !menuState}">
           <div>
             <bread-crumbs></bread-crumbs>
           </div>
           <div>
-            <i class='bx bx-user'></i>
-            {{$pinia.state.value.auth.user.email}}
+            <el-dropdown placement="bottom-start" trigger="click">
+              <el-button style="padding:10px;" type="info">
+                <i class='bx bx-user'></i>
+                <span style="margin-left: 5px;">{{ user.email }}</span>
+              </el-button>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item><i class='bx bxs-edit'></i>Ma'lumotlarni tahrirlash</el-dropdown-item>
+                  <el-dropdown-item @click="logOut"><i class='bx bx-exit'></i>Tizimdan chiqish</el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+          </el-dropdown>
           </div>
-          {{ loadingC }}
         </div>
         <div style="margin-right: 2rem;">
-          <!-- <transition name="el-fade-in">
-            <router-view />
-          </transition> -->
           <div v-show="!loading">
             <router-view v-slot="{ Component }">
             <transition name="el-fade-linear">
@@ -25,23 +31,29 @@
             </transition>
           </router-view>
           </div>
-          <div v-show="loading">
-            <!-- <loading
-                 :can-cancel="true"
-                 :on-cancel="true"
-                 :is-full-page="false"/> -->
+          <div class="loading vl-parent" v-show="loading">
 
                  <loading v-model:active="loading"
                  :can-cancel="true"
                  :on-cancel="false"
                  :is-full-page="true"
+                 :container="$refs.loadingContainer"
                  loader="bars"
                  opacity="0.9"
                  />
           </div>
         </div> 
+        <footer class="footer">
+          <div class="author">
+            <i class='bx bx-copyright'></i>
+            <span>Fozilbek Raimberdiyev</span>
+          </div>
+          <div class="year">
+            2023-yil
+          </div>
+        </footer>
       </aside>
-      
+    
     </div>
   </template>
   <script>
@@ -61,9 +73,8 @@ import breadCrumbs from '../components/breadCrumbs.vue'
       }
     },
     computed : {
-      ...mapStores(authStore),
+      ...mapState(authStore, ["user"]),
       ...mapState(loadingStore, ["loading"]),
-      ...mapStores(loadingStore),
       loadingC() {
         return 
       }
@@ -71,8 +82,12 @@ import breadCrumbs from '../components/breadCrumbs.vue'
     methods : {
       getState (value) {
         this.menuState = value
+      },
+      logOut () {
+        localStorage.removeItem("user")
+        this.$router.push("/login")
       }
-    }
+    },
     
   }
   </script>
@@ -87,9 +102,6 @@ import breadCrumbs from '../components/breadCrumbs.vue'
       padding: 0;
       display: flex;
       background: #eef0f8;
-    }
-    .left {
-    /* transition: all  .5s; */
     }
     .left.open {
       /* max-width: 20%; */
@@ -106,24 +118,45 @@ import breadCrumbs from '../components/breadCrumbs.vue'
       flex-basis: 100%;
       background: #eef0f8;
       position: relative;
+      min-height: 100vh;
     }
 
 
       .notitifacation {
         background: red;
       }
-      .top-sidebar {
+      .header {
         display: flex;
         align-items: center;
         justify-content: space-between;
         background: #fff;
         padding: 20px 2.9rem 20px 2.2rem;
       }
-      .top-sidebar.open {
+      .header.open {
         margin-left: -2.3rem;
         margin-bottom: 1rem;
       }
-      .top-sidebar.close {
-        margin-left: -1rem;
+      .header.close {
+        margin-left: -1.5rem;
+      }
+      .footer {
+        background: #fff;
+        padding: 0.5rem 2rem;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        /* left: -2.3rem; */
+      }
+      .footer span {
+        margin-left: 5px;
+      }
+      .main-content.open .footer{
+        left: -2.3rem;
+      }
+      .main-content.close .footer {
+        left: -1.2rem;
       }
   </style>

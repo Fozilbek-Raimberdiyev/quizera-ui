@@ -1,5 +1,6 @@
 <template>
-    <div class="form">
+    <div class="login_wrapper">
+        <div class="form">
         <form v-loading="loading" @submit.prevent="submit">
             <label>Login</label>
             <el-input required v-model="form.email" placeholder="Please input" />
@@ -11,6 +12,7 @@
             <!-- <el-button type="text" @click="loading=!loading">Loading</el-button> -->
             <!-- <button class="btn">Login</button> -->
         </form>
+    </div>
     </div>
 </template>
 <script>
@@ -38,7 +40,12 @@ export default {
     }
 }
 </script>
-<style>
+<style scoped>
+.login_wrapper {
+    background: #fff;
+    position: absolute;
+    inset: 0;
+}
 .form {
     width: 500px;
     margin: 5rem auto;

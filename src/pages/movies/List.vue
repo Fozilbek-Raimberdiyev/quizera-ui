@@ -1,24 +1,44 @@
 <template>
     <div>
-        <h1>Movies</h1>
-        <label>
+        <label style="text-align: right;">
             <el-input
+            style="width: 300px;"
+            clearable 
+        size="large"
         v-model="movieStore.search"
         class="w-50 m-2"
         placeholder="Type something"
         :prefix-icon="Search"
       />
-      <el-button @click="movieStore.searchMovies(movieStore.search)">Izlash</el-button>
+      <el-button type="primary" size="large" @click="movieStore.searchMovies(movieStore.search)">Izlash</el-button>
         </label>
         <div>
             <div class="movies" v-if="movieStore.list.length">
             <div class="movie" v-for="(movie) in movieStore?.list" :key="movie?.id">
+            <!-- <router-link :to="`/movies/${movie.id}`">
+            </router-link> -->
+            
             <router-link :to="`/movies/${movie.id}`">
-            <p class="title">{{ movie.original_title }}</p>
+                <p class="title"><el-link :to="`/movies/${movie.id}`" :underline="false">{{ movie.original_title }}</el-link></p>
             </router-link>
-            <img :src="`https://image.tmdb.org/t/p/w500/${movie?.backdrop_path}`" alt="Photo">
+            <!-- <el-link :underline="false">{{ movie.original_title }}</el-link> -->
+            <!-- <img :src="`https://image.tmdb.org/t/p/w500/${movie?.backdrop_path}`" alt="Photo"> -->
+            <el-image
+            style="width: 100px; height: 100px"
+            :src="`https://image.tmdb.org/t/p/w500/${movie?.backdrop_path}`"
+            :zoom-rate="1.2"
+            :preview-src-list="[`https://image.tmdb.org/t/p/w500/${movie?.backdrop_path}`]"
+            :initial-index="4"
+            fit="cover"
+            :hide-on-click-modal="true"
+            :draggable="false"
+            :lazy="true"
+            loading="lazy"
+            :preview-teleported="true"
+            />
             <p class="desc">{{ movie.overview }}</p>
             <p class="rating">{{ movie.vote_average }}</p>
+            <el-rate v-model="movie.vote_average" :colors="['#99A9BF', '#F7BA2A', '#FF9900']" />
         </div>
         <div class="pagination">
             <el-pagination  
@@ -33,7 +53,7 @@
         </div>
         </div>
         <div v-else>
-            <el-empty  :image-size="350" description="Ma'lumot topilmadi" />
+            <el-empty  :image-size="350" size="large" description="Ma'lumot topilmadi" />
         </div>
         <!-- <div v-else>
         
@@ -58,7 +78,8 @@ export default {
         return {
             Search,
             page: 1,
-            app
+            app,
+            rating : ""
         };
     },
     computed: {
@@ -91,6 +112,7 @@ export default {
     },
     created() {
         this.getMovies();
+        this.rating = ""
     },
     components: { Loading }
 }
@@ -112,5 +134,8 @@ export default {
         margin-top: 0.5rem;
         display: block;
         text-align: center;
+    }
+    .title a{
+        font-size: 18px;
     }
 </style>
