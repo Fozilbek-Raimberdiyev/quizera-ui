@@ -3,7 +3,7 @@
       <aside  class="left sidebar" :class="{open : menuState, close : !menuState}">
         <sidebar @getState="getState"></sidebar>
       </aside>
-      <aside ref="loadingContainer" class="right main-content" :class="{open : menuState, close : !menuState}">
+      <aside ref="mainContent" class="right main-content" :class="{open : menuState, close : !menuState}">
         <div class="header" :class="{open : menuState, close : !menuState}">
           <div>
             <bread-crumbs></bread-crumbs>
@@ -32,14 +32,13 @@
           </router-view>
           </div>
           <div class="loading vl-parent" v-show="loading">
-
                  <loading v-model:active="loading"
                  :can-cancel="true"
                  :on-cancel="false"
-                 :is-full-page="true"
-                 :container="$refs.loadingContainer"
+                 :is-full-page="fullPage ? null : $refs.mainContent"
+                 :container="fullPage ? null : $refs.mainContent"
                  loader="bars"
-                 opacity="0.9"
+                 opacity="1"
                  />
           </div>
         </div> 
@@ -70,6 +69,7 @@ import breadCrumbs from '../components/breadCrumbs.vue'
     data() {
       return {
         menuState : true,
+        fullPage : false
       }
     },
     computed : {
@@ -88,7 +88,9 @@ import breadCrumbs from '../components/breadCrumbs.vue'
         this.$router.push("/login")
       }
     },
-    
+    mounted() {
+      console.log()
+    }
   }
   </script>
   <style scoped>

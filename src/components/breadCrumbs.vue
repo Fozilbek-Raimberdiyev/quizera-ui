@@ -5,7 +5,7 @@
     <el-breadcrumb separator="/">
     <el-breadcrumb-item v-show="route.name!='index'" style="text-transform: capitalize;" v-for="(route, index) in $route.matched" :key="index" :to="route.path">{{ route.name }}
         {{ route?.children.matched }}
-    <el-breadcrumb-item v-if="route.children.matched">Children</el-breadcrumb-item>
+    <!-- <el-breadcrumb-item v-if="route.children.matched">Children</el-breadcrumb-item> -->
     </el-breadcrumb-item>
   </el-breadcrumb>
 </template>

@@ -4,18 +4,20 @@
         <div class="sidebar" :class="{open : isOpen, 'bx-menu bx-menu-alt-right' : isOpen, 'bx-menu-alt-right bx-menu' : !isOpen}">
           <i :class="[isOpen ? '' : 'bx bx-menu-alt-left']" id="btn" @click="toggleMenu" ></i>
     <div class="logo-details">
-      <i class='bx bxl-vuejs' ></i>
-        <div class="logo_name">Raimberdiyev</div>
+      <router-link to="/dashboard" class="logo">
+        <i class='bx bxl-vuejs' ></i>
+        <span class="logo_name">Raimberdiyev</span>
+      </router-link>>
         <!-- <i class="bx bx-menu-alt-right" @click="toggleMenu"></i> -->
     </div>
     <ul class="nav-list">
-      <li>
+      <!-- <li>
         <router-link to="/">
           <i class='bx bx-grid-alt'></i>
           <span class="links_name">Dashboard</span>
         </router-link>
          <span class="tooltip">Dashboard</span>
-      </li>
+      </li> -->
       <li>
        <router-link to="/news">
         <i class='bx bx-news' ></i>
@@ -380,5 +382,10 @@ li.router-link-active, .router-link-exact-active span{
 
 .router-link-active:hover, .router-link-exact-active:hover{
   color: #11101D !important;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
 }
 </style>

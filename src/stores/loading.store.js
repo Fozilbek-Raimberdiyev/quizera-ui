@@ -2,7 +2,8 @@ import { defineStore } from "pinia";
 import { app } from "../main";
 export const loadingStore = defineStore("loading", {
     state : () => ({
-        loading : false
+        loading : false,
+        isMounted : false
     }),
     actions : {
         setLoader() {

@@ -7,7 +7,7 @@ import router from './router'
 
 import OpenLayersMap from 'vue3-openlayers'
 import 'vue3-openlayers/dist/vue3-openlayers.css'
- import  {resInterceptor, reqinterceptor, $watchLoader} from "./services/api.service"
+ import  {resInterceptor, reqinterceptor} from "./services/api.service"
 
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
