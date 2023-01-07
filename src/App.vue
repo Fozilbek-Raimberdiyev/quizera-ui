@@ -51,10 +51,6 @@ export default {
   margin: 0;
   padding: 0;
 }
-  .back {
-    /* background: #eef0f8;
-    height: 100vh; */
-  }
   .loading  {
     position: absolute;
     top: 40%;
