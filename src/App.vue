@@ -39,7 +39,7 @@ export default {
   mounted() {
     setTimeout(() => {
       this.loadingStore.$patch({isMounted : true})
-    }, 500);
+    }, 1000);
     },
   created() {
     // this.setLoader()
