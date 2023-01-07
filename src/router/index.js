@@ -53,7 +53,7 @@ const routes = [
           },
           {
             path : ":id",
-            component : () => import("../pages/movies/movieSingle.vue"),
+            component : () => import("../pages/movies/MovieSingle.vue"),
             name : "Informatsiya"
           }
         ]
