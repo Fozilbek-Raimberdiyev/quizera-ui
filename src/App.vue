@@ -54,7 +54,7 @@ export default {
   .loading  {
     position: absolute;
     top: 40%;
-    left: 45%;
-    width: 100px;
+    left: 50%;
+    width: 50px;
   }
 </style>

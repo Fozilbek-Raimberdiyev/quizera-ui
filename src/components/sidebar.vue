@@ -1,23 +1,21 @@
 <template>
-    <div>
-      
-        <div class="sidebar" :class="{open : isOpen, 'bx-menu bx-menu-alt-right' : isOpen, 'bx-menu-alt-right bx-menu' : !isOpen}">
-          <i :class="[isOpen ? '' : 'bx bx-menu-alt-left']" id="btn" @click="toggleMenu" ></i>
+    <!-- <div>
+    <div class="sidebar" :class="{open : isOpen, 'bx-menu bx-menu-alt-right' : isOpen, 'bx-menu-alt-right bx-menu' : !isOpen}">
+      <i :class="[isOpen ? '' : 'bx bx-menu-alt-left']" id="btn" @click="toggleMenu" ></i>
     <div class="logo-details">
-      <router-link to="/dashboard" class="logo">
+      <router-link to="/" class="logo">
         <i class='bx bxl-vuejs' ></i>
         <span class="logo_name">Raimberdiyev</span>
       </router-link>>
-        <!-- <i class="bx bx-menu-alt-right" @click="toggleMenu"></i> -->
     </div>
     <ul class="nav-list">
-      <!-- <li>
-        <router-link to="/">
-          <i class='bx bx-grid-alt'></i>
-          <span class="links_name">Dashboard</span>
-        </router-link>
-         <span class="tooltip">Dashboard</span>
-      </li> -->
+      <li>
+       <router-link to="/news">
+        <i class='bx bx-news' ></i>
+         <span class="links_name">Management</span>
+       </router-link>
+       <span class="tooltip">News</span>
+     </li>
       <li>
        <router-link to="/news">
         <i class='bx bx-news' ></i>
@@ -69,12 +67,10 @@
      </li>
      
     </ul>
-    <!-- <li class="profile">
-         <div>{{ authStore.user?.email }}</div>
-         <i @click="logOut" class='bx bx-log-out' id="log_out" ></i>
-     </li> -->
   </div>
-    </div>
+    </div> -->
+    <sidebar-menu  width="250px" :collapsed="false" :menu="menu">
+    </sidebar-menu>
 </template>
 <script>
 import { mapStores } from 'pinia'
@@ -82,7 +78,50 @@ import {authStore} from "../stores/counter"
 export default {
     data() {
         return {
-            isOpen : true
+            isOpen : true,
+            menu : [
+              {
+                header : "Main Navigation",
+                hiddenOnCollapse : true,
+              },
+              {
+                // href : "/management",
+                title : "Management",
+                icon : "bx bx-cog",
+                child : [
+                  {
+                    href : "/management/users",
+                    title : "Users",
+                    icon : "bi bi-dot"
+                  },
+                  {
+                    href : "/management/roles",
+                    title : "Roles",
+                    icon : "bi bi-dot"
+                  },
+                ]
+              },
+              {
+                href : "/news",
+                title : "News",
+                icon : "bx bx-news"
+              },
+              {
+                href : "/posts",
+                title : "Posts",
+                icon : "bi bi-postcard"
+              },
+              {
+                href : "/movies",
+                title : "Movies",
+                icon : "bx bx-movie"
+              },
+              {
+                href : "/weather",
+                title : "Weather",
+                icon : "bi bi-cloud-sun"
+              }
+            ]
         }
     },
     computed : {
@@ -376,8 +415,12 @@ export default {
   color: #42b883;
 }
 
-li.router-link-active, .router-link-exact-active span{
+.router-link-active, .router-link-exact-active span{
   color: yellow !important;
+}
+
+a.router-link-active {
+  color: red !important;
 }
 
 .router-link-active:hover, .router-link-exact-active:hover{
@@ -387,5 +430,17 @@ li.router-link-active, .router-link-exact-active span{
   display: flex;
   align-items: center;
   text-decoration: none;
+}
+
+.vsm--dropdown {
+  /* margin-left: 0.5rem; */
+  display: inline-block;
+}
+.v-sidebar-menu .vsm--dropdown {
+ background: red;
+}
+
+.menu-item:active {
+  background-color: red;
 }
 </style>

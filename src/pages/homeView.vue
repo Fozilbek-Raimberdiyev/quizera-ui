@@ -51,8 +51,9 @@
             2023-yil
           </div>
         </footer>
+        <el-footer>
+        </el-footer>
       </aside>
-    
     </div>
   </template>
   <script>
@@ -69,12 +70,13 @@ import breadCrumbs from '../components/breadCrumbs.vue'
     data() {
       return {
         menuState : true,
-        fullPage : false
+        fullPage : false,
       }
     },
     computed : {
-      ...mapState(authStore, ["user"]),
+      ...mapState(authStore, ["user", "authLogout", "authSucces"]),
       ...mapState(loadingStore, ["loading"]),
+      ...mapStores(authStore),
       loadingC() {
         return 
       }
@@ -85,6 +87,12 @@ import breadCrumbs from '../components/breadCrumbs.vue'
       },
       logOut () {
         localStorage.removeItem("user")
+        // this.authSucces = false
+        // this.authLogout = true
+        this.authStore.$patch({
+          authLogout : true,
+          authSucces : false
+        })
         this.$router.push("/login")
       }
     },
@@ -106,7 +114,6 @@ import breadCrumbs from '../components/breadCrumbs.vue'
       background: #eef0f8;
     }
     .left.open {
-      /* max-width: 20%; */
       margin-right: 18rem;
   
     }
@@ -115,8 +122,6 @@ import breadCrumbs from '../components/breadCrumbs.vue'
       
     }
     .right {
-      /* margin-left: -2rem;
-      margin-right: 2rem; */
       flex-basis: 100%;
       background: #eef0f8;
       position: relative;
@@ -150,7 +155,6 @@ import breadCrumbs from '../components/breadCrumbs.vue'
         display: flex;
         justify-content: space-between;
         align-items: center;
-        /* left: -2.3rem; */
       }
       .footer span {
         margin-left: 5px;
@@ -158,7 +162,38 @@ import breadCrumbs from '../components/breadCrumbs.vue'
       .main-content.open .footer{
         left: -2.3rem;
       }
-      .main-content.close .footer {
-        left: -1.2rem;
-      }
   </style>
+
+  <!-- <template>
+    <q-layout view="lhh LpR lFf">
+  
+      <q-header class="bg-primary text-white">
+        <q-toolbar>
+          <q-toolbar-title>
+            <q-avatar>
+              <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg">
+            </q-avatar>
+            Title
+          </q-toolbar-title>
+        </q-toolbar>
+      </q-header>
+
+      <q-drawer></q-drawer>
+  
+      <q-page-container>
+        <router-view />
+      </q-page-container>
+  
+      <q-footer elevated class="bg-grey-8 text-white">
+        <q-toolbar>
+          <q-toolbar-title>
+            <q-avatar>
+              <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg">
+            </q-avatar>
+            <div>Title</div>
+          </q-toolbar-title>
+        </q-toolbar>
+      </q-footer>
+  
+    </q-layout>
+  </template> -->

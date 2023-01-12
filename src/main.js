@@ -1,7 +1,7 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 const pinia = createPinia()
-
+pinia.use(abilityPlugin)
 import App from './App.vue'
 import router from './router'
 
@@ -19,6 +19,14 @@ import Toast from "vue-toastification";
 // Import the CSS or use your own!
 import "vue-toastification/dist/index.css";
 
+import VueSidebarMenu from 'vue-sidebar-menu'
+import 'vue-sidebar-menu/dist/vue-sidebar-menu.css'
+
+import { Quasar } from 'quasar'
+// Import icon libraries
+import '@quasar/extras/material-icons/material-icons.css'
+import 'quasar/src/css/index.sass'
+
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
 import ClipLoader from "vue-spinner/src/ClipLoader.vue"
 import GridLoader from "vue-spinner/src/GridLoader.vue"
@@ -35,6 +43,8 @@ import MoonLoader from 'vue-spinner/src/MoonLoader.vue'
 import RingLoader from 'vue-spinner/src/RingLoader.vue'
 import BounceLoader from 'vue-spinner/src/BounceLoader.vue'
 import DotLoader from 'vue-spinner/src/DotLoader.vue'
+import { abilityPlugin } from './services/ability'
+
 
 
 
@@ -44,19 +54,19 @@ export const app = createApp(App)
 app.component('pulse-loader',PulseLoader);
 app.component("grid-loader", ClipLoader),
 app.component("grid-loader", GridLoader)
-app.use("rise-loader", RiseLoader)
-app.use("beat-loader", BeatLoader)
-app.use("sync-loader", SyncLoader)
-app.use("rotate-loader", RotateLoader)
-app.use("fade-loader", FadeLoader)
-app.use("pacman-loader", PacmanLoader)
-app.use("square-loader", SquareLoader)
-app.use("scale-loader", ScaleLoader)
-app.use("skew-loader", SkewLoader)
-app.use("moon-loader", MoonLoader)
-app.use("ring-loader", RingLoader)
-app.use("bounce-loader", BounceLoader)
-app.use("dot-loader", DotLoader)
+app.component("rise-loader", RiseLoader)
+app.component("beat-loader", BeatLoader)
+app.component("sync-loader", SyncLoader)
+app.component("rotate-loader", RotateLoader)
+app.component("fade-loader", FadeLoader)
+app.component("pacman-loader", PacmanLoader)
+app.component("square-loader", SquareLoader)
+app.component("scale-loader", ScaleLoader)
+app.component("skew-loader", SkewLoader)
+app.component("ring-loader", RingLoader)
+app.component("bounce-loader", BounceLoader)
+app.component("dot-loader", DotLoader)
+
 
 
 
@@ -69,5 +79,8 @@ app.use(Toast)
 app.use(resInterceptor)
 app.use(reqinterceptor)
 app.use(LoadingPlugin)
-// app.use($watchLoader)
+app.use(Quasar, {
+    plugins: {}, // import Quasar plugins and add here
+  })
+app.use(VueSidebarMenu)
 app.mount('#app')

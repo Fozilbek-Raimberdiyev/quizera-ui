@@ -4,41 +4,20 @@
             <el-input
             style="width: 300px;"
             clearable 
-        size="large"
-        v-model="movieStore.search"
-        class="w-50 m-2"
-        placeholder="Type something"
-        :prefix-icon="Search"
+            size="large"
+            v-model="searchName"
+            class="w-50 m-2"
+            placeholder="Type something"
+            :prefix-icon="Search"
       />
-      <el-button type="primary" size="large" @click="movieStore.searchMovies(movieStore.search)">Izlash</el-button>
+      <el-button type="primary" size="large" @click="searchMovies(search)">Izlash</el-button>
         </label>
         <div>
-            <div class="movies" v-if="movieStore.list.length">
-            <div class="movie" v-for="(movie) in movieStore?.list" :key="movie?.id">
-            <!-- <router-link :to="`/movies/${movie.id}`">
-            </router-link> -->
-            
+            <div class="movies" v-if="list.length">
+            <div class="movie" v-for="(movie) in list" :key="movie?.id">
             <router-link @click="toInfo=true" :to="`/movies/${movie.id}`">
-                <p class="title"><el-link :to="`/movies/${movie.id}`" :underline="false">{{ movie.original_title }}</el-link></p>
+                <p class="title"><el-link :to="`/movies/${movie.id}`" :underline="false"><b>{{ movie.original_title }}</b></el-link></p>
             </router-link>
-            <!-- <el-link :underline="false">{{ movie.original_title }}</el-link> -->
-            <!-- <img :src="`https://image.tmdb.org/t/p/w500/${movie?.backdrop_path}`" alt="Photo"> -->
-            <!-- <el-image
-            style="width: 100px; height: 100px"
-            :src="`https://image.tmdb.org/t/p/w500/${movie?.backdrop_path}`"
-            :zoom-rate="1.2"
-            :preview-src-list="[`https://image.tmdb.org/t/p/w500/${movie?.backdrop_path}`]"
-            :initial-index="4"
-            fit="cover"
-            :hide-on-click-modal="true"
-            :draggable="false"
-            :lazy="true"
-            loading="lazy"
-            :preview-teleported="true"
-            />
-            <p class="desc">{{ movie.overview }}</p>
-            <p class="rating">{{ movie.vote_average }}</p>
-            <el-rate v-model="movie.vote_average" :colors="['#99A9BF', '#F7BA2A', '#FF9900']" /> -->
             <el-skeleton :loading="loading">
                 <template #template>
                     <el-skeleton-item variant="image" style="width: 240px; height: 240px" />
@@ -57,21 +36,29 @@
             loading="lazy"
             :preview-teleported="true"
             />
-                </template>
+            </template>
             </el-skeleton>
-            <p class="desc">{{ movie.overview }}</p>
-            <p class="rating">{{ movie.vote_average }}</p>
+            <p class="description">{{ movie.overview }}</p>
+            <p class="rating">
+                <b>Rating</b> : 
+                {{ movie.vote_average }}
+            </p>
+            <p class="realease_date">
+                <b>Release date</b> : 
+                {{ movie.release_date }}
+            </p>
         </div>
         <div class="pagination">
             <el-pagination  
             :page-size="20"
             :pager-count="11"
             layout="prev, pager, next"
-            :total="movieStore.total"
+            :total="total"
             background
             :v-model:current-page="page"
             @update:current-page="updateCurPage"            
             />
+            
         </div>
         </div>
         <div v-else>
@@ -84,13 +71,6 @@
         :is-full-page="true"/>
         </div> -->
         </div>
-        <el-dialog
-        v-model="toInfo"
-        title="Tips"
-        width="50%"
-        >
-        <router-view></router-view>
-        </el-dialog>
     </div>
 </template>
 <script>
@@ -99,7 +79,7 @@ import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/css/index.css';
 import {app} from "../../main"
 import {  Search } from '@element-plus/icons-vue'
-import { mapStores, mapActions, mapState } from 'pinia'
+import {  mapActions, mapState } from 'pinia'
 import { movieStore } from '../../stores/movie.store';
 import { loadingStore } from '../../stores/loading.store';
 export default {
@@ -109,16 +89,16 @@ export default {
             page: 1,
             app,
             rating : "",
-            toInfo : false
+            searchName : ""
         };
     },
     computed: {
-        ...mapStores(movieStore, ["search"]),
+        ...mapState(movieStore, ["list", "total", "search"]),
         ...mapState(loadingStore, ["loading"])
     },
     watch: {
-        "movieStore.search"() {
-            if (!this.movieStore.search) {
+        search() {
+            if (!this.search) {
                 // this.movieStore.total = this.movieStore.movies?.total_results;
                 this.getMovies()
             }
@@ -128,21 +108,14 @@ export default {
         }
     },
     methods: {
-        ...mapActions(movieStore, ["searchMovies"]),
-        async getMovies() {
-            try {   
-                this.movieStore.getList();
-            }
-            catch(e) {
-            }
-        },
+        ...mapActions(movieStore, ["searchMovies", "getPage", "getList"]),
         updateCurPage(v) {
             this.page = v;
-            this.movieStore.getPage(v);
+            this.getPage(v);
         }
     },
     created() {
-        this.getMovies();
+        this.getList();
         this.rating = ""
     },
     components: { Loading }
@@ -154,6 +127,7 @@ export default {
         flex-wrap: wrap;
         justify-content: space-between;
         align-items: center;
+        margin-top: 3rem;
     }
     .movie {
         flex-basis: 45%;
@@ -162,11 +136,15 @@ export default {
         height: 250px;
     }
     .pagination {
-        margin-top: 0.5rem;
+        margin: 3rem 0;
         display: block;
-        text-align: center;
+        margin-left: 3rem;
     }
     .title a{
         font-size: 18px;
+    }
+    .description {
+        height: 200px;
+        overflow-y: auto;
     }
 </style>

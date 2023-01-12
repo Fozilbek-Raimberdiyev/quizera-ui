@@ -7,7 +7,7 @@
             <label>Password</label>
             <el-input required type="password" v-model="form.password" show-password placeholder="Please input" />
             <button>
-                <el-button type="button">Login</el-button>
+                <el-button style="background: #ccc; cursor: pointer;" native-type="submit">Login</el-button>
             </button>
             <!-- <el-button type="text" @click="loading=!loading">Loading</el-button> -->
             <!-- <button class="btn">Login</button> -->
@@ -16,7 +16,7 @@
     </div>
 </template>
 <script>
-import { mapStores } from 'pinia'
+import { mapState, mapStores } from 'pinia'
 import { authStore } from "../stores/counter"
 export default {
     data : () => {
@@ -29,12 +29,17 @@ export default {
         }
     },
     computed : {
+        ...mapState(authStore, ["authSucces", "user"]),
         ...mapStores(authStore)
     },
     methods : {
         submit () {
             localStorage.setItem("user", JSON.stringify(this.form))
-           this.authStore.user = JSON.parse(localStorage.getItem("user"))
+        //    this.authStore.$patch({
+        //     authLogout : false,
+        //     authSucces : true,
+        //     // user : JSON.parse(localStorage.getItem("user"))
+        //    })
            this.$router.push("/")
         }
     }

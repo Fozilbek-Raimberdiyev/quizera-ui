@@ -1,31 +1,38 @@
 <template>
-    <!-- <div class="breadcrumbs" v-for="(route, index) in $route.matched" :key="index">
-        <router-link :to="route?.path">{{ route.name }}</router-link>
-    </div> -->
     <el-breadcrumb separator="/">
-    <el-breadcrumb-item v-show="route.name!='index'" style="text-transform: capitalize;" v-for="(route, index) in $route.matched" :key="index" :to="route.path">{{ route.name }}
-        {{ route?.children.matched }}
-    <!-- <el-breadcrumb-item v-if="route.children.matched">Children</el-breadcrumb-item> -->
+    <span v-if="breadcrumbs.length>=2 && breadcrumbs[1].label!='Dashboard'">
+        <el-breadcrumb-item  style="text-transform: capitalize;" v-for="(route, index) in breadcrumbs" :key="index"  :to="route.path">{{ route.label }}
     </el-breadcrumb-item>
+    </span>
+    <span v-else>
+        <el-breadcrumb class="is-link" style="font-weight: 600; cursor: pointer;" to="/" >Dashboard</el-breadcrumb>
+    </span>
   </el-breadcrumb>
 </template>
 <script>
 export default {
     name : "breadcrumbs",
-    props : {
-        routes : {
-            type : Array,
-            default : []
+    data() {
+        {
+
         }
     },
     computed : {
-        routesC() {
-            return this.$route
-        }
+        breadcrumbItemsC() {
+            return this.breadcrumbItems
+        },
+        breadcrumbs() {
+        let routes = this.$route.matched
+        .filter((el) => el.name)
+        .map((el) => {
+          return {
+            path: el.name !== this.$route.name ? el.path : "",
+            label: el.name,
+          };
+        });
+      return routes;
     },
-    created() {
-
-    }
+    },
 }
 </script>
 <style scoped>

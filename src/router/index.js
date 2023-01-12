@@ -5,11 +5,33 @@ import { loadingStore } from '../stores/loading.store'
 import { app } from '../main'
 import { h, resolveComponent } from 'vue'
 
+// let weather = "<></>"
+// let weatherInfo = "<></>"
+// let weatherInfoUpdate = "<></>"
+
+const weather = {
+  template : `
+    <h1>Weather</h1>
+  `
+}
+
+const weatherInfo = {
+  template : `
+    <h1>Weather Info</h1>
+  `
+}
+
+const weatherInfoUpdate = {
+  template : `
+    <h1>Weather Info Update</h1>
+  `
+}
+
 const routes = [
   {
     path : "/",
     component : () => import("../pages/homeView.vue"),
-    name : "homeView",
+    name : "Dashboard",
     meta : {
       public : false,
     },
@@ -22,6 +44,69 @@ const routes = [
             public: false,
             isMain : true
         },
+    },
+    {
+      path : "/management",
+      name : "Management",
+      component : {
+        render() {
+          return h(resolveComponent("router-view"))
+        }
+      },
+      children : [
+        {
+          path : "users",
+          name : "Users",
+          component : {
+            render() {
+              return h(resolveComponent("router-view"))
+            }
+          },
+          children : [
+            {
+              path : "",
+              name : "",
+              component : () => import("../pages/management/users/List.vue"),
+            },
+            {
+              path : "add",
+              name : "User add",
+              component : () => import("../pages/management/users/AddOrUpdate.vue")
+            },
+            {
+              path : "update",
+              name : "User update",
+              component : () => import("../pages/management/users/AddOrUpdate.vue")
+            }
+          ]
+        },
+        {
+            path : "roles",
+            name : "Roles",
+            component : {
+              render() {
+                return h(resolveComponent("router-view"))
+              }
+            },
+            children : [
+              {
+                path : "",
+                name : "",
+                component : () => import("../pages/management/roles/List.vue")
+              },
+              {
+                path : "create",
+                name : "Role create",
+                component : () => import("../pages/management/roles/AddOrUpdate.vue")
+              },
+              {
+                path : "update",
+                name : "Role update",
+                component : () => import("../pages/management/roles/AddOrUpdate.vue")
+              }
+            ]
+        }
+      ]
     },
     {
         path : "/news",
@@ -49,15 +134,61 @@ const routes = [
           {
             path : "",
             component : () => import("../pages/movies/List.vue"),
-            name : "movies"
+            name : ""
           },
           {
             path : ":id",
             component : () => import("../pages/movies/MovieSingle.vue"),
-            name : "Informatsiya"
+            name : "Informatsiya",
+            meta : {
+              info : true
+            }
           }
         ]
-    }
+    },
+        {
+          path : "/weather",
+          component : {
+            render() {
+              return h(resolveComponent("router-view"))
+            }
+          },
+          name : "Weather",
+          children : [
+            {
+              path : "",
+              component : weather,
+              name : "Weather",
+            },
+            {
+              path : ":id",
+              // component : weatherInfo,
+              component : {
+                render() {
+                  return h(resolveComponent("router-view"))
+                }
+              },
+              name : "Informatiya",
+              meta : {
+                info : false
+              },
+              children : [
+                {
+                  path : "",
+                  component : weatherInfo
+                },
+                {
+                  path : "update",
+                  component : weatherInfoUpdate,
+                  name : "Weather update",
+                  meta : {
+                    info : true
+                  }
+                }
+              ]
+            }
+          ]
+        }
     ]
   },
   {
@@ -92,109 +223,7 @@ const routes = [
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes  : routes
-  // routes: [
-  //   {
-  //     path : "/",
-  //     redirect : "/dashboard",
-  //     component : () => import("../pages/homeView.vue"),
-  //     name : "Dashboard",
-  //     meta : {
-  //       requiresAuth : true
-  //     },
-  //     children : [
-  //       {
-  //         path : "/dashboard",
-  //         component : () => import("../pages/mainLayout.vue"),
-  //         name: "index"
-  //       },
-  //       {
-  //         path : "/posts",
-  //         component : () => import("../pages/posts.vue"),
-  //         name : "posts"
-  //             },
-  //       {
-  //       path : "/news",
-  //       component : news,
-  //       name : "news"
-  //       },
-  //       {
-  //         path : "/movies",
-  //         component : () => import("../pages/movies/List.vue"),
-  //         component : {
-  //           render() {
-  //             return h(resolveComponent("router-view"))
-  //           }
-  //         },
-  //         redirect : {label : "moviesList"},
-  //         name : "movies",
-  //       children : [
-  //           {
-  //             path : "",
-  //             component : () => import("../pages/movies/List.vue"),
-  //             label : "moviesList"
-  //           },
-  //           {
-  //             path : ":id",
-  //             component : () => import("../pages/movies/MovieSingle.vue"),
-  //             name : "movieInfo", 
-  //           }
-  //         ]
-  //       },
-  //       {
-  //         path : "/weather",
-  //         component : () => import("../pages/weather/List.vue"),
-  //         name : "weather"
-  //       }
-  //     ]
-  //   },
-  //   {
-  //     path : "/login",
-  //     component : () => import("../pages/login.vue"),
-  //     name : "login"
-  //   },
-  //   {
-  //     path : "/register",
-  //     component : () => import("../pages/register.vue"),
-  //     name : "register"
-  //   },
-  //   {
-  //     path : "/404",
-  //     component : () => import("../pages/notFound.vue"),
-  //     name : "NotFound"
-  //   },
-  //   {
-  //     path: '/:pathMatch(.*)*',
-  //     redirect : {name : "NotFound"}
-  //   }
-  // ]
-})
-
-// router.beforeEach((to, from, next) => {
-//   let auth = authStore()
-
-//   if (to.meta.requiresAuth && !auth.isAuth) {
-//    next({name : "login"})
-//   } else {
-//      next()
-//   }
-// }) 
-
-
-
-// router.beforeEach((to, from, next) => {
-//   const isPublic = to.meta.isPublic;
-//   const loggedIn = authStore().isAuth
-//   const loadStore = loadingStore()
-//   let auth = authStore()
-//   if(to.meta.requiresAuth && !auth.isAuth) {
-//     next({name : "login"})
-//   } else {
-//     loadStore.$patch({loading : true})
-//     next()
-//     loadStore.$patch({loading : false})
-//   }
-// })
+  routes  : routes})
 router.beforeEach((to, from, next) => {
   
   const isAuthenticated = authStore().isAuth;
@@ -210,11 +239,9 @@ router.beforeEach((to, from, next) => {
     //   next()
     //   loadingStore().$patch({loading : false})
     // }, 300);
-    if(isMain && !loadingStore().isMounted) {
-      loadingStore().$patch({loading : true})
+    if(!loadingStore().isMounted) {
       setTimeout(() => {
         next()
-        loadingStore().$patch({loading : false})
       }, 500);
     } else {
       next()
