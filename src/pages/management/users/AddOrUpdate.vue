@@ -70,7 +70,7 @@
         </div>
       </div>
       <el-button
-        v-if="currentIndex<0"
+        v-if="currentIndex < 0"
         size="large"
         class="btn"
         type="primary"
@@ -86,6 +86,7 @@
         >Update</el-button
       >
     </form>
+    <el-button size="large" @click="justDoIt">justDoIt</el-button>
   </div>
 </template>
 <script>
@@ -143,13 +144,25 @@ export default {
         this.v$.$touch();
       }
     },
+    justDoIt() {
+      let clonedObj = Object.assign({},this.form)
+      console.log(this.form, "this.form")
+      clonedObj.firstName = "l;ejwlfjwel"
+      console.log(clonedObj, "clonedobj")
+    }
   },
   mounted() {
-    this.form = this.users[this.currentIndex];
-  },
+    if (this.currentIndex >= 0 && this.$route.name=="User update") {
+      this.form = this.users[this.currentIndex];
+    }
+  }
 };
 </script>
 <style scoped>
+form {
+  background: #fff;
+  padding: 50px 15px;
+}
 .form {
   display: flex;
   flex-wrap: wrap;

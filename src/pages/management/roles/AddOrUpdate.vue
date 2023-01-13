@@ -17,58 +17,66 @@
         ></el-input>
       </div>
       <div class="inline_form">
-        <div>
-          <label
-            ><b>{{ newsPerm.name }}</b></label
-          >
-          <el-checkbox
-            v-for="(perm, index) of newsPerm.permissions"
-            @click="addNewsPerms(index, perm.action)"
-            :key="index"
-            :label="perm.action"
-            size="large"
-            style="margin: 0"
-          />
-        </div>
-        <div>
-          <label
-            ><b>{{ postPerm.name }}</b></label
-          >
-          <el-checkbox
-            v-for="(perm, index) of postPerm.permissions"
-            @click="addPostPerms(index, perm.action)"
-            :key="index"
-            :label="perm.action"
-            size="large"
-            style="margin: 0"
-          />
-        </div>
-        <div>
-          <label
-            ><b>{{ moviePerm.name }}</b></label
-          >
-          <el-checkbox
-            v-for="(perm, index) of moviePerm.permissions"
-            @click="addMoviesPerms(index, perm.action)"
-            :key="index"
-            :label="perm.action"
-            size="large"
-            style="margin: 0"
-          />
-        </div>
-        <div>
-          <label
-            ><b>{{ weatherPerm.name }}</b></label
-          >
-          <el-checkbox
-            v-for="(perm, index) of weatherPerm.permissions"
-            @click="addWeatherperms(index, perm.action)"
-            :key="index"
-            :label="perm.action"
-            size="large"
-            style="margin: 0"
-          />
-        </div>
+        <el-card>
+          <div>
+            <label
+              ><b>{{ newsPerm.name }}</b></label
+            >
+            <el-checkbox
+              v-for="(perm, index) of newsPerm.permissions"
+              @click="addNewsPerms(index, perm.action)"
+              :key="index"
+              :label="perm.action"
+              size="large"
+              style="margin: 0"
+            />
+          </div>
+        </el-card>
+        <el-card>
+          <div>
+            <label
+              ><b>{{ postPerm.name }}</b></label
+            >
+            <el-checkbox
+              v-for="(perm, index) of postPerm.permissions"
+              @click="addPostPerms(index, perm.action)"
+              :key="index"
+              :label="perm.action"
+              size="large"
+              style="margin: 0"
+            />
+          </div>
+        </el-card>
+        <el-card>
+          <div>
+            <label
+              ><b>{{ moviePerm.name }}</b></label
+            >
+            <el-checkbox
+              v-for="(perm, index) of moviePerm.permissions"
+              @click="addMoviesPerms(index, perm.action)"
+              :key="index"
+              :label="perm.action"
+              size="large"
+              style="margin: 0"
+            />
+          </div>
+        </el-card>
+        <el-card>
+          <div>
+            <label
+              ><b>{{ weatherPerm.name }}</b></label
+            >
+            <el-checkbox
+              v-for="(perm, index) of weatherPerm.permissions"
+              @click="addWeatherperms(index, perm.action)"
+              :key="index"
+              :label="perm.action"
+              size="large"
+              style="margin: 0"
+            />
+          </div>
+        </el-card>
       </div>
       <div>
         <el-button native-type="submit" type="primary">Create role</el-button>
@@ -102,7 +110,7 @@ export default {
     ]),
     ...mapState(roleStore, ["roles"]),
   },
-  inject : ["currentIndex"],
+  inject: ["currentIndex"],
   methods: {
     ...mapActions(roleStore, ["createRole"]),
 

@@ -4,7 +4,7 @@ export const userStore = defineStore("userStore", {
   state: () => ({
     users: JSON.parse(localStorage.getItem("users")) || [],
     currentUser: {},
-    currentIndex : -1
+    currentIndex : ""
   }),
   actions: {
     createUser({ firstName, lastName, role, password }) {

@@ -33,10 +33,28 @@
                 ></el-button>
                 <el-button
                   style="cursor: pointer"
-                  @click="deleteUser(index)"
+                  @click="dialogVisible=true"
                   type="text"
                   ><i class="bi bi-trash"></i
                 ></el-button>
+                <el-dialog
+                  v-model="dialogVisible"
+                  title="Tips"
+                  width="30%"
+                  :before-close="handleClose"
+                >
+                  <span>This is a message</span>
+                  <template #footer>
+                    <span class="dialog-footer">
+                      <el-button @click="dialogVisible = false"
+                        >Cancel</el-button
+                      >
+                      <el-button type="primary" @click="deleteUser(index)">
+                        Confirm
+                      </el-button>
+                    </span>
+                  </template>
+                </el-dialog>
               </div>
             </td>
           </tr>
@@ -50,18 +68,17 @@
 </template>
 <script>
 import { mapActions, mapState, mapStores } from "pinia";
-import TableLite from "vue3-table-lite";
 import { userStore } from "../../../stores/management/user.store";
 export default {
-  components: {
-    TableLite,
-  },
+  components: {},
   data() {
-    return {};
+    return {
+      dialogVisible: false,
+    };
   },
   computed: {
     ...mapState(userStore, ["users"]),
-    ...mapStores(userStore)
+    ...mapStores(userStore),
   },
   methods: {
     ...mapActions(userStore, ["createUser"]),
@@ -70,10 +87,10 @@ export default {
       this.users.splice(this.currentIndex, 1);
       localStorage.setItem("users", JSON.stringify(this.users));
     },
-    toUpdate (index) {
-        this.userStoreStore.$patch({currentIndex : index})
-        this.$router.push('/management/users/add')
-    }
+    toUpdate(index) {
+      this.userStoreStore.$patch({ currentIndex: index });
+      this.$router.push("/management/users/update");
+    },
   },
 };
 </script>
@@ -83,10 +100,12 @@ table {
   font-family: arial, sans-serif;
   border-collapse: collapse;
   width: 100%;
+  background: #fff;
+  border: 1px solid #ccc;
 }
 thead {
-  background: #2a2a2e;
-  color: #fff;
+  /* background: #2a2a2e; */
+  color: #000;
 }
 td,
 th {

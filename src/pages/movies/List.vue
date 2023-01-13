@@ -31,10 +31,9 @@
             :initial-index="4"
             fit="cover"
             :hide-on-click-modal="true"
-            :draggable="false"
             :lazy="true"
             loading="lazy"
-            :preview-teleported="true"
+            :preview-teleported="false"
             />
             </template>
             </el-skeleton>
