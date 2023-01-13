@@ -33,7 +33,7 @@
                 ></el-button>
                 <el-button
                   style="cursor: pointer"
-                  @click="dialogVisible=true"
+                  @click="dialogVisible = true"
                   type="text"
                   ><i class="bi bi-trash"></i
                 ></el-button>

@@ -165,7 +165,13 @@ export default {
   left: -2.3rem;
 }
 </style> -->
-<template>
+
+
+
+
+
+
+<!-- <template>
   <div class="wrapper container">
     <div class="row">
       <div class="sidebar" :class="[isOpen ? 'col-3' : 'col-1']">
@@ -251,4 +257,107 @@ export default {
 .v-sidebar-menu.vsm_expanded .vsm--link_level-1.vsm--link_open .vsm--icon {
   background-color: none !important;
 }
+</style> -->
+
+
+<template>
+  <a-layout style="min-height: 100vh">
+    <a-layout-sider v-model:collapsed="collapsed">
+      <div class="logo" style="color: #fff; font-size: 18px; padding: 25px">
+        Navigation
+      </div>
+      <a-menu v-model:selectedKeys="selectedKeys" theme="dark" mode="inline">
+        <a-sub-menu key="sub1">
+          <template #title>
+            <span>Management</span>
+          </template>
+          <a-menu-item key="3"
+            ><router-link to="/management/users"
+              >Users</router-link
+            ></a-menu-item
+          >
+          <a-menu-item key="4"
+            ><router-link to="/management/roles"
+              >Roles</router-link
+            ></a-menu-item
+          >
+        </a-sub-menu>
+        <a-menu-item key="1">
+          <router-link to="/news">News</router-link>
+        </a-menu-item>
+        <a-menu-item key="2">
+          <router-link to="/posts">Posts</router-link>
+        </a-menu-item>
+
+        <a-menu-item key="9">
+          <router-link to="/movies">Movies</router-link>
+        </a-menu-item>
+        <a-menu-item>
+          <router-link to="/weather">Weather</router-link>
+        </a-menu-item>
+      </a-menu>
+    </a-layout-sider>
+    <a-layout>
+      <a-layout-header style="background: #fff; padding: 0">
+        <header-menu style="margin: 16px; padding: 0 24px"></header-menu>
+      </a-layout-header>
+      <a-layout-content style="margin: 16px">
+        <div
+          :style="{ padding: '24px', background: '#fff', minHeight: '400px' }"
+        >
+          <router-view></router-view>
+        </div>
+      </a-layout-content>
+      <a-layout-footer style="text-align: center">
+        Fozilbek Raimberdiyev 2023-yil
+      </a-layout-footer>
+    </a-layout>
+  </a-layout>
+</template>
+<script>
+import Sidebar from "@/components/sidebar.vue";
+import { mapState, mapStores } from "pinia";
+import { authStore } from "../stores/counter";
+import { ElNotification } from "element-plus";
+import { loadingStore } from "../stores/loading.store";
+import Loading from "vue-loading-overlay";
+import "vue-loading-overlay/dist/css/index.css";
+import breadCrumbs from "../components/breadCrumbs.vue";
+import headerMenu from "../components/header.vue";
+export default {
+  components: { Sidebar, Loading, breadCrumbs, headerMenu },
+  data() {
+    return {
+      isOpen: true,
+      fullPage: false,
+      collapsed: false,
+    };
+  },
+  computed: {
+    ...mapState(authStore, ["user", "authLogout", "authSucces"]),
+    ...mapState(loadingStore, ["loading"]),
+    ...mapStores(authStore),
+    loadingC() {
+      return;
+    },
+  },
+  methods: {
+    getState(value) {
+      this.isOpen = value;
+    },
+    logOut() {
+      localStorage.removeItem("user");
+      this.authStore.$patch({
+        authLogout: true,
+        authSucces: false,
+      });
+      this.$router.push("/login");
+    },
+  },
+  mounted() {
+    console.log();
+  },
+};
+</script>
+<style>
 </style>

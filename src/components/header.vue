@@ -57,10 +57,8 @@ export default {
 </script>
 <style scoped>
 .header {
-  /* display: flex;
-  align-items: center;
-  justify-content: space-between; */
-  background: #fff;
-  padding: 20px 2.9rem 20px 2.2rem;
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
 }
 </style>
