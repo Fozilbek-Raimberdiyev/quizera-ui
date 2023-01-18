@@ -17,7 +17,7 @@
         ></el-input>
       </div>
       <div class="inline_form">
-        <el-card>
+        <a-card>
           <div>
             <label
               ><b>{{ newsPerm.name }}</b></label
@@ -31,8 +31,8 @@
               style="margin: 0"
             />
           </div>
-        </el-card>
-        <el-card>
+        </a-card>
+        <a-card>
           <div>
             <label
               ><b>{{ postPerm.name }}</b></label
@@ -46,8 +46,8 @@
               style="margin: 0"
             />
           </div>
-        </el-card>
-        <el-card>
+        </a-card>
+        <a-card>
           <div>
             <label
               ><b>{{ moviePerm.name }}</b></label
@@ -61,8 +61,8 @@
               style="margin: 0"
             />
           </div>
-        </el-card>
-        <el-card>
+        </a-card>
+        <a-card>
           <div>
             <label
               ><b>{{ weatherPerm.name }}</b></label
@@ -76,7 +76,22 @@
               style="margin: 0"
             />
           </div>
-        </el-card>
+        </a-card>
+        <a-card>
+          <div>
+            <label
+              ><b>{{ managementPerm.name }}</b></label
+            >
+            <el-checkbox
+              v-for="(perm, index) of managementPerm.permissions"
+              @click="addWeatherperms(index, perm.action)"
+              :key="index"
+              :label="perm.action"
+              size="large"
+              style="margin: 0"
+            />
+          </div>
+        </a-card>
       </div>
       <div>
         <el-button native-type="submit" type="primary">Create role</el-button>
@@ -95,6 +110,7 @@ export default {
       moviePerms: [],
       postPerms: [],
       weatherPerms: [],
+      managementPerms : [],
       role: {
         rules: [],
         name: "",
@@ -107,6 +123,8 @@ export default {
       "newsPerm",
       "postPerm",
       "weatherPerm",
+      "managementPerm"
+
     ]),
     ...mapState(roleStore, ["roles"]),
   },

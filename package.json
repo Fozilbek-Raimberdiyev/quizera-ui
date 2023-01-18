@@ -1,9 +1,9 @@
 {
   "name": "vue-rbac",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "vite build",
     "preview": "vite preview"
   },
@@ -12,23 +12,27 @@
     "@casl/vue": "^2.2.1",
     "@headlessui/vue": "^1.7.7",
     "@heroicons/vue": "^2.0.13",
+    "@okta/okta-vue": "^5.5.0",
     "@quasar/extras": "^1.15.9",
     "@vuelidate/core": "^2.0.0",
     "@vuelidate/validators": "^2.0.0",
+    "ant-design-vue": "3.2.14",
     "axios": "^1.2.1",
+    "boxicons": "^2.1.4",
     "element-plus": "^2.2.27",
     "pinia": "^2.0.28",
     "quasar": "^2.11.4",
+    "socket.io-client": "^4.5.4",
     "vue": "^3.2.45",
+    "vue-3-socket.io": "^1.0.5",
+    "vue-authenticate": "^1.5.0",
+    "vue-datepicker": "^1.3.0",
     "vue-loading-overlay": "6.0",
     "vue-router": "^4.1.6",
     "vue-sidebar-menu": "^5.2.5",
     "vue-spinner": "^1.0.4",
     "vue-toastification": "^2.0.0-rc.5",
-    "vue3-google-map": "^0.15.0",
-    "vue3-openlayers": "^0.1.71",
-    "vue3-table-lite": "^1.3.1",
-    "ant-design-vue":"3.2.14"
+    "vue3-table-lite": "^1.3.1"
   },
   "devDependencies": {
     "@quasar/vite-plugin": "^1.3.0",

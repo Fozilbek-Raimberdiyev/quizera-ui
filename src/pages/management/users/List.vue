@@ -5,8 +5,17 @@
         style="float: right; margin-bottom: 2px"
         type="primary"
         @click="$router.push({ name: 'User add' })"
+        :style="[
+          $ability.can('create', 'management') ? '' : 'pointer-events : none;',
+        ]"
+        :title="[
+          $ability.can('create', 'management')
+            ? ''
+            : 'Sizning bu amalga ruxsatingiz yo\'/q',
+        ]"
         >Create user</el-button
       >
+      <!-- {{ $ability }} -->
     </div>
     <div v-if="users.length">
       <table class="responsive-table striped">
@@ -43,13 +52,22 @@
                   width="30%"
                   :before-close="handleClose"
                 >
-                  <span>This is a message</span>
+                  <span>Do you want delete this user?</span>
                   <template #footer>
                     <span class="dialog-footer">
-                      <el-button @click="dialogVisible = false"
+                      <el-button
+                        :style="[
+                          $ability.can('create', 'management')
+                            ? ''
+                            : 'pointer-events: none',
+                        ]"
+                        @click="dialogVisible = false"
                         >Cancel</el-button
                       >
-                      <el-button type="primary" @click="deleteUser(index)">
+                      <el-button
+                        type="primary"
+                        @click="deleteUser(index)"
+                      >
                         Confirm
                       </el-button>
                     </span>
@@ -69,6 +87,7 @@
 <script>
 import { mapActions, mapState, mapStores } from "pinia";
 import { userStore } from "../../../stores/management/user.store";
+import { ability } from "../../../services/ability";
 export default {
   components: {},
   data() {
@@ -86,6 +105,7 @@ export default {
       this.currentIndex = index;
       this.users.splice(this.currentIndex, 1);
       localStorage.setItem("users", JSON.stringify(this.users));
+      this.dialogVisible = false
     },
     toUpdate(index) {
       this.userStoreStore.$patch({ currentIndex: index });

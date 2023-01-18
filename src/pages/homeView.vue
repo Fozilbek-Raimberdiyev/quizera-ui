@@ -264,7 +264,7 @@ export default {
   <a-layout style="min-height: 100vh">
     <a-layout-sider v-model:collapsed="collapsed">
       <div class="logo" style="color: #fff; font-size: 18px; padding: 25px">
-        Navigation
+        <router-link to="/"> Navigation</router-link>
       </div>
       <a-menu v-model:selectedKeys="selectedKeys" theme="dark" mode="inline">
         <a-sub-menu key="sub1">
@@ -293,7 +293,7 @@ export default {
           <router-link to="/movies">Movies</router-link>
         </a-menu-item>
         <a-menu-item>
-          <router-link to="/weather">Weather</router-link>
+          <router-link to="/todos">Todos</router-link>
         </a-menu-item>
       </a-menu>
     </a-layout-sider>
@@ -305,7 +305,17 @@ export default {
         <div
           :style="{ padding: '24px', background: '#fff', minHeight: '400px' }"
         >
-          <router-view></router-view>
+          <!-- <router-view></router-view> -->
+          <div v-show="!loading">
+            <router-view v-slot="{ Component }">
+              <transition name="el-fade-linear">
+                <component :is="Component" />
+              </transition>
+            </router-view>
+          </div>
+          <div class="" v-show="loading">
+            <a-spin />
+          </div>
         </div>
       </a-layout-content>
       <a-layout-footer style="text-align: center">
@@ -354,10 +364,14 @@ export default {
       this.$router.push("/login");
     },
   },
-  mounted() {
-    console.log();
-  },
 };
 </script>
-<style>
+<style scoped>
+.example {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+}
 </style>

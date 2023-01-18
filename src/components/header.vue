@@ -27,15 +27,17 @@
   </div>
 </template>
 <script>
-import { mapState } from "pinia";
+import { mapState, mapStores } from "pinia";
 import breadCrumbs from "./breadCrumbs.vue";
 import { userStore } from "../stores/management/user.store";
+import { authStore } from '../stores/counter';
 export default {
   components: {
     breadCrumbs,
   },
   computed: {
     ...mapState(userStore, ["currentUser"]),
+    ...mapStores(authStore)
   },
   props: {
     isOpen: {
@@ -49,6 +51,7 @@ export default {
       this.authStore.$patch({
         authLogout: true,
         authSucces: false,
+        user : null
       });
       this.$router.push("/login");
     },

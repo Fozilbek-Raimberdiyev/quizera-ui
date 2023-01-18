@@ -18,7 +18,7 @@
         </thead>
         <tbody>
           <tr v-for="(role, index) in roles" :key="index">
-            <td>{{ index+1 }}</td>
+            <td>{{ index + 1 }}</td>
             <td>{{ role.name }}</td>
             <td>{{ role.lastName }}</td>
             <td>
@@ -55,12 +55,13 @@ export default {
     TableLite,
   },
   data() {
-    return {
-    };
+    return {};
   },
+  setup() {},
   computed: {
     ...mapState(roleStore, ["roles"]),
   },
+  mounted() {},
 };
 </script>
 <style scoped>

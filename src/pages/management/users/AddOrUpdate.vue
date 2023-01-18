@@ -45,9 +45,9 @@
           >
             <el-option
               v-for="role in roles"
-              :key="role.name"
+              :key="role"
               :label="role.name"
-              :value="role.name"
+              :value="role"
             />
           </el-select>
           <span class="error" v-if="v$.form.role.$error"
@@ -104,6 +104,7 @@ export default {
       lastName: "",
       role: null,
       password: "",
+      rules : []
     },
   }),
   validations() {
@@ -134,7 +135,11 @@ export default {
       this.v$.$validate();
       if (!this.v$.$error) {
         if (!this.currentIndex) {
-          this.createUser(this.form);
+          let body = {...this.form}
+          body.role = this.form.role.name;
+          body.rules = this.form.role.rules
+          console.log(body)
+          this.createUser(body);
           this.$router.push("/management/users");
         } else {
           this.users[this.currentIndex] = this.form;
@@ -144,18 +149,12 @@ export default {
         this.v$.$touch();
       }
     },
-    justDoIt() {
-      let clonedObj = Object.assign({},this.form)
-      console.log(this.form, "this.form")
-      clonedObj.firstName = "l;ejwlfjwel"
-      console.log(clonedObj, "clonedobj")
-    }
   },
   mounted() {
-    if (this.currentIndex >= 0 && this.$route.name=="User update") {
+    if (this.currentIndex >= 0 && this.$route.name == "User update") {
       this.form = this.users[this.currentIndex];
     }
-  }
+  },
 };
 </script>
 <style scoped>

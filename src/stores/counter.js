@@ -14,11 +14,12 @@ export const authStore = defineStore('auth', {
   state: () => ({
     user: JSON.parse(localStorage.getItem("user")) || {},
     authSucces : false,
-    authLogout : false
+    authLogout : false,
+    permissions : []
   }),
   getters: {
     isAuth (state) {
-      if(state.user?.email && state.user?.password) {
+      if(state.user?.firstName && state.user?.password) {
         return true
       } else {
         return false

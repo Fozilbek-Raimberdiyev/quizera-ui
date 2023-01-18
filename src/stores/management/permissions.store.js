@@ -85,6 +85,27 @@ export const permissionStore = defineStore("permStore", {
                 subject : "Weather"
             }
         ]
+    },
+    managementPerm : {
+        name : "Management",
+        permissions : [
+            {
+                action : "read",
+                subject : "Management"
+            },
+            {
+                action : "create",
+                subject : "Management"
+            },
+            {
+                action : "update",
+                subject : "Management"
+            },
+            {
+                action : "delete",
+                subject : "Management"
+            }
+        ]
     }
   }),
 });

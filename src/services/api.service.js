@@ -3,11 +3,12 @@ import { ElNotification } from "element-plus";
 import { useToast } from "vue-toastification";
 import { app } from "../main";
 import { loadingStore } from "../stores/loading.store";
-const toast = useToast()
+const toast = useToast();
 
-export const reqinterceptor = axios.interceptors.request.use(function (config) {
-    const loadStore = loadingStore()
-    loadStore.$patch({loading : true})
+export const reqinterceptor = axios.interceptors.request.use(
+  function (config) {
+    const loadStore = loadingStore();
+    loadStore.$patch({ loading: true });
     // loadStore.setLoader()
     return config;
   }
@@ -15,20 +16,29 @@ export const reqinterceptor = axios.interceptors.request.use(function (config) {
   //   loading = true
   //   return Promise.reject(error);
   // }
-  );
-``
-export const resInterceptor =  axios.interceptors.response.use(function (response) {
-  const loadStore = loadingStore()
-  loadStore.$patch({loading : false})
+);
+``;
+export const resInterceptor = axios.interceptors.response.use(
+  function (response) {
+    const loadStore = loadingStore();
+    loadStore.$patch({ loading: false });
+    response.message
+      ? ElNotification({
+          title: response?.message,
+          type: "success",
+        })
+      : "";
     return response;
-  }, function (error) {
-    const loadStore = loadingStore()
-    loadStore.$patch({loading : false})
+  },
+  function (error) {
+    const loadStore = loadingStore();
+    loadStore.$patch({ loading: false });
     ElNotification({
-      title : "Error",
-      message : error.message || "Xatolik yuz berdi",
-      type : "error",
-    })
+      title: "Error",
+      message: error.message || "Xatolik yuz berdi",
+      type: "error",
+    });
     // toast.error(error.message || "Xatolik yuz berdi")
     return Promise.reject(error);
-  });
+  }
+);

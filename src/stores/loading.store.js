@@ -16,7 +16,6 @@ export const loadingStore = defineStore("loading", {
                     // onCancel: true,
                 })
             if(this.loading) {
-                console.log("loading")
                 loader
                 
             } else {

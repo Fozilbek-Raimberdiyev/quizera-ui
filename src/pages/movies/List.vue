@@ -16,50 +16,40 @@
     </label>
     <div>
       <div class="movies" v-if="list.length">
-        <div class="movie" v-for="movie in list" :key="movie?.id">
-          <router-link @click="toInfo = true" :to="`/movies/${movie.id}`">
-            <p class="title">
-              <el-link :to="`/movies/${movie.id}`" :underline="false"
-                ><b>{{ movie.original_title }}</b></el-link
-              >
-            </p>
-          </router-link>
-          <el-skeleton :loading="loading">
-            <template #template>
-              <el-skeleton-item
-                variant="image"
-                style="width: 240px; height: 240px"
-              />
-            </template>
-            <template #default>
-              <!-- <el-image
-            style="width: 100px; height: 100px"
-            :src="`https://image.tmdb.org/t/p/w500/${movie?.backdrop_path}`"
-            :zoom-rate="1.2"
-            :preview-src-list="[`https://image.tmdb.org/t/p/w500/${movie?.backdrop_path}`]"
-            :initial-index="4"
-            fit="cover"
-            :hide-on-click-modal="true"
-            :lazy="true"
-            loading="lazy"
-            :preview-teleported="false"
-            /> -->
-              <a-image
-                :width="200"
-                :src="`https://image.tmdb.org/t/p/w500/${movie?.backdrop_path}`"
-              />
-            </template>
-          </el-skeleton>
-          <p class="description">{{ movie.overview }}</p>
-          <p class="rating">
-            <b>Rating</b> :
-            {{ movie.vote_average }}
-          </p>
-          <p class="realease_date">
-            <b>Release date</b> :
-            {{ movie.release_date }}
-          </p>
-        </div>
+          <a-row :gutter="[8,48]" class="movie" v-for="movie in list" :key="movie?.id">
+            <a-card :span="12">
+              <router-link @click="toInfo = true" :to="`/movies/${movie.id}`">
+                <p class="title">
+                  <el-link :to="`/movies/${movie.id}`" :underline="false"
+                    ><b>{{ movie.original_title }}</b></el-link
+                  >
+                </p>
+              </router-link>
+              <el-skeleton :loading="loading">
+                <template #template>
+                  <el-skeleton-item
+                    variant="image"
+                    style="width: 240px; height: 240px"
+                  />
+                </template>
+                <template #default>
+                  <a-image
+                    :width="200"
+                    :src="`https://image.tmdb.org/t/p/w500/${movie?.backdrop_path}`"
+                  />
+                </template>
+              </el-skeleton>
+              <p class="description">{{ movie.overview }}</p>
+              <p class="rating">
+                <b>Rating</b> :
+                {{ movie.vote_average }}
+              </p>
+              <p class="realease_date">
+                <b>Release date</b> :
+                {{ movie.release_date }}
+              </p>
+            </a-card>
+          </a-row>
         <div class="pagination">
           <el-pagination
             :page-size="20"
@@ -73,11 +63,12 @@
         </div>
       </div>
       <div v-else>
-        <el-empty
+        <!-- <el-empty
           :image-size="350"
           size="large"
           description="Ma'lumot topilmadi"
-        />
+        /> -->
+      <a-empty></a-empty>
       </div>
       <!-- <div v-else>
         
