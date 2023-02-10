@@ -1,5 +1,5 @@
 <template>
-  <sidebar-menu @update:collapsed="onToggleCollapse"  width="250px" :collapsed="false" :menu="menu"> </sidebar-menu>
+  <sidebar-menu @update:collapsed="onToggleCollapse"  width="250px" :collapsed="true" :menu="menu"> </sidebar-menu>
 </template>
 <script>
 import { mapStores } from "pinia";
@@ -28,6 +28,11 @@ export default {
               title: "Roles",
               icon: "bi bi-dot",
             },
+            {
+              href : "/management/permissions",
+              title :"Permissions",
+              icon : ""
+            }
           ],
         },
         {

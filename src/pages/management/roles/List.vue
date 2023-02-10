@@ -55,17 +55,15 @@ export default {
     TableLite,
   },
   data() {
-    return {};
+    return {roles : []};
   },
   setup() {},
   computed: {
-    ...mapState(roleStore, ["roles"]),
+    // ...mapState(roleStore, ["roles"]),
   },
-  mounted() {},
 };
 </script>
 <style scoped>
-/* @import url("https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"); */
 table {
   margin-top: 5rem;
   font-family: arial, sans-serif;
@@ -83,7 +81,7 @@ th {
   padding: 8px;
 }
 
-tr:nth-child(even) {
+tr:nth-child() {
   /* background-color: #dddddd; */
 }
 </style>

@@ -25,11 +25,11 @@
               <td>{{ todo.description }}</td>
               <td>{{ toDDMMYY(todo.date) }}</td>
               <td>{{ toDDMMYY(todo.endDate) }}</td>
-              <td>{{ minusTwoDates(todo.endDate, todo.date) }}</td>
+              <td>{{ minusTwoDates(todo.endDate, Date.now()) }}</td>
               <td>
                 <div
                   style="
-                    display: flex;
+                   display: flex;
                     justify-content: space-between;
                     align-items: center;
                     flex-wrap: wrap;
@@ -68,7 +68,7 @@
       />
     </div>
     <div v-else>
-      <el-empty description="Users not found"></el-empty>
+      <el-empty description="Todos not found"></el-empty>
     </div>
   </div>
 </template>

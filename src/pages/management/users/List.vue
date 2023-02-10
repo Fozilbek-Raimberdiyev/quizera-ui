@@ -5,9 +5,6 @@
         style="float: right; margin-bottom: 2px"
         type="primary"
         @click="$router.push({ name: 'User add' })"
-        :style="[
-          $ability.can('create', 'management') ? '' : 'pointer-events : none;',
-        ]"
         :title="[
           $ability.can('create', 'management')
             ? ''
@@ -93,10 +90,11 @@ export default {
   data() {
     return {
       dialogVisible: false,
+      users : []
     };
   },
   computed: {
-    ...mapState(userStore, ["users"]),
+    ...mapState(userStore, ["user"]),
     ...mapStores(userStore),
   },
   methods: {

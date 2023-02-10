@@ -5,7 +5,7 @@
       @click="$router.go(-1)"
       type="info"
       size="small"
-      style="cursor: pointer;"
+      style="cursor: pointer"
       ><i class="bx bx-arrow-back" style="margin-right: 5px"></i>Back</el-button
     >
     <form @submit.prevent="submit">
@@ -63,7 +63,7 @@
         v-else
         size="large"
         class="btn"
-        style="margin-top: 5px;"
+        style="margin-top: 5px"
         type="primary"
         :disabled="disabled"
         native-type="submit"

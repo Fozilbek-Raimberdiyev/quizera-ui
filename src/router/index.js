@@ -1,32 +1,10 @@
 import { createRouter, createWebHistory } from "vue-router";
-import { authStore } from "../stores/counter";
-import news from "@/pages/news.vue";
 import { loadingStore } from "../stores/loading.store";
-import { app } from "../main";
+import { userStore } from "../stores/management/user.store";
 import { h, resolveComponent } from "vue";
-
-// let weather = "<></>"
-// let weatherInfo = "<></>"
-// let weatherInfoUpdate = "<></>"
-
-const weather = {
-  template: `
-    <h1>Weather</h1>
-  `,
-};
-
-const weatherInfo = {
-  template: `
-    <h1>Weather Info</h1>
-  `,
-};
-
-const weatherInfoUpdate = {
-  template: `
-    <h1>Weather Info Update</h1>
-  `,
-};
-
+import jwtDecode from "jwt-decode";
+import references from "./references"
+let token = localStorage.getItem("token") || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
 const routes = [
   {
     path: "/",
@@ -38,7 +16,7 @@ const routes = [
     children: [
       {
         path: "/",
-        name: "Dashboard",
+        name: "",
         component: () => import("../pages/mainLayout.vue"),
         meta: {
           public: false,
@@ -112,15 +90,46 @@ const routes = [
               },
             ],
           },
+          {
+            path : "permissions",
+            name : "Permissions",
+            component : () => import("../pages/management/permissions/Permissions.vue")
+          },
         ],
       },
       {
-        path: "/news",
-        component: () => import("../pages/news.vue"),
-        name: "news",
+        path: "/quiz",
+        component: {
+          render() {
+            return h(resolveComponent("router-view"));
+          },
+        },
+        name: "Tests",
         meta: {
           public: false,
         },
+        children : [
+          {
+            path : "",
+            component : () => import("../pages/quiz/List.vue"),
+            name : ""
+          },
+          {
+            path : ":id",
+            component : () => import("../pages/quiz/QuizRender.vue"),
+            name : ""
+          },
+          {
+            path : "add",
+            component : () => import("../pages/quiz/AddOrUpdate.vue.vue"),
+            name : "Qo'shish"
+          },
+          {
+            path : "edit",
+            component : () => import("../pages/quiz/AddOrUpdate.vue.vue"),
+            name : "Tahrirlash"
+          }
+        ]
       },
       {
         path: "/posts",
@@ -177,6 +186,14 @@ const routes = [
             name : "Todo add"
           }
         ]
+      },
+      {
+        path : "/profile",
+        component : () => import("../pages/profile/me.vue"),
+        name : "Profile"
+      },
+      {
+        ...references
       }
     ],
   },
@@ -184,9 +201,9 @@ const routes = [
     path: "/login",
     component: () => import("../pages/login.vue"),
     name: "login",
-    meta: {
-      public: true,
-    },
+    // meta: {
+    //   public: true,
+    // },
   },
   {
     path: "/register",
@@ -214,20 +231,17 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: routes,
 });
+
+
+
 router.beforeEach((to, from, next) => {
-  // const isAuthenticated = authStore().isAuth;
-  let  isAuthenticated = true
-  const isPublic = to.meta.public ? true : false;
-  const isMain = to.meta.isMain;
-  const isMounted = loadingStore().isMounted;
-  if (!isPublic && !isAuthenticated) {
+  let {exp} = jwtDecode(token) || null;
+  let current = Math.floor(Date.now() / 1000)
+  let isValid = current <= exp;
+  const isAuth = userStore().isAuth;
+  if ((!isValid && to.name!="login")) {
     next("/login");
   } else {
-    // loadingStore().$patch({loading : true})
-    // setTimeout(() => {
-    //   next()
-    //   loadingStore().$patch({loading : false})
-    // }, 300);
     if (!loadingStore().isMounted) {
       setTimeout(() => {
         next();

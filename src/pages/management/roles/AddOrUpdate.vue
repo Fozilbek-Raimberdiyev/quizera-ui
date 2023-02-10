@@ -11,87 +11,41 @@
       <div style="width: 200px">
         <label for="name"><b>Role name</b></label>
         <el-input
-          v-model="role.name"
           id="name"
+          required
           placeholder="Enter the role name"
         ></el-input>
       </div>
       <div class="inline_form">
-        <a-card>
+        <a-card v-for="perm of list" :key="perm._id">
           <div>
             <label
-              ><b>{{ newsPerm.name }}</b></label
+              ><b>{{ perm.name }}</b></label
             >
-            <el-checkbox
-              v-for="(perm, index) of newsPerm.permissions"
-              @click="addNewsPerms(index, perm.action)"
-              :key="index"
-              :label="perm.action"
-              size="large"
-              style="margin: 0"
-            />
+            <!-- @change="
+              (event) => role.rules.push({ subject: perm.name, action: rule }), 
+              " -->
+            <el-checkbox-group
+              v-for="(rule, i) in perm.actions"
+              :key="i"
+              :value="rule"
+              @change="
+                (event) => setData(event).then(() => {
+                  currentIndex=i
+                })
+              "
+            >
+              <el-checkbox
+                :label="rule"
+                size="large"
+                class="block"
+                style="margin: 0"
+              />
+            </el-checkbox-group>
           </div>
         </a-card>
-        <a-card>
-          <div>
-            <label
-              ><b>{{ postPerm.name }}</b></label
-            >
-            <el-checkbox
-              v-for="(perm, index) of postPerm.permissions"
-              @click="addPostPerms(index, perm.action)"
-              :key="index"
-              :label="perm.action"
-              size="large"
-              style="margin: 0"
-            />
-          </div>
-        </a-card>
-        <a-card>
-          <div>
-            <label
-              ><b>{{ moviePerm.name }}</b></label
-            >
-            <el-checkbox
-              v-for="(perm, index) of moviePerm.permissions"
-              @click="addMoviesPerms(index, perm.action)"
-              :key="index"
-              :label="perm.action"
-              size="large"
-              style="margin: 0"
-            />
-          </div>
-        </a-card>
-        <a-card>
-          <div>
-            <label
-              ><b>{{ weatherPerm.name }}</b></label
-            >
-            <el-checkbox
-              v-for="(perm, index) of weatherPerm.permissions"
-              @click="addWeatherperms(index, perm.action)"
-              :key="index"
-              :label="perm.action"
-              size="large"
-              style="margin: 0"
-            />
-          </div>
-        </a-card>
-        <a-card>
-          <div>
-            <label
-              ><b>{{ managementPerm.name }}</b></label
-            >
-            <el-checkbox
-              v-for="(perm, index) of managementPerm.permissions"
-              @click="addWeatherperms(index, perm.action)"
-              :key="index"
-              :label="perm.action"
-              size="large"
-              style="margin: 0"
-            />
-          </div>
-        </a-card>
+        <pre>{{ role }}</pre>
+        <pre>{{ currentIndex }}</pre>
       </div>
       <div>
         <el-button native-type="submit" type="primary">Create role</el-button>
@@ -100,79 +54,30 @@
   </div>
 </template>
 <script>
-import { mapState, mapActions } from "pinia";
+import { mapActions, mapState } from "pinia";
 import { permissionStore } from "../../../stores/management/permissions.store";
-import { roleStore } from "../../../stores/management/role.store";
 export default {
   data() {
     return {
-      newsPerms: [],
-      moviePerms: [],
-      postPerms: [],
-      weatherPerms: [],
-      managementPerms : [],
       role: {
         rules: [],
         name: "",
       },
+      currentIndex : ""
     };
   },
   computed: {
-    ...mapState(permissionStore, [
-      "moviePerm",
-      "newsPerm",
-      "postPerm",
-      "weatherPerm",
-      "managementPerm"
-
-    ]),
-    ...mapState(roleStore, ["roles"]),
+    ...mapState(permissionStore, ["list"]),
   },
-  inject: ["currentIndex"],
   methods: {
-    ...mapActions(roleStore, ["createRole"]),
-
-    addNewsPerms(index, element) {
-      this.newsPerms[index] = element;
+    ...mapActions(permissionStore, ["getList"]),
+    submit() {},
+   async setData(e) {
+      console.log(e, "event")
     },
-    addMoviesPerms(index, element) {
-      this.moviePerms[index] = element;
-    },
-    addWeatherperms(index, element) {
-      this.weatherPerms[index] = element;
-    },
-    addPostPerms(index, element) {
-      this.postPerms[index] = element;
-    },
-    submit() {
-      for (let key of this.newsPerms) {
-        let ability = {};
-        ability.action = key;
-        ability.subject = "news";
-        this.role.rules.push(ability);
-      }
-      for (let key of this.moviePerms) {
-        let ability = {};
-        ability.action = key;
-        ability.subject = "news";
-        this.role.rules.push(ability);
-      }
-      for (let key of this.weatherPerms) {
-        let ability = {};
-        ability.action = key;
-        ability.subject = "news";
-        this.role.rules.push(ability);
-      }
-      for (let key of this.postPerms) {
-        let ability = {};
-        ability.action = key;
-        ability.subject = "news";
-        this.role.rules.push(ability);
-      }
-      this.roles.push(this.role);
-      localStorage.setItem("roles", JSON.stringify(this.roles));
-      this.$router.push("/management/roles");
-    },
+  },
+  mounted() {
+    this.getList();
   },
 };
 </script>

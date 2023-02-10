@@ -1,27 +1,26 @@
-import axios from "axios";
-const path = "http://localhost:8080/api";
+import { $axios } from "./auth";
 export default {
   getList(params) {
-    return axios.get(`${path}/todos`, {params});
+    return $axios.get(`/todos`, { params });
   },
   addTodo(body) {
-    return axios.post("/todos/add", body);
+    return $axios.post("/todos/add", body);
   },
   updateTodoById(id, body) {
-    return axios.put(`${path}/todos/update`, body, {
+    return $axios.put(`/todos/update`, body, {
       params: {
         ID: id,
       },
     });
   },
   deleteTodo(id) {
-    return axios.delete(`${path}/todos/delete`, {
+    return $axios.delete(`/todos/delete`, {
       params: {
         ID: id,
       },
     });
   },
   getById(id) {
-    return axios.get(`${path}/todos/${id}`);
+    return $axios.get(`/todos/${id}`);
   },
 };

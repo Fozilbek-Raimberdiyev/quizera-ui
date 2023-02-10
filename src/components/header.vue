@@ -3,17 +3,17 @@
     class="d-flex justify-content-between header"
   >
     <div>
-      <breadCrumbs></breadCrumbs>
+      <breadCrumbs v-if="!smallScreen"></breadCrumbs>
     </div>
     <div>
       <el-dropdown placement="bottom-start" trigger="click">
         <el-button style="padding: 10px" type="info">
           <i class="bx bx-user"></i>
-          <!-- <span style="margin-left: 5px">{{ user.email }}</span> -->
+          <span style="margin-left: 5px">{{ user?.firstName + " " + user?.lastName }}</span>
         </el-button>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item
+            <el-dropdown-item @click="$router.push('/profile')"
               ><i class="bx bxs-edit"></i>Ma'lumotlarni
               tahrirlash</el-dropdown-item
             >
@@ -36,7 +36,7 @@ export default {
     breadCrumbs,
   },
   computed: {
-    ...mapState(userStore, ["currentUser"]),
+    ...mapState(userStore, ["user"]),
     ...mapStores(authStore)
   },
   props: {
@@ -44,15 +44,15 @@ export default {
       type: Boolean,
       default: false,
     },
+    smallScreen : {
+      type : Boolean,
+      default : false
+    }
   },
   methods: {
     logOut() {
       localStorage.removeItem("user");
-      this.authStore.$patch({
-        authLogout: true,
-        authSucces: false,
-        user : null
-      });
+      localStorage.removeItem("token")
       this.$router.push("/login");
     },
   },

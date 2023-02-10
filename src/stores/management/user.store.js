@@ -1,20 +1,32 @@
 import { defineStore } from "pinia";
-
+import auth from "../../services/auth";
+import router from "../../router";
 export const userStore = defineStore("userStore", {
   state: () => ({
-    users: JSON.parse(localStorage.getItem("users")) || [],
-    currentIndex : ""
+    user: JSON.parse(localStorage.getItem("user")) || {},
+    token : localStorage.getItem("token") || null
   }),
+  getters : {
+    isAuth() {
+      if(this.token && this.user) return true
+      return false
+    }
+  },
   actions: {
-    createUser({ firstName, lastName, role, password, rules }) {
-       this.users.push({
-        firstName: firstName,
-        lastName: lastName,
-        role: role,
-        password: password,
-        rules : rules
-      });
-      localStorage.setItem("users", JSON.stringify(this.users))
+    async createUser(form) {
+      let res = (await auth.register(form));
+      this.user = res.data;
+      localStorage.setItem("user", JSON.stringify(this.user))
+      localStorage.setItem("token", res?.data?.token)
+      auth.setHeader(res.data.token)
+    },
+    async login(form) {
+      let res = await auth.login(form)
+      this.user = res?.data?.user;
+      localStorage.setItem("user", JSON.stringify(this.user))
+      localStorage.setItem("token", res?.data?.token)
+      auth.setHeader(res.data.token)
+      router.push("/")
     },
   },
 });

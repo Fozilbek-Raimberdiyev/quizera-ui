@@ -3,7 +3,9 @@ import { ElNotification } from "element-plus";
 import { useToast } from "vue-toastification";
 import { app } from "../main";
 import { loadingStore } from "../stores/loading.store";
+import auth from "./auth";
 const toast = useToast();
+let token = localStorage.getItem("token") || null;
 
 export const reqinterceptor = axios.interceptors.request.use(
   function (config) {
@@ -24,10 +26,12 @@ export const resInterceptor = axios.interceptors.response.use(
     loadStore.$patch({ loading: false });
     response.message
       ? ElNotification({
-          title: response?.message,
+          title: response?.message || response.data.message,
           type: "success",
         })
       : "";
+      let header = response.headers["Authorization"];
+      console.log(header, "header")
     return response;
   },
   function (error) {

@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
+import dotenv  from "dotenv"
 
  import  {resInterceptor, reqinterceptor} from "./services/api.service"
 
@@ -32,7 +33,8 @@ import 'ant-design-vue/dist/antd.css';
 import { ability, abilityPlugin } from './services/ability'
 import { abilitiesPlugin } from '@casl/vue'
 const pinia = createPinia()
-pinia.use(abilityPlugin)
+// pinia.use(abilityPlugin)
+
 
 
 export const app = createApp(App)
