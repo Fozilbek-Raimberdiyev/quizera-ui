@@ -11,10 +11,8 @@
       "
     >
       <div class="bg-container"></div>
-      <div class="form">
-        <pre>server manzili :{{ serverUrl }}</pre>
-        <pre>{{ modeProject }}</pre>
-        <form v-loading="loading" @submit.prevent="submit">
+      <form class="form" @submit.prevent="submit">
+        <div class="form" v-loading="loading">
           <label>Login</label>
           <el-input required v-model="form.email" placeholder="Please input" />
           <label>Password</label>
@@ -26,14 +24,12 @@
             placeholder="Please input"
           />
           <button>
-            <el-button
-              style="background: #ccc; cursor: pointer"
-              native-type="submit"
+            <el-button native-type="submit" style="background: #ccc; cursor: pointer" @click="submit"
               >Login</el-button
             >
           </button>
-        </form>
-      </div>
+        </div>
+      </form>
     </div>
   </div>
 </template>
@@ -41,7 +37,7 @@
 import { mapActions, mapState, mapStores } from "pinia";
 import { userStore } from "../stores/management/user.store";
 import { useToast } from "vue-toastification";
-import { authStore } from "../stores/counter";
+import axios from "axios";
 export default {
   data: () => {
     return {
@@ -50,36 +46,21 @@ export default {
         password: "",
       },
       loading: false,
+      isSuccesfully: false,
     };
   },
   computed: {
     ...mapState(userStore, ["user"]),
-    modeProject() {
-      return import.meta.env.MODE
-    },
-    serverUrl() {
-      return import.meta.env.VITE_SERVER_URL
-    }
   },
+  watch: {},
   methods: {
     ...mapActions(userStore, ["login"]),
     async submit() {
-      try {
-        await this.login(this.form);
-        // debugger
-        this.$router.push({ name: "Bosh sahifa" });
-      } catch (e) {
-        useToast().error(e?.response?.data?.message);
-      }
+      await this.login(this.form);
+      window.location.href = "/";
     },
-    
   },
-  created() {
-      localStorage.setItem(
-        "token",
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
-      );
-    },
+  created() {},
 };
 </script>
 <style scoped>

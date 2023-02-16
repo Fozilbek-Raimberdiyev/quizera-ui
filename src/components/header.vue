@@ -5,7 +5,7 @@
     </div>
     <div>
       <el-dropdown placement="bottom-start" trigger="click">
-        <el-button style="padding: 10px" type="info">
+        <el-button class="cursor-pointer" style="padding: 10px" type="info">
           <i class="bx bx-user"></i>
           <span style="margin-left: 5px">{{
             user?.firstName + " " + user?.lastName
@@ -13,11 +13,11 @@
         </el-button>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item @click="$router.push('/profile')"
+            <el-dropdown-item class="cursor-pointer" @click="$router.push('/profile')"
               ><i class="bx bxs-edit"></i>Ma'lumotlarni
               tahrirlash</el-dropdown-item
             >
-            <el-dropdown-item @click="logOut"
+            <el-dropdown-item class="cursor-pointer" @click="logOut"
               ><i class="bx bx-exit"></i>Tizimdan chiqish</el-dropdown-item
             >
           </el-dropdown-menu>

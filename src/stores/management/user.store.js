@@ -24,12 +24,12 @@ export const userStore = defineStore("userStore", {
     async login(form) {
       try {
         let res = await auth.login(form);
-        this.user = res?.data?.user;
-        localStorage.setItem("user", JSON.stringify(res?.data?.user));
-        localStorage.setItem("token", res?.data?.token);
-        // auth.setHeader(res.data.token);
+        this.user = res.data.user;
+        let token = res.data.token;
+        localStorage.setItem("user", JSON.stringify(this.user));
+        localStorage.setItem("token", token);
       } catch (e) {
-        useToast().error(e)
+        useToast().error(e);
       }
     },
   },
