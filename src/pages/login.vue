@@ -11,7 +11,7 @@
       "
     >
       <div class="bg-container"></div>
-      <form class="form" @submit.prevent="submit">
+      <form @submit.prevent="login(form)">
         <div class="form" v-loading="loading">
           <label>Login</label>
           <el-input required v-model="form.email" placeholder="Please input" />
@@ -24,7 +24,7 @@
             placeholder="Please input"
           />
           <button>
-            <el-button native-type="submit" style="background: #ccc; cursor: pointer" @click="submit"
+            <el-button native-type="submit" style="background: #ccc; cursor: pointer"
               >Login</el-button
             >
           </button>
@@ -55,10 +55,6 @@ export default {
   watch: {},
   methods: {
     ...mapActions(userStore, ["login"]),
-    async submit() {
-      await this.login(this.form);
-      window.location.href = "/";
-    },
   },
   created() {},
 };

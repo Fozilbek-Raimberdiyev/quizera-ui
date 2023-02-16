@@ -28,8 +28,10 @@ export const userStore = defineStore("userStore", {
         let token = res.data.token;
         localStorage.setItem("user", JSON.stringify(this.user));
         localStorage.setItem("token", token);
+        window.location.href = "/";
       } catch (e) {
-        useToast().error(e);
+        console.log(e)
+        useToast().error(e.response.data.message);
       }
     },
   },
