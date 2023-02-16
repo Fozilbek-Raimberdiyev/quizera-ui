@@ -15,8 +15,8 @@ const routes = [
     },
     children: [
       {
-        path: "/",
-        name: "",
+        path: "",
+        name: "Bosh sahifa",
         component: () => import("../pages/mainLayout.vue"),
         meta: {
           public: false,

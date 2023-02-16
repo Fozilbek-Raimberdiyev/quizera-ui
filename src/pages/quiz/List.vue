@@ -1,47 +1,86 @@
 <template>
   <div>
-    <h6>Yakuniy nazorat</h6>
-    <table id="list">
-      <thead>
-        <tr>
-          <th>Fan</th>
-          <th>Savollar soni</th>
-          <th>Belgilangan vaqt</th>
-          <th>Harakatlar</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(subject, i) in list" :key="i">
-          <td>{{ subject.name }}</td>
-          <td>{{ subject.quizCount }}</td>
-          <td>{{ subject.time }}</td>
-          <td>
-            <el-button
-              type="primary"
-              style="cursor: pointer"
-              size="small"
-              @click="$router.push(`/quiz/${subject._id}`)"
-            >
-              Kirish
-            </el-button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="flex items-center justify-between">
+      <h5>Yakuniy nazorat</h5>
+      <div>
+        <el-input v-model="search" placeholder="Izlang..."> </el-input>
+      </div>
+    </div>
+    <div class="table" v-if="searchSubject">
+      <table id="list">
+        <thead>
+          <tr>
+            <th>Fan</th>
+            <th>Savollar soni</th>
+            <th>Belgilangan vaqt</th>
+            <th>Harakatlar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(subject, i) in searchSubject" :key="i">
+            <td>{{ subject.name }}</td>
+            <td>{{ subject.quizCount }}</td>
+            <td>{{ subject.time }}</td>
+            <td>
+              <el-button
+                type="primary"
+                style="cursor: pointer"
+                size="small"
+                @click="$router.push(`/quiz/${subject._id}`)"
+              >
+                Kirish
+              </el-button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div v-else>
+      <el-empty description="Fanlar toplimadi"></el-empty>
+    </div>
+    <el-pagination
+      small
+      background
+      layout="prev, pager, next"
+      :total="total"
+      :page-size="limit"
+      v-model:current-page="page"
+    />
   </div>
 </template>
 <script>
 import { mapActions, mapState } from "pinia";
 import { subjectStore } from "../../stores/references/subject";
+import notFound from '../notFound.vue';
 export default {
+  components: { notFound },
+  data() {
+    return {
+      search: "",
+      page: 1,
+      limit: 5,
+    };
+  },
   computed: {
-    ...mapState(subjectStore, ["list"]),
+    ...mapState(subjectStore, ["list", "total"]),
+    searchSubject() {
+      return this.list.filter((subject) =>
+        subject.name
+          .toLocaleLowerCase()
+          .includes(this.search.toLocaleLowerCase())
+      );
+    },
+  },
+  watch: {
+    page(val) {
+      this.getList(this.limit, val);
+    },
   },
   methods: {
     ...mapActions(subjectStore, ["getList"]),
   },
   mounted() {
-    this.getList();
+    this.getList(this.limit, this.page);
   },
 };
 </script>
@@ -50,6 +89,9 @@ export default {
   font-family: Arial, Helvetica, sans-serif;
   border-collapse: collapse;
   width: 100%;
+}
+.table {
+  min-height: 350px;
 }
 
 #list td,

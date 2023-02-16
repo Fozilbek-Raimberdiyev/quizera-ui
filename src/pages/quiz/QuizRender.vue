@@ -1,6 +1,6 @@
 <template>
   <div v-if="questions.length">
-    <h6 class="sub-name">{{ subject?.name }}</h6>
+    <h5 class="sub-name">{{ subject?.name }}</h5>
     <div v-if="!isEnded" class="bars" style="margin-bottom: 1rem">
       <div class="flex justify-end">
         <el-button class="cursor-pointer" type="primary" @click="endTest"
@@ -23,7 +23,9 @@
       </div>
       <div style="margin-top: 1rem" class="flex justify-between items-center">
         <h6>{{ questions[currentIndex]?.question }}</h6>
-        <span v-if="questions[currentIndex]?.ball" class="ball">{{ questions[currentIndex]?.ball }} ball</span>
+        <span v-if="questions[currentIndex]?.ball" class="ball"
+          >{{ questions[currentIndex]?.ball }} ball</span
+        >
       </div>
       <div
         class="questions"
@@ -52,6 +54,36 @@
     </div>
     <div v-else>
       <!-- <h4>Yakunlandi</h4> -->
+      <div class="flex justify-between items-center">
+        <span></span>
+        <div
+          v-if="subject.isDifferent"
+          class="result-ball"
+          :class="{ passed: isPassed, failed: !isPassed }"
+        >
+          <h3>{{ sum }} / {{ subject?.point }}</h3>
+        </div>
+        <div v-else class="flex justify-between items-center notDifference">
+          <div title="Belgilangan savollar">
+            <span><i class="bi bi-ui-checks-grid"></i> : </span>
+            <span class="count">
+              {{ +correctAnswersCount + +inCorrectAnswersCount }}
+            </span>
+          </div>
+          <div title="To'gri javoblar soni">
+            <span><i class="bi bi-check2-circle"></i> : </span>
+            <span class="count"> {{ correctAnswersCount }} </span>
+          </div>
+          <div title="Noto'g'ri javoblar soni">
+            <span><i class="bx bx-question-mark"></i> :</span>
+            <span class="count"> {{ inCorrectAnswersCount }} </span>
+          </div>
+          <div title="Belgilanmagan savollar soni">
+            <span><i class="bx bx-checkbox"></i> : </span>
+            <span class="count"> {{ notCheckedQuestionsCount }} </span>
+          </div>
+        </div>
+      </div>
       <div class="tabs">
         <div class="t">
           <span
@@ -69,8 +101,11 @@
           >
         </div>
       </div>
-      <div style="margin-top: 1rem">
+      <div style="margin-top: 1rem" class="flex justify-between items-center">
         <h6>{{ answers[currentIndex]?.question }}</h6>
+        <span v-if="questions[currentIndex]?.ball" class="ball"
+          >{{ questions[currentIndex]?.ball }} ball</span
+        >
       </div>
       <div
         class="questions"
@@ -111,7 +146,7 @@
 import { mapActions, mapState } from "pinia";
 import { questionStore } from "../../stores/references/questions";
 import { subjectStore } from "../../stores/references/subject";
-import subjectService from '../../services/subject.service';
+import subjectService from "../../services/subject.service";
 export default {
   data() {
     return {
@@ -122,11 +157,19 @@ export default {
       timeInterval: setInterval(this.timerFunc, 1),
       checkedCount: 0,
       isChange: false,
+      subject: {},
     };
   },
   computed: {
-    ...mapState(questionStore, ["questions", "answers"]),
-    ...mapState(subjectStore, ["subject"]),
+    ...mapState(questionStore, [
+      "questions",
+      "answers",
+      "sum",
+      "isPassed",
+      "correctAnswersCount",
+      "inCorrectAnswersCount",
+      "notCheckedQuestionsCount",
+    ]),
   },
   watch: {
     questions: {
@@ -175,7 +218,7 @@ export default {
         questions.forEach((question, index) => {
           return (question["number"] = index);
         });
-        this.checkTests(questions);
+        this.checkTests({ questions, point: this.subject?.point });
         this.isEnded = true;
         this.currentIndex = 0;
       }, 1000);
@@ -194,8 +237,9 @@ export default {
       });
       return (this.checkedCount = counts.length);
     },
-    tryAgain() {
-      this.getQuestions(this.$route.params.id);
+    async tryAgain() {
+      let res = (await subjectService.getById(this.$route.params.id)).data;
+      this.getQuestions(this.$route.params.id, "", "", "", res);
       setTimeout(() => {
         this.isEnded = false;
         this.currentIndex = 0;
@@ -203,12 +247,11 @@ export default {
     },
   },
 
-  mounted() {
-    
-  },
+  mounted() {},
   async created() {
-  let res =  (await subjectService.getById(this.$route.params.id)).data;
-  this.getQuestions(this.$route.params.id, "", "", "",res);
+    let res = (await subjectService.getById(this.$route.params.id)).data;
+    this.subject = res;
+    this.getQuestions(this.$route.params.id, "", "", "", res);
   },
 };
 </script>
@@ -307,5 +350,45 @@ input[type="radio"]:checked + label {
   padding: 5px 10px;
   color: #409eff;
   border-radius: 5px;
+}
+.result-ball {
+  border: 1px solid #e3e5e9;
+  padding: 5px 15px;
+  border-radius: 5px;
+}
+.result-ball.passed {
+  border: 1px solid yellowgreen;
+}
+.result-ball.passed h3 {
+  color: yellowgreen;
+}
+.result-ball.failed {
+  border: 1px solid red;
+}
+.result-ball.failed h3 {
+  color: red;
+}
+.result-ball h3 {
+  margin: 0;
+  padding: 0;
+}
+span {
+  font-size: 18px;
+}
+.count {
+  margin: 0 5px;
+  font-size: 18px;
+  font-weight: 600;
+  border: 1px solid #e3e5e9;
+  padding: 2px 10px;
+  border-radius: 5px;
+  color: #706f72;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.notDifference > div {
+  border: 1px solid #f2f0f5;
+  padding: 5px 5px;
+  border-radius: 5px;
+  margin: 0 2px;
 }
 </style>

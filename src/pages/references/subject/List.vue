@@ -11,29 +11,45 @@
       <a-list item-layout="horizontal" :data-source="list">
         <template #renderItem="{ item }">
           <a-list-item>
-            {{ item.name }}
-            <el-button>
-              <i class="bx bxs-edit"></i>
-            </el-button>
-            <a-popconfirm
-              title="Are you sure delete this todo?"
-              ok-text="Yes"
-              cancel-text="No"
-              @confirm="deleteTodo(todo._id)"
-              @cancel="cancel"
-            >
-              <i
-                style="cursor: pointer; color: #429fff"
-                class="bi bi-trash"
-              ></i>
-            </a-popconfirm>
+            <div class="flex items-center">
+              <span style="margin-right: 1rem">{{ item.name }}</span>
+              <div class="actions flex items-center">
+                <el-button style="margin-right: 0.5rem;" class="cursor-pointer" type="text">
+                  <router-link :to="`/references/subject/${item._id}/update`">
+                    <i class="bx bxs-edit"></i>
+                  </router-link>
+                </el-button>
+                <a-popconfirm
+                  title="Are you sure delete this todo?"
+                  ok-text="Yes"
+                  cancel-text="No"
+                  @confirm="deleteSubject(item._id)"
+                  @cancel="cancel"
+                >
+                  <i
+                    style="cursor: pointer; color: #429fff"
+                    class="bi bi-trash"
+                  ></i>
+                </a-popconfirm>
+              </div>
+            </div>
           </a-list-item>
         </template>
       </a-list>
-      <el-button class="cursor-pointer" v-if="!isInAdd" type="primary" @click="toAddOrUpdate"
+      <el-button
+        class="cursor-pointer"
+        v-if="!isInAdd"
+        type="primary"
+        @click="toAddOrUpdate"
         >Qo'shish</el-button
       >
-      <el-button class="cursor-pointer" v-if="isInAdd" @click="toList" type="danger">Yopish</el-button>
+      <el-button
+        class="cursor-pointer"
+        v-if="isInAdd"
+        @click="toList"
+        type="danger"
+        >Yopish</el-button
+      >
     </div>
   </div>
 </template>
@@ -45,7 +61,7 @@ export default {
     return {
       subjectId: "",
       number: 0,
-      isInAdd : false
+      isInAdd: false,
       // stat  : false
     };
   },
@@ -53,19 +69,23 @@ export default {
     ...mapState(subjectStore, ["list"]),
   },
   methods: {
-    ...mapActions(subjectStore, ["getList"]),
+    ...mapActions(subjectStore, ["getList", "deleteSubjectAndQuestions"]),
     getStat(val) {
       if (val) {
         this.getList();
       }
     },
     toAddOrUpdate() {
-      this.isInAdd = true
-      this.$router.push('/references/subject/add')
+      this.isInAdd = true;
+      this.$router.push("/references/subject/add");
     },
     toList() {
-      this.isInAdd = false
-      this.$router.push('/references/subject')
+      this.isInAdd = false;
+      this.$router.push("/references/subject");
+    },
+    async deleteSubject (id) {
+      let res= await this.deleteSubjectAndQuestions(id);
+      this.$router.push("/references/subject")
     }
   },
   mounted() {

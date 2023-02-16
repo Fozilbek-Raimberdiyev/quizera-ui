@@ -1,8 +1,8 @@
 import {$axios} from "./auth"
 
 export default {
-    getSubjects() {
-        return $axios.get("/subjects")
+    getSubjects(limit, page) {
+        return $axios.get("/subjects", {params : {limit, page}})
     },
     addSubject(body) {
         return $axios.post("/subjects/add", body)
@@ -10,7 +10,10 @@ export default {
     getById(id) {
         return $axios.get(`subjects/${id}`)
     },
-    updateSubject(body) {
-        return $axios.put("/subjects/update", body)
+    updateSubject(body, id) {
+        return $axios.put("/subjects/update", body,{params : {ID : id}})
+    },
+    deleteSubjectAndQuestions(id) {
+        return $axios.delete("/subjects/delete", {params : {ID : id}})
     }
 }

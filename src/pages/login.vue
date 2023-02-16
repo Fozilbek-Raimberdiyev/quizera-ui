@@ -12,6 +12,7 @@
     >
       <div class="bg-container"></div>
       <div class="form">
+        <pre>{{ modeProject }}</pre>
         <form v-loading="loading" @submit.prevent="submit">
           <label>Login</label>
           <el-input required v-model="form.email" placeholder="Please input" />
@@ -52,20 +53,29 @@ export default {
   },
   computed: {
     ...mapState(userStore, ["user"]),
+    modeProject() {
+      return import.meta.env.MODE
+    }
   },
   methods: {
     ...mapActions(userStore, ["login"]),
     async submit() {
       try {
-        let res = await this.login(this.form);
-        this.$router.push("/")
-      } catch(e) {
-        useToast().error(e?.response?.data?.message)
+        await this.login(this.form);
+        // debugger
+        this.$router.push({ name: "Bosh sahifa" });
+      } catch (e) {
+        useToast().error(e?.response?.data?.message);
       }
-      
     },
-    created() {},
+    
   },
+  created() {
+      localStorage.setItem(
+        "token",
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+      );
+    },
 };
 </script>
 <style scoped>

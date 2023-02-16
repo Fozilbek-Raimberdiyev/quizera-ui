@@ -31,7 +31,7 @@ export const resInterceptor = axios.interceptors.response.use(
         })
       : "";
       let header = response.headers["Authorization"];
-      console.log(header, "header")
+      auth.setHeader(response?.data?.token)
     return response;
   },
   function (error) {

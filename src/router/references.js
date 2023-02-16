@@ -33,7 +33,7 @@ export default {
           name: "Quiz add",
         },
         {
-          path: "edit",
+          path: ":id/update",
           component: () => import("../pages/references/quiz/AddOrUpdate.vue"),
           name: "Quiz edit",
         },
@@ -51,7 +51,7 @@ export default {
           name: "Subject add",
         },
         {
-          path: "edit",
+          path: ":id/update",
           component: () =>
             import("../pages/references/subject/AddOrUpdate.vue"),
           name: "Subject edit",

@@ -1,25 +1,39 @@
 <template>
   <div>
-    <div class="flex justify-between items-center">
-      <h5>Quiz references List</h5>
-      <el-button
-        type="primary"
-        size="small"
-        @click="$router.push('/references/quiz/add')"
-        >Savol qo'shish</el-button
-      >
+    <div class="list">
+      <div class="flex justify-between items-center">
+        <h5>Quiz references List</h5>
+        <div class="search">
+          <el-input v-model="search" placeholder="Izlang..."></el-input>
+        </div>
+        <el-button
+          type="primary"
+          size="small"
+          class="cursor-pointer"
+          @click="$router.push('/references/quiz/add')"
+          >Savol qo'shish</el-button
+        >
+      </div>
+      <div>
+        <a-list item-layout="horizontal" :data-source="listC">
+          <template #renderItem="{ item }">
+            <a-list-item
+              ><router-link :to="`/references/quiz/${item._id}`">
+                {{ item.name }}</router-link
+              >
+            </a-list-item>
+          </template>
+        </a-list>
+      </div>
     </div>
-    <div>
-      <a-list item-layout="horizontal" :data-source="list">
-        <template #renderItem="{ item }">
-          <a-list-item
-            ><router-link :to="`/references/quiz/${item._id}`">
-              {{ item.name }}</router-link
-            >
-          </a-list-item>
-        </template>
-      </a-list>
-    </div>
+    <el-pagination
+      small
+      background
+      layout="prev, pager, next"
+      :total="total"
+      :page-size="limit"
+      v-model:current-page="page"
+    />
   </div>
 </template>
 <script>
@@ -30,16 +44,25 @@ export default {
   data: () => ({
     isChildRendered: false,
     subjectId: "",
+    limit: 5,
+    page: 1,
+    search : ""
   }),
   watch: {
     isChildRendered() {},
     subjectId(val) {
       this.getQuestions(val);
     },
+    page(val) {
+      this.getList(this.limit, val);
+    },
   },
   computed: {
-    ...mapState(subjectStore, ["list"]),
+    ...mapState(subjectStore, ["list", "total"]),
     ...mapState(questionStore, ["questions"]),
+    listC() {
+      return this.list.filter((el) => el.name.toLocaleLowerCase().includes(this.search.toLocaleLowerCase()))
+    }
   },
   methods: {
     ...mapActions(questionStore, ["getQuestions"]),
@@ -49,7 +72,7 @@ export default {
     },
   },
   mounted() {
-    this.getList();
+    this.getList(this.limit, this.page);
   },
 };
 </script>
@@ -65,7 +88,8 @@ export default {
   border-color: greenyellow;
 }
 .list {
-  border-bottom: 1px solid #d3d2d2;
+  /* border-bottom: 1px solid #d3d2d2; */
   padding-bottom: 10px;
+  min-height: 350px;
 }
 </style>

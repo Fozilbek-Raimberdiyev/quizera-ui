@@ -36,7 +36,7 @@
         <label for="time">
           Testga ajratiladigan daqiqani kiriting
           <el-input
-          class="minute"
+            class="minute"
             v-model="form.time"
             placeholder="Ajratiladigan vaqtni kiriting(daqiqa hisobida)"
           >
@@ -47,6 +47,16 @@
         </label>
       </div>
       <el-button
+        v-if="$route.params.id"
+        type="primary"
+        style="margin-top: 5px"
+        class="cursor-pointer"
+        native-type="submit"
+      >
+        Yangilash
+      </el-button>
+      <el-button
+        v-else
         type="primary"
         style="margin-top: 5px"
         class="cursor-pointer"
@@ -61,13 +71,14 @@
       <template #header>
         <h6>Savollarni ball tizimida sonini aniqlash</h6>
       </template>
-      <div class="flex justify-between">
+      <div class="flex justify-between items-center">
         <h6>
           <span :class="{ error: sumCountGrades > form.quizCount }">{{
             sumCountGrades
           }}</span>
           / {{ form.quizCount }}
         </h6>
+        <h5 class="point">{{ countPointSubject }}</h5>
         <el-button
           type="primary"
           class="cursor-pointer"
@@ -118,7 +129,7 @@
             <i
               @click="deleteGradeOption(index)"
               style="font-size: 1.2rem; color: #409eef"
-              class="bx bx-trash"
+              class="bx bx-trash cursor-pointer"
             ></i>
           </div>
         </div>
@@ -132,8 +143,8 @@
       <el-button
         @click="plusGradeOption"
         v-if="
-          form.grades[form.grades.length - 1].count &&
-          form.grades[form.grades.length - 1].grade
+          form?.grades[form.grades.length - 1].count &&
+          form?.grades[form.grades.length - 1].grade
         "
         type="primary"
         style="margin-top: 5px"
@@ -191,7 +202,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(subjectStore, ["list"]),
+    ...mapState(subjectStore, ["list", "subject"]),
     sumCountGrades() {
       let sum = 0;
       for (let i = 0; i < this.form.grades.length; i++) {
@@ -199,6 +210,14 @@ export default {
       }
       return sum;
     },
+    countPointSubject() {
+      let grades = [...this.form.grades];
+      let sum = 0;
+      for(let element of grades) {
+        sum+=(+element.grade * +element.count)
+      }
+      return sum;
+    }
   },
   watch: {
     "form.quizCount"(val) {
@@ -208,26 +227,62 @@ export default {
     "form.isDifferent"(val) {
       if (val) {
         this.toModal();
-        for (let i = 1; i < this.form.quizCount?.length; i++) {
-          this.numbers.push(i);
+        if (this.numbers.length < this.form.quizCount) {
+          for (let i = 1; i < this.form.quizCount?.length; i++) {
+            this.numbers.push(i);
+          }
         }
+      }
+    },
+    "$route.params.id"(val) {
+      if (val) {
+        this.setFormData(val);
+      } else {
+        this.form = {
+          name: "",
+          time: "",
+          quizCount: "",
+          isDifferent: false,
+          grades: [
+            {
+              grade: null,
+              count: null,
+            },
+          ],
+        };
       }
     },
   },
   methods: {
-    ...mapActions(subjectStore, ["addSubject", "updateSubject"]),
+    ...mapActions(subjectStore, ["addSubject", "updateSubject", "getById", "getList"]),
     async submit() {
       this.v$.$validate();
-      if (!this.v$.$error) {
-        let res = await this.addSubject(this.form);
-        this.$emit("created", res);
-        this.$router.push("/references/subject");
+      if (!this.$route.params.id) {
+        if (!this.v$.$error) {
+          let form = {...this.form};
+          form.point = this.countPointSubject
+          let res = await this.addSubject(form);
+          this.$emit("created", res);
+          this.$router.push("/references/subject");
+        }
+      } else {
+        if (!this.v$.$error) {
+          let form = {...this.form};
+          form._id = undefined;
+          form.__v = undefined;
+          form.point = this.countPointSubject
+          let res = await this.updateSubject(form, this.$route.params.id);
+          this.$router.push("/references/subject");
+          this.getList()
+        }
       }
     },
     toModal() {
       // this.form.quizCount
-      for (let i = 1; i < +this.form.quizCount + 1; i++) {
-        this.numbers.push(i);
+      if (this.numbers.length < this.form.quizCount) {
+        for (let i = 1; i < +this.form.quizCount; i++) {
+          this.numbers.push(i);
+        }
       }
       this.dialogTableVisible = true;
     },
@@ -266,8 +321,19 @@ export default {
         this.form.grades = [{ grade: null, count: null }];
       }
     },
+    async setFormData(val) {
+      await this.getById(val);
+      let form = { ...this.subject };
+      // form.grades = [{grade : null, count : null}];
+      form.isDifferent ? form.isDifferent : form.isDifferent=false
+      this.form = form;
+      // this.form = res;
+    },
   },
-  mounted() {},
+  created() {
+    this.setFormData(this.$route.params.id);
+    // this.getById(this.$route.params.id)
+  },
 };
 </script>
 <style scoped>

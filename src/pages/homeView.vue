@@ -18,7 +18,7 @@
         <router-link v-if="!smallScreen" to="/"> Navigation</router-link>
         <router-link v-else to="/"> <i class='bx bx-briefcase'></i></router-link>
       </div>
-      <a-menu v-model:selectedKeys="selectedKeys" theme="dark" mode="inline">
+      <a-menu theme="dark" mode="inline">
         <a-sub-menu key="sub1">
           <template #title>
             <span v-if="!smallScreen">Management</span>
