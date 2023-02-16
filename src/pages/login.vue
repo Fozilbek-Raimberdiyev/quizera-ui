@@ -12,6 +12,7 @@
     >
       <div class="bg-container"></div>
       <div class="form">
+        <pre>server manzili :{{ SERVER_URL }}</pre>
         <pre>{{ modeProject }}</pre>
         <form v-loading="loading" @submit.prevent="submit">
           <label>Login</label>
