@@ -21,45 +21,45 @@
       <a-menu theme="dark" mode="inline">
         <a-sub-menu key="sub1">
           <template #title>
-            <span v-if="!smallScreen">Management</span>
+            <span v-if="!smallScreen">Boshqarish</span>
             <span v-else><i class="bi bi-sliders"></i></span>
           </template>
           <a-menu-item key="3"
             ><router-link to="/management/users"
-              >Users</router-link
+              >Foydalanuvchilar</router-link
             ></a-menu-item
           >
           <a-menu-item key="4"
             ><router-link to="/management/roles"
-              >Roles</router-link
+              >Rollar</router-link
             ></a-menu-item
           >
           <a-menu-item key="5"
             ><router-link to="/management/permissions"
-              >Permissions</router-link
+              >Ruxsatlar</router-link
             ></a-menu-item
           >
         </a-sub-menu>
         <a-menu-item key="2">
-          <router-link v-if="!smallScreen" to="/quiz">Quiz</router-link>
+          <router-link v-if="!smallScreen" to="/quiz">Test ishlash</router-link>
           <router-link v-else to="/quiz"
             ><i class="bi bi-question-square"></i
           ></router-link>
         </a-menu-item>
         <a-menu-item key="5">
-          <router-link v-if="!smallScreen" to="/posts">Posts</router-link>
+          <router-link v-if="!smallScreen" to="/posts">Maqolalar</router-link>
           <router-link v-else to="/posts"
             ><i class="bx bx-news"></i
           ></router-link>
         </a-menu-item>
 
         <a-menu-item key="9">
-          <router-link v-if="!smallScreen" to="/movies">Movies</router-link>
+          <router-link v-if="!smallScreen" to="/movies">Kinolar</router-link>
           <router-link v-else to="/movies"
             ><i class="bi bi-film"></i></router-link>
         </a-menu-item>
         <a-menu-item>
-          <router-link v-if="!smallScreen" to="/todos">Todos</router-link>
+          <router-link v-if="!smallScreen" to="/todos">Topshiriqlar</router-link>
           <router-link v-else to="/todos"
             ><i class="bi bi-check2-square"></i
           ></router-link>
@@ -70,16 +70,16 @@
             <span v-else><i class="bx bx-building"></i></span>
           </template>
           <a-menu-item key="10"
-            ><router-link to="/references/quiz">Quiz</router-link></a-menu-item
+            ><router-link to="/references/quiz">Savollar</router-link></a-menu-item
           >
           <a-menu-item key="11"
             ><router-link to="/references/subject"
-              >Subject</router-link
+              >Fanlar</router-link
             ></a-menu-item
           >
-          <a-menu-item key="12"
+          <!-- <a-menu-item key="12"
             ><router-link to="">Item1</router-link></a-menu-item
-          >
+          > -->
         </a-sub-menu>
       </a-menu>
     </a-layout-sider>

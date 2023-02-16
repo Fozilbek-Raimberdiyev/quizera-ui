@@ -1,5 +1,11 @@
 <template>
-  <div>
+  <div v-if="loading" class="container">
+    <div class="loading flex justify-center items-center">
+      <div class="hidden"></div>
+      <img  src="../../assets/gif/ball-loading.gif" alt="loading" />
+    </div>
+  </div>
+  <div v-else="!loading" class="wrapper">
     <div class="flex items-center justify-between">
       <h5>Yakuniy nazorat</h5>
       <div>
@@ -51,7 +57,7 @@
 <script>
 import { mapActions, mapState } from "pinia";
 import { subjectStore } from "../../stores/references/subject";
-import notFound from '../notFound.vue';
+import notFound from "../notFound.vue";
 export default {
   components: { notFound },
   data() {
@@ -59,6 +65,7 @@ export default {
       search: "",
       page: 1,
       limit: 5,
+      loading: false,
     };
   },
   computed: {
@@ -80,7 +87,9 @@ export default {
     ...mapActions(subjectStore, ["getList"]),
   },
   mounted() {
+    this.loading = true
     this.getList(this.limit, this.page);
+    this.loading = false
   },
 };
 </script>
@@ -113,5 +122,22 @@ export default {
   /* background-color: #04AA6D; */
   color: #000;
   border-bottom: 2px solid #f7f8fc;
+}
+.container {
+  position: relative;
+}
+
+.loading {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
+.loading img {
+  width: 200px;
+  background: #e3e5e9;
 }
 </style>
