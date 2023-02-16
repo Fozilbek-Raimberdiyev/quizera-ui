@@ -60,8 +60,6 @@ import { mapActions, mapState } from "pinia";
 import { questionStore } from "../../../stores/references/questions";
 import { subjectStore } from "../../../stores/references/subject";
 import questionsService from "../../../services/questions.service";
-import jsPDF from "jspdf";
-import pdfMake from "pdfmake/build/pdfmake"
 export default {
   data() {
     return {
