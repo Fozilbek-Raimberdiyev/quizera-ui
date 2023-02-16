@@ -12,7 +12,7 @@
     >
       <div class="bg-container"></div>
       <div class="form">
-        <pre>server manzili :{{ SERVER_URL }}</pre>
+        <pre>server manzili :{{ serverUrl }}</pre>
         <pre>{{ modeProject }}</pre>
         <form v-loading="loading" @submit.prevent="submit">
           <label>Login</label>
@@ -56,6 +56,9 @@ export default {
     ...mapState(userStore, ["user"]),
     modeProject() {
       return import.meta.env.MODE
+    },
+    serverUrl() {
+      return import.meta.env.VITE_SERVER_URL
     }
   },
   methods: {
