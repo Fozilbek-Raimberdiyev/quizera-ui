@@ -1,21 +1,26 @@
  <template>
   <div class="back">
-    <img
+    <!-- <img
       class="loading"
       v-if="!isMounted"
       src="./assets/gif/spinner.gif"
       alt="Loading"
-    />
-    <router-view v-else></router-view>
+    /> -->
+    <router-view></router-view>
   </div>
 </template>
 <script>
 import { mapActions, mapState, mapStores } from "pinia";
 import { loadingStore } from "./stores/loading.store";
+import { useLoading } from "vue-loading-overlay";
+const loadingIndicator = useLoading();
+const { show } = useLoading();
 export default {
   data() {
     return {
       stateMounted: false,
+      loader: null,
+      isLoaded : false
     };
   },
   methods: {
@@ -32,7 +37,8 @@ export default {
       }
     },
   },
-  watch: {},
+  watch: {
+  },
   mounted() {
     setTimeout(() => {
       this.loadingStore.$patch({ isMounted: true });

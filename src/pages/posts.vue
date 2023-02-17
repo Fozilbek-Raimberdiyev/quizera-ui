@@ -1,6 +1,5 @@
 <template>
   <div>Posts</div>
-  <pre>{{ pdfFile }}</pre>
   <h1 id="table">
     Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet dolores
     numquam, officia nisi rem cumque animi beatae iure quis, adipisci, ullam

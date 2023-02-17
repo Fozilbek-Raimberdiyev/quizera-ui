@@ -102,6 +102,7 @@ export default {
     ...mapState(movieStore, ["list", "total", "search"]),
     ...mapState(loadingStore, ["loading"]),
   },
+  props : ["size", "large","small", "default", "type", "primart", "info", "succes", "text", "native-type", "submit", "cancel"],
   watch: {
     search() {
       if (!this.search) {

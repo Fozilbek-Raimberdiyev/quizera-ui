@@ -3,7 +3,6 @@ import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
 
-
  import  {resInterceptor, reqinterceptor} from "./services/api.service"
 
 import "boxicons"
@@ -37,6 +36,12 @@ const pinia = createPinia()
 
 
 
+//importing sweetalert2
+import VueSweetalert2 from 'vue-sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
+import { loadingStore } from './stores/loading.store'
+
+
 export const app = createApp(App)
 
 // The usual app stuff goes here.
@@ -46,15 +51,17 @@ app.use(pinia)
 app.use(router)
 app.use(ElementPlus)
 app.use(Toast)
-app.use(resInterceptor)
 app.use(reqinterceptor)
-app.use(LoadingPlugin)
+app.use(resInterceptor)
+
+// app.use(LoadingPlugin)
 app.use(Quasar, {
     plugins: {}, // import Quasar plugins and add here
   })
 
   app.use(Antd)
   // app.use(abilitiesPlugin,ability)
-
+app.use(VueSweetalert2)
 app.use(VueSidebarMenu)
 app.mount('#app')
+

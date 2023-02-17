@@ -16,6 +16,9 @@ export const todoStore = defineStore("todoStore", {
       this.list = res.todos;
       this.total = res.total;
     },
+    addTodo (data) {
+      return todosService.addTodo(data)
+    },
     async updateById(id, body) {
       return todosService.updateTodoById(id, body);
     },

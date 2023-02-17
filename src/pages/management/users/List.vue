@@ -4,13 +4,9 @@
       <el-button
         style="float: right; margin-bottom: 2px"
         type="primary"
-        @click="$router.push({ name: 'User add' })"
-        :title="[
-          $ability.can('create', 'management')
-            ? ''
-            : 'Sizning bu amalga ruxsatingiz yo\'/q',
-        ]"
-        >Create user</el-button
+        class="cursor-pointer"
+        @click="$router.push('/management/users/add')"
+        >Add user</el-button
       >
       <!-- {{ $ability }} -->
     </div>
@@ -32,7 +28,6 @@
             <td>
               <div>
                 <el-button
-                  @click="toUpdate(index)"
                   type="text"
                   style="cursor: pointer"
                   ><i class="bx bxs-edit"></i
@@ -53,17 +48,11 @@
                   <template #footer>
                     <span class="dialog-footer">
                       <el-button
-                        :style="[
-                          $ability.can('create', 'management')
-                            ? ''
-                            : 'pointer-events: none',
-                        ]"
                         @click="dialogVisible = false"
                         >Cancel</el-button
                       >
                       <el-button
                         type="primary"
-                        @click="deleteUser(index)"
                       >
                         Confirm
                       </el-button>
@@ -84,32 +73,22 @@
 <script>
 import { mapActions, mapState, mapStores } from "pinia";
 import { userStore } from "../../../stores/management/user.store";
-import { ability } from "../../../services/ability";
 export default {
   components: {},
   data() {
     return {
       dialogVisible: false,
-      users : []
     };
   },
   computed: {
-    ...mapState(userStore, ["user"]),
-    ...mapStores(userStore),
+    ...mapState(userStore, ["user", "users"]),
   },
   methods: {
-    ...mapActions(userStore, ["createUser"]),
-    deleteUser(index) {
-      this.currentIndex = index;
-      this.users.splice(this.currentIndex, 1);
-      localStorage.setItem("users", JSON.stringify(this.users));
-      this.dialogVisible = false
-    },
-    toUpdate(index) {
-      this.userStoreStore.$patch({ currentIndex: index });
-      this.$router.push("/management/users/update");
-    },
+    ...mapActions(userStore, ["getAllUsers"])
   },
+  created() {
+    this.getAllUsers()
+  }
 };
 </script>
 <style scoped>

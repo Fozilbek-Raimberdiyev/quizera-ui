@@ -107,6 +107,7 @@ export default {
       rules : []
     },
   }),
+  props : ["size", "large","small", "default", "type", "primart", "info", "succes", "text", "native-type", "submit", "cancel"],
   validations() {
     return {
       form: {

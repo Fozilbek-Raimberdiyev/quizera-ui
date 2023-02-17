@@ -91,6 +91,7 @@ export default {
       // rules : []
     },
   }),
+  props : ["size", "large","small", "default", "type", "primart", "info", "succes", "text", "native-type", "submit", "cancel"],
   validations() {
     return {
       form: {
@@ -109,15 +110,12 @@ export default {
   watch: {},
   computed: {},
   methods: {
-    ...mapActions(todoStore, ["getById", "updateById"]),
+    ...mapActions(todoStore, ["getById", "updateById", "addTodo"]),
     async submit() {
       this.v$.$validate();
       if (!this.v$.$error) {
         if (!this.$route.params.id) {
-          let res = await axios.post(
-            "http://localhost:8080/api/todos/add",
-            this.form
-          );
+          let res = await this.addTodo(this.form)
           this.$router.push("/todos");
         } else {
           let id = this.form._id;

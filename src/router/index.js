@@ -3,8 +3,11 @@ import { loadingStore } from "../stores/loading.store";
 import { userStore } from "../stores/management/user.store";
 import { h, resolveComponent } from "vue";
 import jwtDecode from "jwt-decode";
-import references from "./references"
-let token = localStorage.getItem("token") || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+import references from "./references";
+import auth from "../services/auth";
+let token =
+  localStorage.getItem("token") ||
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
 const routes = [
   {
     path: "/",
@@ -21,18 +24,20 @@ const routes = [
         meta: {
           public: false,
           isMain: true,
+          roles: ["admin", "teacher", "student"],
         },
       },
       {
         path: "/management",
         name: "Management",
-        redirect: { name: "" },
         component: {
           render() {
             return h(resolveComponent("router-view"));
           },
         },
-
+        meta: {
+          roles: ["admin"],
+        },
         children: [
           {
             path: "users",
@@ -47,18 +52,28 @@ const routes = [
                 path: "",
                 name: "",
                 component: () => import("../pages/management/users/List.vue"),
+                meta: {
+                  roles: ["admin"],
+                },
               },
               {
                 path: "add",
                 name: "User add",
                 component: () =>
                   import("../pages/management/users/AddOrUpdate.vue"),
+                meta: {
+                  roles: ["admin"],
+                },
               },
+
               {
                 path: "update",
                 name: "User update",
                 component: () =>
                   import("../pages/management/users/AddOrUpdate.vue"),
+                meta: {
+                  roles: ["admin"],
+                },
               },
             ],
           },
@@ -70,30 +85,46 @@ const routes = [
                 return h(resolveComponent("router-view"));
               },
             },
+            meta: {
+              roles: ["admin"],
+            },
             children: [
               {
                 path: "",
                 name: "",
                 component: () => import("../pages/management/roles/List.vue"),
+                meta: {
+                  roles: ["admin"],
+                },
               },
               {
                 path: "create",
                 name: "Role create",
                 component: () =>
                   import("../pages/management/roles/AddOrUpdate.vue"),
+                meta: {
+                  roles: ["admin"],
+                },
               },
               {
                 path: "update",
                 name: "Role update",
                 component: () =>
                   import("../pages/management/roles/AddOrUpdate.vue"),
+                meta: {
+                  roles: ["admin"],
+                },
               },
             ],
           },
           {
-            path : "permissions",
-            name : "Permissions",
-            component : () => import("../pages/management/permissions/Permissions.vue")
+            path: "permissions",
+            name: "Permissions",
+            component: () =>
+              import("../pages/management/permissions/Permissions.vue"),
+            meta: {
+              roles: ["admin"],
+            },
           },
         ],
       },
@@ -107,34 +138,38 @@ const routes = [
         name: "Tests",
         meta: {
           public: false,
+          roles: ["admin", "teacher", "student"],
         },
-        children : [
+        children: [
           {
-            path : "",
-            component : () => import("../pages/quiz/List.vue"),
-            name : ""
+            path: "",
+            component: () => import("../pages/quiz/List.vue"),
+            name: "",
           },
           {
-            path : ":id",
-            component : () => import("../pages/quiz/QuizRender.vue"),
-            name : ""
+            path: ":id",
+            component: () => import("../pages/quiz/QuizRender.vue"),
+            name: "",
           },
           {
-            path : "add",
-            component : () => import("../pages/quiz/AddOrUpdate.vue.vue"),
-            name : "Qo'shish"
+            path: "add",
+            component: () => import("../pages/quiz/AddOrUpdate.vue.vue"),
+            name: "Qo'shish",
           },
           {
-            path : "edit",
-            component : () => import("../pages/quiz/AddOrUpdate.vue.vue"),
-            name : "Tahrirlash"
-          }
-        ]
+            path: "edit",
+            component: () => import("../pages/quiz/AddOrUpdate.vue.vue"),
+            name: "Tahrirlash",
+          },
+        ],
       },
       {
         path: "/posts",
         component: () => import("../pages/posts.vue"),
         name: "posts",
+        meta: {
+          roles: ["admin", "teacher", "student"],
+        },
       },
       {
         path: "/movies",
@@ -143,6 +178,9 @@ const routes = [
           render() {
             return h(resolveComponent("router-view"));
           },
+        },
+        meta: {
+          roles: ["admin", "teacher", "student"],
         },
         name: "Movies",
         children: [
@@ -162,48 +200,55 @@ const routes = [
         ],
       },
       {
-        path : "todos",
-        name : "Todos",
-        component : {
-           render() {
-            return h(resolveComponent("router-view"))
-           }
+        path: "todos",
+        name: "Todos",
+        component: {
+          render() {
+            return h(resolveComponent("router-view"));
+          },
         },
-        children : [
+        meta: {
+          roles: ["admin", "teacher", "student"],
+        },
+        children: [
           {
-            path : "",
-            component : () => import("../pages/todos/List.vue"),
-            name : ""
+            path: "",
+            component: () => import("../pages/todos/List.vue"),
+            name: "",
           },
           {
-            path : ":id/update",
-            component : () => import("../pages/todos/AddOrUpdate.vue"),
-            name : "Todo update"
+            path: ":id/update",
+            component: () => import("../pages/todos/AddOrUpdate.vue"),
+            name: "Todo update",
           },
           {
-            path : "add",
-            component : () => import("../pages/todos/AddOrUpdate.vue"),
-            name : "Todo add"
-          }
-        ]
+            path: "add",
+            component: () => import("../pages/todos/AddOrUpdate.vue"),
+            name: "Todo add",
+          },
+        ],
       },
       {
-        path : "/profile",
-        component : () => import("../pages/profile/me.vue"),
-        name : "Profile"
+        path: "/profile",
+        component: () => import("../pages/profile/me.vue"),
+        name: "Profile",
+        meta: {
+          roles: ["admin", "role", "student"],
+        },
       },
       {
-        ...references
-      }
+        ...references,
+      },
     ],
   },
   {
     path: "/login",
     component: () => import("../pages/login.vue"),
     name: "login",
-    // meta: {
-    //   public: true,
-    // },
+    meta: {
+      public: true,
+      roles: ["admin", "teacher", "student"],
+    },
   },
   {
     path: "/register",
@@ -211,6 +256,7 @@ const routes = [
     name: "register",
     meta: {
       public: true,
+      roles: ["admin", "teacher", "student"],
     },
   },
   {
@@ -219,6 +265,7 @@ const routes = [
     name: "NotFound",
     meta: {
       public: true,
+      roles: ["admin", "teacher", "student"],
     },
   },
   {
@@ -232,22 +279,23 @@ const router = createRouter({
   routes: routes,
 });
 
-
-
-router.beforeEach((to, from, next) => {
-  let {exp} = jwtDecode(token) || null;
-  let current = Math.floor(Date.now() / 1000)
+router.beforeEach(async(to, from, next) => {
+  // const userRole = "student";
+  const userRole =  (await auth.getCurrentUser())?.data;
+  console.log(userRole)
+  const requiredRoles = to.meta.roles;
+  let { exp } = jwtDecode(token) || null;
+  let current = Math.floor(Date.now() / 1000);
   let isValid = current <= exp;
   const isAuth = userStore().isAuth;
-  if ((!isValid && to.name!="login")) {
-    next("/login");
+
+  if(!isValid  && to.name!="login") {
+    next("/login")
   } else {
-    if (!loadingStore().isMounted) {
-      setTimeout(() => {
-        next();
-      }, 500);
+    if(!requiredRoles?.some((role) => role === userRole) && to.path!="/") {
+      next("/")
     } else {
-      next();
+      next()
     }
   }
 });

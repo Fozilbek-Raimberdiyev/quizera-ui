@@ -57,6 +57,7 @@ export default {
       this.getList(this.limit, val);
     },
   },
+  props : ["size", "large","small", "default", "type", "primart", "info", "succes", "text", "native-type", "submit", "cancel"],
   computed: {
     ...mapState(subjectStore, ["list", "total"]),
     ...mapState(questionStore, ["questions"]),

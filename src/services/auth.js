@@ -1,10 +1,6 @@
 import axios from "axios";
 import { useRoute } from "vue-router";
 import router from "../router/index"
-// const path = "http://localhost:3000/.netlify/functions/api"
-// let path = import.meta.env.SERVER_URL;
-//"development"
-// console.log(import.meta.env.MODE)
 let path = import.meta.env.VITE_SERVER_URL;
 export const $axios = axios.create({
   baseURL: path,
@@ -14,6 +10,9 @@ export const $axios = axios.create({
 });
 
 export default {
+  getAllUsers() {
+    return $axios.get("/users")
+  },
   register(form) {
     return $axios.post(`/auth/register`, form);
   },
@@ -23,4 +22,7 @@ export default {
   setHeader(token) {
     axios.defaults.headers.common["authorization"] = token;
   },
+  getCurrentUser() {
+    return $axios.get("/auth/user")
+  }
 };

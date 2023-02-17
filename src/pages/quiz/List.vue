@@ -78,6 +78,7 @@ export default {
       );
     },
   },
+  props : ["size", "large","small", "default", "type", "primart", "info", "succes", "text", "native-type", "submit", "cancel"],
   watch: {
     page(val) {
       this.getList(this.limit, val);

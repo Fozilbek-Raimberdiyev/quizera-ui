@@ -1,12 +1,15 @@
 import { defineStore } from "pinia";
-
+import rolesService from "../../services/management/roles.service";
 export const roleStore = defineStore("roleStore", {
     state : () => ({
-        roles : JSON.parse(localStorage.getItem("roles")) || []
+        roles :  []
     }),
     actions : {
-        createRole () {
-
+       async getList() {
+        this.roles = await rolesService.getList()
+        },
+        addRole (data) {
+            return rolesService.addRole(data)
         }
     }
 })

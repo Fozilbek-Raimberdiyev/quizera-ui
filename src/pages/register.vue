@@ -50,6 +50,7 @@ export default {
         lastName: "",
         birdthData: "",
         phoneNumber: null,
+        role : "student"
       },
       loading: false,
     };
@@ -61,7 +62,7 @@ export default {
     ...mapActions(userStore, ["createUser"]),
     async submit() {
       let res = await this.createUser(this.form);
-      if (res) this.$router.push("/");
+      if (res) window.location.href = "/"
     },
   },
 };

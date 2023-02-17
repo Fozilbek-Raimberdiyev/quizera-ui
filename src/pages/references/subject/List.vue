@@ -20,9 +20,9 @@
                   </router-link>
                 </el-button>
                 <a-popconfirm
-                  title="Are you sure delete this todo?"
-                  ok-text="Yes"
-                  cancel-text="No"
+                  title="Haqiqatdan o'chirmoqchimisiz? Fanga qo'shilib savollari ham o'chib ketadi?"
+                  ok-text="Ha"
+                  cancel-text="Yo'q"
                   @confirm="deleteSubject(item._id)"
                   @cancel="cancel"
                 >
@@ -86,7 +86,7 @@ export default {
     async deleteSubject (id) {
       let res= await this.deleteSubjectAndQuestions(id);
       this.$router.push("/references/subject")
-    }
+    },
   },
   mounted() {
     this.getList();

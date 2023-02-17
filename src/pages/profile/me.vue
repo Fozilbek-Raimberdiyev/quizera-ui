@@ -18,6 +18,8 @@
       ></el-date-picker>
       <label class="block font-extrabold">Email</label>
       <el-input v-model="form.email" placeholder="Enter the email"></el-input>
+      <label class="block font-extrabold">Role</label>
+      <el-input disabled v-model="form.role"></el-input>
       <el-button
         native-type="submit"
         type="primary"
@@ -38,6 +40,7 @@ export default {
       birdthData: "",
       email: "",
       phoneNumber: "",
+      role: "",
     },
   }),
   computed: {
@@ -50,6 +53,7 @@ export default {
         (this.form.lastName = user.lastName),
         (this.form.birdthData = user.birdthData),
         (this.form.email = user.email);
+      this.form.role = user.role;
     },
   },
   mounted() {

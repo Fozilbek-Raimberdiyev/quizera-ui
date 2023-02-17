@@ -66,6 +66,7 @@ export default {
       currentIndex : ""
     };
   },
+  props : ["size", "large","small", "default", "type", "primart", "info", "succes", "text", "native-type", "submit", "cancel"],
   computed: {
     ...mapState(permissionStore, ["list"]),
   },

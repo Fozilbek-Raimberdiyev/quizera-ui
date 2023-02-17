@@ -16,6 +16,9 @@ export default {
         },
       },
       name: "Quiz",
+      meta: {
+        roles: ["admin", "teacher", "student"],
+      },
       children: [
         {
           path: "",
@@ -23,19 +26,28 @@ export default {
           name: "List",
         },
         {
-          path : ":id",
-          component : () => import("../pages/references/quiz/View.vue"),
-          name : "View"
+          path: ":id",
+          component: () => import("../pages/references/quiz/View.vue"),
+          name: "View",
+          meta: {
+            roles: ["admin","teacher", "student"],
+          },
         },
         {
           path: "add",
           component: () => import("../pages/references/quiz/AddOrUpdate.vue"),
           name: "Quiz add",
+          meta: {
+            roles: ["admin"],
+          },
         },
         {
           path: ":id/update",
           component: () => import("../pages/references/quiz/AddOrUpdate.vue"),
           name: "Quiz edit",
+          meta: {
+            roles: ["admin"],
+          },
         },
       ],
     },
@@ -43,18 +55,27 @@ export default {
       path: "subject",
       component: () => import("../pages/references/subject/List.vue"),
       name: "Subject",
+      meta: {
+        roles: ["admin", "teacher", "student"],
+      },
       children: [
         {
           path: "add",
           component: () =>
             import("../pages/references/subject/AddOrUpdate.vue"),
           name: "Subject add",
+          meta: {
+            roles: ["admin"],
+          },
         },
         {
           path: ":id/update",
           component: () =>
             import("../pages/references/subject/AddOrUpdate.vue"),
           name: "Subject edit",
+          meta: {
+            roles: ["admin"],
+          },
         },
       ],
     },

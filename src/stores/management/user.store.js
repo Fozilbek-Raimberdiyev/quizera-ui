@@ -6,6 +6,7 @@ export const userStore = defineStore("userStore", {
   state: () => ({
     user: JSON.parse(localStorage.getItem("user")) || {},
     token: localStorage.getItem("token") || null,
+    users : []
   }),
   getters: {
     isAuth() {
@@ -14,6 +15,14 @@ export const userStore = defineStore("userStore", {
     },
   },
   actions: {
+    async getAllUsers() {
+      try {
+        let res = await auth.getAllUsers();
+        this.users = res.data;
+      } catch(e) {
+        console.log(e)
+      }
+    },
     async createUser(form) {
       let res = await auth.register(form);
       this.user = res.data;
