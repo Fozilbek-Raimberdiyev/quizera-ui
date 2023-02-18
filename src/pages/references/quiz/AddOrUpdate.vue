@@ -409,7 +409,7 @@ export default {
       window.scrollTo({ top: 0, behavior: "smooth" });
     },
     deleteQuestion() {
-      console.log("delete");
+      // console.log("delete");
     },
   },
   mounted() {

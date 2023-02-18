@@ -282,12 +282,10 @@ const router = createRouter({
 router.beforeEach(async(to, from, next) => {
   let userRole = null;
   try{
-    userRole =  (await auth.getCurrentUser()).data.role
+    userRole =  (await auth.getCurrentUser()).data
   }catch(e) {
     userRole = "student"
   }
-  // const userRole =  res.data || res.data.role 
-  console.log(userRole)
   const requiredRoles = to.meta.roles;
   let { exp } = jwtDecode(token) || null;
   let current = Math.floor(Date.now() / 1000);

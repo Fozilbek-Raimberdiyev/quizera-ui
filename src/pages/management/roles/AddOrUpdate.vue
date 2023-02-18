@@ -74,7 +74,7 @@ export default {
     ...mapActions(permissionStore, ["getList"]),
     submit() {},
    async setData(e) {
-      console.log(e, "event")
+      // console.log(e, "event")
     },
   },
   mounted() {

@@ -15,7 +15,7 @@
       :collapsed="smallScreen ? true : false"
     >
       <div class="logo" style="color: #fff; font-size: 18px; padding: 25px">
-        <router-link v-if="!smallScreen" to="/"> Navigation</router-link>
+        <router-link v-if="!smallScreen" to="/"> Portfolio</router-link>
         <router-link v-else to="/"> <i class='bx bx-briefcase'></i></router-link>
       </div>
       <a-menu theme="dark" mode="inline">

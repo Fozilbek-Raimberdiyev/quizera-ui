@@ -139,7 +139,7 @@ export default {
           let body = {...this.form}
           body.role = this.form.role.name;
           body.rules = this.form.role.rules
-          console.log(body)
+          // console.log(body)
           this.createUser(body);
           this.$router.push("/management/users");
         } else {
