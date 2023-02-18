@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useRoute } from "vue-router";
 import router from "../router/index"
+import { loadingStore } from "../stores/loading.store";
 let path = import.meta.env.VITE_SERVER_URL;
 export const $axios = axios.create({
   baseURL: path,
@@ -23,6 +24,9 @@ export default {
     axios.defaults.headers.common["authorization"] = token;
   },
   getCurrentUser() {
-    return $axios.get("/auth/user")
+    loadingStore().loading = false
+    return $axios.get("/auth/user").then((res) => {loadingStore().loading - false}).finally(() => {
+      loadingStore().loading = false
+    })
   }
 };

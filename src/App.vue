@@ -6,6 +6,12 @@
       src="./assets/gif/spinner.gif"
       alt="Loading"
     /> -->
+    <loading
+      v-model:active="loading"
+      :can-cancel="true"
+      :on-cancel="false"
+      :is-full-page="true"
+    />
     <router-view></router-view>
   </div>
 </template>
@@ -13,14 +19,14 @@
 import { mapActions, mapState, mapStores } from "pinia";
 import { loadingStore } from "./stores/loading.store";
 import { useLoading } from "vue-loading-overlay";
-const loadingIndicator = useLoading();
-const { show } = useLoading();
+import Loading from "vue-loading-overlay";
+import "vue-loading-overlay/dist/css/index.css";
 export default {
   data() {
     return {
       stateMounted: false,
       loader: null,
-      isLoaded : false
+      isLoaded: false,
     };
   },
   methods: {
@@ -37,8 +43,7 @@ export default {
       }
     },
   },
-  watch: {
-  },
+  watch: {},
   mounted() {
     setTimeout(() => {
       this.loadingStore.$patch({ isMounted: true });

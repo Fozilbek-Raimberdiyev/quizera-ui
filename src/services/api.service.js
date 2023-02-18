@@ -26,7 +26,7 @@ const loader = null
 
 export const reqinterceptor = $axios.interceptors.request.use(
   function (config) {
-    loadingStore().$patch({loading : true})
+    config.url!="/auth/user" ? loadingStore().$patch({loading : true}) : ""
     // nProgress.done()
     // loader = useLoading().show({
     //   color: "#000000",

@@ -282,7 +282,7 @@ const router = createRouter({
 router.beforeEach(async(to, from, next) => {
   let userRole = null;
   try{
-    userRole =  (await auth.getCurrentUser()).data
+    userRole =  (await auth.getCurrentUser()).data.role
   }catch(e) {
     userRole = "student"
   }

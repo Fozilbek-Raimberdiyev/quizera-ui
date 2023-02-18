@@ -106,7 +106,11 @@
             </router-view>
           </div>
           <div class="" v-show="loading">
-            <a-spin />
+            <!-- <a-spin /> -->
+            <loading v-model:active="loading"
+                 :can-cancel="false"
+                 :on-cancel="false"
+                 :is-full-page="true"/>
           </div>
         </div>
       </a-layout-content>
