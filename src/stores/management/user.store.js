@@ -24,12 +24,8 @@ export const userStore = defineStore("userStore", {
         console.log(e)
       }
     },
-    async createUser(form) {
-      let res = await auth.register(form);
-      this.user = res.data;
-      localStorage.setItem("user", JSON.stringify(this.user));
-      localStorage.setItem("token", res?.data?.token);
-      auth.setHeader(res.data.token);
+    createUser(form) {
+      return auth.register(form);
     },
     async login(form) {
       try {

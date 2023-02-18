@@ -19,7 +19,7 @@
         <router-link v-else to="/"> <i class='bx bx-briefcase'></i></router-link>
       </div>
       <a-menu theme="dark" mode="inline">
-        <a-sub-menu key="sub1">
+        <a-sub-menu v-if="currentUserRole=='admin'" key="sub1">
           <template #title>
             <span v-if="!smallScreen">Boshqarish</span>
             <span v-else><i class="bi bi-sliders"></i></span>
@@ -64,7 +64,7 @@
             ><i class="bi bi-check2-square"></i
           ></router-link>
         </a-menu-item>
-        <a-sub-menu key="sub2">
+        <a-sub-menu key="sub2" v-if="currentUserRole==='teacher' || currentUserRole==='admin'">
           <template #title>
             <span v-if="!smallScreen">Ma'lumotnomalar</span>
             <span v-else><i class="bx bx-building"></i></span>
@@ -131,6 +131,7 @@ import "vue-loading-overlay/dist/css/index.css";
 import breadCrumbs from "../components/breadCrumbs.vue";
 import headerMenu from "../components/header.vue";
 import { subject } from "@casl/ability";
+import { userStore } from "../stores/management/user.store";
 export default {
   components: { Sidebar, Loading, breadCrumbs, headerMenu },
   data() {
@@ -144,6 +145,7 @@ export default {
   computed: {
     ...mapState(authStore, ["user", "authLogout", "authSucces"]),
     ...mapState(loadingStore, ["loading"]),
+    ...mapState(userStore, ["currentUserRole"]),
     ...mapStores(authStore),
     loadingC() {
       return;

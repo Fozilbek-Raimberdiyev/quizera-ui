@@ -62,7 +62,6 @@ export default {
     ...mapActions(userStore, ["createUser"]),
     async submit() {
       let res = await this.createUser(this.form);
-      if (res) window.location.href = "/"
     },
   },
 };
