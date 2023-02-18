@@ -38,7 +38,7 @@ export default {
           component: () => import("../pages/references/quiz/AddOrUpdate.vue"),
           name: "Quiz add",
           meta: {
-            roles: ["admin"],
+            roles: ["admin", "teacher"],
           },
         },
         {
@@ -46,7 +46,7 @@ export default {
           component: () => import("../pages/references/quiz/AddOrUpdate.vue"),
           name: "Quiz edit",
           meta: {
-            roles: ["admin"],
+            roles: ["admin", "teacher"],
           },
         },
       ],
@@ -65,7 +65,7 @@ export default {
             import("../pages/references/subject/AddOrUpdate.vue"),
           name: "Subject add",
           meta: {
-            roles: ["admin"],
+            roles: ["admin", "teacher"],
           },
         },
         {
@@ -74,7 +74,7 @@ export default {
             import("../pages/references/subject/AddOrUpdate.vue"),
           name: "Subject edit",
           meta: {
-            roles: ["admin"],
+            roles: ["admin", "teacher"],
           },
         },
       ],

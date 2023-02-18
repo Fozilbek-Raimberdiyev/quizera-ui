@@ -233,7 +233,7 @@ const routes = [
         component: () => import("../pages/profile/me.vue"),
         name: "Profile",
         meta: {
-          roles: ["admin", "role", "student"],
+          roles: ["admin", "teacher", "student"],
         },
       },
       {
@@ -280,13 +280,15 @@ const router = createRouter({
 });
 
 router.beforeEach(async(to, from, next) => {
-  userStore().getCurrentUserRole()
-  let userRole = userStore().currentUserRole;
-  // try{
-  //   userRole =  (await auth.getCurrentUser()).data
-  // }catch(e) {
-  //   userRole = "student"
-  // }
+  // let userRole = userStore().currentUserRole;
+  let userRole = null
+  try{
+    userStore().getCurrentUserRole()
+    userRole =  userStore().currentUserRole;
+
+  }catch(e) {
+    userRole = "student"
+  }
   const requiredRoles = to.meta.roles;
   let { exp } = jwtDecode(token) || null;
   let current = Math.floor(Date.now() / 1000);
