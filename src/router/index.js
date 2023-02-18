@@ -281,7 +281,7 @@ const router = createRouter({
 
 router.beforeEach(async(to, from, next) => {
   // const userRole = "student";
-  const userRole =  (await auth.getCurrentUser())?.data;
+  const userRole =  (await auth.getCurrentUser())?.data || "student"
   console.log(userRole)
   const requiredRoles = to.meta.roles;
   let { exp } = jwtDecode(token) || null;
