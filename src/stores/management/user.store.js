@@ -6,7 +6,8 @@ export const userStore = defineStore("userStore", {
   state: () => ({
     user: JSON.parse(localStorage.getItem("user")) || {},
     token: localStorage.getItem("token") || null,
-    users : []
+    users : [],
+    currentUserRole : "student"
   }),
   getters: {
     isAuth() {
@@ -43,5 +44,9 @@ export const userStore = defineStore("userStore", {
         useToast().error(e.response.data.message);
       }
     },
+    async getCurrentUserRole() {
+    let res = await auth.getCurrentUser();
+    this.currentUserRole = res.data;
+    }
   },
 });

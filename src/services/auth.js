@@ -24,9 +24,6 @@ export default {
     axios.defaults.headers.common["authorization"] = token;
   },
   getCurrentUser() {
-    loadingStore().loading = false
-    return $axios.get("/auth/user").then((res) => {loadingStore().loading - false}).finally(() => {
-      loadingStore().loading = false
-    })
+    return $axios.get("/auth/user")
   }
 };
