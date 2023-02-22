@@ -1,5 +1,6 @@
 <template>
   <div class="wrapper">
+    <!-- <pre>{{ form.members }}</pre> -->
     <form @submit.prevent="submit">
       <div class="input flex justify-between">
         <label for="name">
@@ -44,6 +45,35 @@
           <span style="color: red" v-if="v$.form.time.$error"
             >Maydon to'ldirilishi shart...</span
           >
+        </label>
+        <label>
+          Test ishtirokchilarini tanlang
+          <!-- <el-select-v2
+            v-model="form.members"
+            style="width: 240px"
+            multiple
+            filterable
+            remote
+            :remote-method="remoteMethod"
+            clearable
+            :options="usersList"
+            :loading="loading"
+            placeholder="Please enter a keyword"
+          >
+        </el-select-v2> -->
+          <n-select
+            v-model:value="form.members"
+            multiple
+            filterable
+            placeholder="Search users"
+            :options="usersList"
+            :loading="loading"
+            clearable
+            remote
+            :clear-filter-after-select="false"
+            @search="remoteMethod"
+          />
+          <!-- <pre>{{ form.members }}</pre> -->
         </label>
       </div>
       <el-button
@@ -158,9 +188,16 @@
 import { mapActions, mapState } from "pinia";
 import { subjectStore } from "../../../stores/references/subject";
 import { useVuelidate } from "@vuelidate/core";
-import { required } from "@vuelidate/validators";
+import { email, required } from "@vuelidate/validators";
 import { useToast } from "vue-toastification";
+import { userStore } from "../../../stores/management/user.store";
+import AsyncMulSelect from "../../../components/form/AsyncMulSelect.vue";
+import auth from "../../../services/auth";
+import { NSelect } from "naive-ui";
 export default {
+  components: {
+    AsyncMulSelect,
+  },
   data() {
     return {
       v$: useVuelidate(),
@@ -169,12 +206,14 @@ export default {
       isDefined: false,
       isEnterednumber: false,
       isClickedSave: false,
-      list: [],
+      usersList: [],
+      search: "",
       form: {
         name: "",
         time: "",
         quizCount: "",
         isDifferent: false,
+        members: [],
         grades: [
           {
             grade: null,
@@ -186,7 +225,20 @@ export default {
       numbers: [],
     };
   },
-  props : ["size", "large","small", "default", "type", "primart", "info", "succes", "text", "native-type", "submit", "cancel"],
+  props: [
+    "size",
+    "large",
+    "small",
+    "default",
+    "type",
+    "primart",
+    "info",
+    "succes",
+    "text",
+    "native-type",
+    "submit",
+    "cancel",
+  ],
   validations() {
     return {
       form: {
@@ -204,6 +256,7 @@ export default {
   },
   computed: {
     ...mapState(subjectStore, ["list", "subject"]),
+    ...mapState(userStore, ["users", "user"]),
     sumCountGrades() {
       let sum = 0;
       for (let i = 0; i < this.form.grades.length; i++) {
@@ -214,11 +267,11 @@ export default {
     countPointSubject() {
       let grades = [...this.form.grades];
       let sum = 0;
-      for(let element of grades) {
-        sum+=(+element.grade * +element.count)
+      for (let element of grades) {
+        sum += +element.grade * +element.count;
       }
       return sum;
-    }
+    },
   },
   watch: {
     "form.quizCount"(val) {
@@ -253,28 +306,58 @@ export default {
         };
       }
     },
+    async search(val) {
+      // let users = (await auth.getUserByEmail(val)).data;
+      // console.log(users);
+      // this.usersList = users?.map((user) => {
+      //   return { value: user.email, label: user.email };
+      // });
+    },
   },
   methods: {
-    ...mapActions(subjectStore, ["addSubject", "updateSubject", "getById", "getList"]),
+    ...mapActions(subjectStore, [
+      "addSubject",
+      "updateSubject",
+      "getById",
+      "getList",
+    ]),
+    ...mapActions(userStore, ["getAllUsers"]),
     async submit() {
       this.v$.$validate();
       if (!this.$route.params.id) {
         if (!this.v$.$error) {
-          let form = {...this.form};
-          form.point = this.countPointSubject
+          let form = { ...this.form };
+          form.point = this.countPointSubject;
+          let members = [...form.members];
+          members = members.map((member) => {
+            return {
+              value: member,
+              label: member,
+            };
+          });
+          form.members = members;
+          form.authorId = this.user._id;
           let res = await this.addSubject(form);
           this.$emit("created", res);
           this.$router.push("/references/subject");
         }
       } else {
         if (!this.v$.$error) {
-          let form = {...this.form};
+          let form = { ...this.form };
+          let members = [...form.members];
+          members = members.map((member) => {
+            return {
+              value: member,
+              label: member,
+            };
+          });
+          form.members = members;
           form._id = undefined;
           form.__v = undefined;
-          form.point = this.countPointSubject
+          form.point = this.countPointSubject;
           let res = await this.updateSubject(form, this.$route.params.id);
           this.$router.push("/references/subject");
-          this.getList()
+          this.getList();
         }
       }
     },
@@ -325,14 +408,39 @@ export default {
     async setFormData(val) {
       await this.getById(val);
       let form = { ...this.subject };
+      form
+      form.members = form.members.map(member => {
+        return member.value
+      })
       // form.grades = [{grade : null, count : null}];
-      form.isDifferent ? form.isDifferent : form.isDifferent=false
+      form.isDifferent ? form.isDifferent : (form.isDifferent = false);
       this.form = form;
       // this.form = res;
     },
+    // async watch(query) {
+    //   this.search = query;
+    // },
+    remoteMethod(query) {
+      if (query) {
+        this.usersList = this.users.filter((user) => {
+          return user.email
+            .toLocaleLowerCase()
+            .includes(query.toLocaleLowerCase());
+        });
+        this.usersList = this.usersList.map((user) => {
+          return {
+            value: user.email,
+            label: user.email,
+          };
+        });
+      }
+    },
   },
   created() {
-    this.setFormData(this.$route.params.id);
+    this.getAllUsers();
+    if (this.$route.params.id) {
+      this.setFormData(this.$route.params.id);
+    }
     // this.getById(this.$route.params.id)
   },
 };

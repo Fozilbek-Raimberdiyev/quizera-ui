@@ -46,14 +46,14 @@
             ><i class="bi bi-question-square"></i
           ></router-link>
         </a-menu-item>
-        <a-menu-item key="5">
+        <a-menu-item key="5" v-if="currentUserRole==='admin'">
           <router-link v-if="!smallScreen" to="/posts">Maqolalar</router-link>
           <router-link v-else to="/posts"
             ><i class="bx bx-news"></i
           ></router-link>
         </a-menu-item>
 
-        <a-menu-item key="9">
+        <a-menu-item key="9" v-if="currentUserRole==='admin'">
           <router-link v-if="!smallScreen" to="/movies">Kinolar</router-link>
           <router-link v-else to="/movies"
             ><i class="bi bi-film"></i></router-link>

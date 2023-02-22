@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>Main layout</h1>
+        <h3>Main layout</h3>
     </div>
 </template>
 <script>

@@ -37,12 +37,15 @@ export const userStore = defineStore("userStore", {
         window.location.href = "/";
       } catch (e) {
         console.log(e)
-        useToast().error(e.response.data.message);
+        // useToast().error(e.response.data.message);
       }
     },
     async getCurrentUserRole() {
     let res = await auth.getCurrentUser();
     this.currentUserRole = res.data;
+    },
+    getByEmail() {
+      return 
     }
   },
 });

@@ -25,5 +25,8 @@ export default {
   },
   getCurrentUser() {
     return $axios.get("/auth/user")
+  },
+  getUserByEmail(email) {
+    return $axios.get(`/auth/user/${email}`)
   }
 };

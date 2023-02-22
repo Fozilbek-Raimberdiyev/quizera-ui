@@ -16,6 +16,7 @@ import 'vue-loading-overlay/dist/css/index.css';
 import Toast from "vue-toastification";
 // Import the CSS or use your own!
 import "vue-toastification/dist/index.css";
+import naive from 'naive-ui'
 
 import VueSidebarMenu from 'vue-sidebar-menu'
 import 'vue-sidebar-menu/dist/vue-sidebar-menu.css'
@@ -53,6 +54,7 @@ app.use(ElementPlus)
 app.use(Toast)
 app.use(reqinterceptor)
 app.use(resInterceptor)
+app.use(naive)
 
 // app.use(LoadingPlugin)
 app.use(Quasar, {

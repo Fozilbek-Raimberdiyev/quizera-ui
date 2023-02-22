@@ -1,6 +1,6 @@
 <template>
   <div>Posts</div>
-  <h1 id="table">
+  <h6 id="table">
     Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet dolores
     numquam, officia nisi rem cumque animi beatae iure quis, adipisci, ullam
     illo eos tempore. Natus voluptatem ipsa obcaecati molestiae incidunt ut
@@ -12,7 +12,7 @@
     Ipsam reiciendis, officia necessitatibus, accusamus corrupti reprehenderit
     beatae minus laudantium perferendis vitae, sit quis nobis nesciunt enim vero
     deleniti dolorem itaque eveniet consequuntur!
-  </h1>
+  </h6>
 </template>
 <script>
 export default {
