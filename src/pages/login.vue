@@ -12,7 +12,7 @@
     >
       <div class="bg-container"></div>
       <form @submit.prevent="login(form)">
-        <div class="form" v-loading="loading">
+        <div :class="[smallScreen ? 'mt-5' : 'form']" v-loading="loading">
           <label>Login</label>
           <el-input required v-model="form.email" placeholder="Please input" />
           <label>Password</label>
@@ -47,6 +47,7 @@ export default {
       },
       loading: false,
       isSuccesfully: false,
+      smallScreen : false
     };
   },
   computed: {
@@ -56,12 +57,16 @@ export default {
   methods: {
     ...mapActions(userStore, ["login"]),
   },
-  created() {},
+  created() {
+    this.smallScreen=window.innerWidth < 600
+  },
 };
 </script>
 <style scoped>
+@import url("https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css");
 .login_wrapper {
-  margin: 0;
+  margin: 0 auto;
+  width: 70%;
 }
 .form {
   width: 500px;

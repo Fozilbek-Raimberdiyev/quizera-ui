@@ -1,6 +1,6 @@
 <template>
   <div id="background">
-    <div class="form">
+    <div :class="[smallScreen ? 'm-5' : 'form']">
       <form v-loading="loading" @submit.prevent="submit">
         <label>Firstname</label>
         <el-input
@@ -53,6 +53,7 @@ export default {
         role : "student"
       },
       loading: false,
+      smallScreen : false
     };
   },
   computed: {
@@ -64,9 +65,13 @@ export default {
       let res = await this.createUser(this.form);
     },
   },
+  created() {
+    this.smallScreen = window.innerWidth < 600
+  }
 };
 </script>
 <style>
+@import url("https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css");
 .form {
   width: 500px;
   margin: 3rem auto;
@@ -91,5 +96,8 @@ form div {
   overflow: auto;
   top: 0;
   left: 0;
+}
+label {
+  color: rgb(27, 27, 27);
 }
 </style>
