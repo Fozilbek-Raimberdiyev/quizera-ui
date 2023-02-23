@@ -23,38 +23,42 @@
       </div>
       <a-sub-menu v-if="currentUserRole == 'admin'" key="sub1">
         <template #title>
+          <i class="bx bx-cog"></i>
           <span>Boshqarish</span>
         </template>
-        <a-menu-item key="3"
+        <a-menu-item key="3">
+          <i class="bx bx-user"></i
           ><router-link to="/management/users"
             >Foydalanuvchilar</router-link
           ></a-menu-item
         >
         <a-menu-item key="4"
+          ><i class="bx bx-group"></i
           ><router-link to="/management/roles">Rollar</router-link></a-menu-item
         >
         <a-menu-item key="5"
           ><router-link to="/management/permissions"
-            >Ruxsatlar</router-link
+            ><i class="bx bxs-key"></i>Ruxsatlar</router-link
           ></a-menu-item
         >
       </a-sub-menu>
       <a-menu-item key="2">
+        <i class="bx bxs-flag-checkered"></i>
         <router-link to="/quiz">Test ishlash</router-link>
       </a-menu-item>
       <a-menu-item key="15" v-if="currentUserRole === 'admin'">
+        <i class="bx bx-news"></i>
         <router-link to="/posts">Maqolalar</router-link>
-        <!-- <router-link v-else to="/posts"
-            ><i class="bx bx-news"></i
-          ></router-link> -->
       </a-menu-item>
 
       <a-menu-item key="9" v-if="currentUserRole === 'admin'">
+        <i class="bx bx-movie"></i>
         <router-link to="/movies">Kinolar</router-link>
         <!-- <router-link v-else to="/movies"
             ><i class="bi bi-film"></i></router-link> -->
       </a-menu-item>
       <a-menu-item>
+        <i class="bx bx-task"></i>
         <router-link to="/todos">Topshiriqlar</router-link>
         <!-- <router-link v-else to="/todos"
             ><i class="bi bi-check2-square"></i
@@ -65,17 +69,19 @@
         v-if="currentUserRole === 'teacher' || currentUserRole === 'admin'"
       >
         <template #title>
+          <i class="bx bx-building"></i>
           <span>Ma'lumotnomalar</span>
-          <!-- <span v-else><i class="bx bx-building"></i></span> -->
+          <!-- <span v-else></span> -->
         </template>
         <a-menu-item key="10"
-          ><router-link to="/references/quiz"
-            >Savollar</router-link
+          ><router-link to="/references/quiz">
+            <i class="bx bx-question-mark"></i>
+            Savollar</router-link
           ></a-menu-item
         >
         <a-menu-item key="11"
           ><router-link to="/references/subject"
-            >Fanlar</router-link
+            ><i class="bx bx-folder-plus"></i>Fanlar</router-link
           ></a-menu-item
         >
         <!-- <a-menu-item key="12"
@@ -129,5 +135,8 @@ export default defineComponent({
 }
 a {
   text-decoration: none !important;
+}
+i {
+  margin-right: 5px;
 }
 </style>

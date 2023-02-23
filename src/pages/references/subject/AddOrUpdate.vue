@@ -2,7 +2,9 @@
   <div class="wrapper">
     <!-- <pre>{{ form.members }}</pre> -->
     <form @submit.prevent="submit">
-      <div :class="[smallScreen ? 'block' : 'flex justify-between']">
+      <div
+        :class="[smallScreen ? 'block' : 'flex justify-between box items-end']"
+      >
         <label for="name">
           Fan nomini kiriting
           <el-input
@@ -16,11 +18,19 @@
         <label for="limit">
           Test miqdorini kiriting
           <div style="display: flex; align-items: center">
-            <el-input
+            <!-- <el-input
               v-model="form.quizCount"
               type="number"
               placeholder="Savollar sonini kiriting..."
-            ></el-input>
+            ></el-input> -->
+            <a-input-number
+              :controls="false"
+              :min="0"
+              :max="50"
+              style="width: 100%"
+              placeholder="Savollar sonini kiriting..."
+              v-model:value="form.quizCount"
+            ></a-input-number>
             <span style="margin-left: 5px">
               <el-checkbox
                 size="large"
@@ -36,12 +46,20 @@
         </label>
         <label for="time">
           Testga ajratiladigan daqiqani kiriting
-          <el-input
+          <!-- <el-input
             class="minute"
             v-model="form.time"
             placeholder="Ajratiladigan vaqtni kiriting(daqiqa hisobida)"
           >
-          </el-input>
+          </el-input> -->
+          <a-input-number
+            placeholder="Ajratiladigan vaqtni kiriting(daqiqa hisobida)"
+            v-model:value="form.time"
+            :controls="false"
+            style="width: 100%;"
+            :min="0"
+            :max="60"
+          ></a-input-number>
           <span style="color: red" v-if="v$.form.time.$error"
             >Maydon to'ldirilishi shart...</span
           >
@@ -179,7 +197,7 @@
         type="primary"
         style="margin-top: 5px"
         class="cursor-pointer"
-        >Qo'shish</el-button
+        ><i class='bx bx-plus' style="margin-right: 5px;"></i>Qo'shish</el-button
       >
     </el-dialog>
   </div>
@@ -223,7 +241,7 @@ export default {
       },
       grades: [1, 2, 3, 4, 5, 6],
       numbers: [],
-      smallScreen : false
+      smallScreen: false,
     };
   },
   props: [
@@ -409,10 +427,10 @@ export default {
     async setFormData(val) {
       await this.getById(val);
       let form = { ...this.subject };
-      form
-      form.members = form.members.map(member => {
-        return member.value
-      })
+      form;
+      form.members = form.members.map((member) => {
+        return member.value;
+      });
       // form.grades = [{grade : null, count : null}];
       form.isDifferent ? form.isDifferent : (form.isDifferent = false);
       this.form = form;
@@ -442,7 +460,7 @@ export default {
     if (this.$route.params.id) {
       this.setFormData(this.$route.params.id);
     }
-    this.smallScreen = window.innerWidth < 600
+    this.smallScreen = window.innerWidth < 600;
 
     // this.getById(this.$route.params.id)
   },
@@ -468,5 +486,8 @@ b {
 }
 .minute:valid {
   border: 1px solid green;
+}
+.box > label {
+  flex-basis: 30%;
 }
 </style>

@@ -4,14 +4,14 @@
       <div class="flex justify-between items-center">
         <h5>Quiz references List</h5>
         <div class="search">
-          <el-input v-model="search" placeholder="Izlang..."></el-input>
+          <a-input-search v-model:value="search" placeholder="Izlang..."></a-input-search>
         </div>
         <el-button
           type="primary"
           size="small"
           class="cursor-pointer"
           @click="$router.push('/references/quiz/add')"
-          >Savol qo'shish</el-button
+          ><i class='bx bx-plus' style="margin-right: 5px;"></i>Savol qo'shish</el-button
         >
       </div>
       <div>

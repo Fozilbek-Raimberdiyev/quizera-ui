@@ -1,6 +1,6 @@
 <template>
   <div class="header items-center">
-    <div v-if="!smallScreen">
+    <div v-if="!smallScreen" class="self-stretch" style="margin-top: 10px;">
       <breadCrumbs></breadCrumbs>
     </div>
     <div v-else class="self-stretch">

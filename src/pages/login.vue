@@ -1,33 +1,29 @@
 <template>
   <div id="background">
     <div
-      class="
-        login_wrapper
-        bg-gradient-to-tl
-        background-image:linear-gradient(to
-        top`
-        left,
-        var(--tw-gradient-stops))
-      "
+      class="login_wrapper bg-gradient-to-tl background-image:linear-gradient(to top` left, var(--tw-gradient-stops))"
     >
       <div class="bg-container"></div>
       <form @submit.prevent="login(form)">
-        <div :class="[smallScreen ? 'mt-5' : 'form']" v-loading="loading">
-          <label>Login</label>
-          <el-input required v-model="form.email" placeholder="Please input" />
-          <label>Password</label>
-          <el-input
+        <div :class="[smallScreen ? 'mt-5' : 'form']">
+          <!-- <label>Login</label> -->
+          <el-input size="large" required v-model="form.email" placeholder="Please input your email..." />
+          <!-- <label>Password</label> -->
+          <el-input style="margin: 1rem 0;" size="large"
             required
             type="password"
             v-model="form.password"
             show-password
-            placeholder="Please input"
+            placeholder="Please input your password"
           />
-          <button>
-            <el-button native-type="submit" style="background: #ccc; cursor: pointer"
-              >Login</el-button
-            >
-          </button>
+          <div class="flex justify-center">
+            <el-button
+            native-type="submit"
+            :loading="loading"
+            style="background: #ccc; cursor: pointer"
+            >Login</el-button
+          >
+          </div>
         </div>
       </form>
     </div>
@@ -38,6 +34,7 @@ import { mapActions, mapState, mapStores } from "pinia";
 import { userStore } from "../stores/management/user.store";
 import { useToast } from "vue-toastification";
 import axios from "axios";
+import { loadingStore } from "../stores/loading.store";
 export default {
   data: () => {
     return {
@@ -45,20 +42,21 @@ export default {
         email: "",
         password: "",
       },
-      loading: false,
       isSuccesfully: false,
-      smallScreen : false
+      smallScreen: false,
     };
   },
   computed: {
     ...mapState(userStore, ["user"]),
+    ...mapState(loadingStore, ["loading"]),
   },
   watch: {},
   methods: {
     ...mapActions(userStore, ["login"]),
   },
   created() {
-    this.smallScreen=window.innerWidth < 600
+    this.smallScreen = window.innerWidth < 600;
+    // this.loadingBar.start()
   },
 };
 </script>

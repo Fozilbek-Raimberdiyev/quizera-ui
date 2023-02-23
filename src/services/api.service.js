@@ -6,7 +6,7 @@ import { useToast } from "vue-toastification";
 import auth from "./auth";
 import { loadingStore } from "../stores/loading.store";
 import { useLoading } from "vue-loading-overlay";
-import nProgress from "nprogress"
+import nProgress from "nprogress";
 // import "nprogress.css"
 const toast = useToast();
 const Toast = swal.mixin({
@@ -21,12 +21,11 @@ const Toast = swal.mixin({
   },
 });
 
-const loader = null
-
+const loader = null;
 
 export const reqinterceptor = $axios.interceptors.request.use(
   function (config) {
-    config.url!="/auth/user" ? loadingStore().$patch({loading : true}) : ""
+    config.url != "/auth/user" ? loadingStore().$patch({ loading: true }) : "";
     // nProgress.done()
     // loader = useLoading().show({
     //   color: "#000000",
@@ -51,7 +50,7 @@ export const resInterceptor = $axios.interceptors.response.use(
     //   icon: "success",
     //   title: response.data.message || response.message || "succes",
     // });
-    loadingStore().$patch({loading : false})
+    loadingStore().$patch({ loading: false });
     // loader.hide()
     response.data.message
       ? ElNotification({
@@ -64,6 +63,7 @@ export const resInterceptor = $axios.interceptors.response.use(
     return response;
   },
   function (error) {
+    loadingStore().$patch({ loading: false });
     error
       ? ElNotification({
           title: error?.response?.data.message || error?.message,

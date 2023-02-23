@@ -2,37 +2,41 @@
   <div id="background">
     <div :class="[smallScreen ? 'm-5' : 'form']">
       <form v-loading="loading" @submit.prevent="submit">
-        <label>Firstname</label>
+        <!-- <label>Firstname</label> -->
         <el-input
+          size="large"
+          style="margin-top: 10px"
           required
           v-model="form.firstName"
-          placeholder="Please input"
+          placeholder="Please input firstname"
         />
-        <label>Lastname</label>
-        <el-input required v-model="form.lastName" placeholder="Please input" />
+        <!-- <label>Lastname</label> -->
+        <el-input required size="large" style="margin-top: 10px;" v-model="form.lastName" placeholder="Please input lastname" />
         <div class="birdthData">
-          <label class="block">Birdth data</label>
-          <el-date-picker class="" v-model="form.birdthData"></el-date-picker>
+          <!-- <label class="block">Birdth data</label> -->
+          <el-date-picker size="large" style="margin-top: 10px;" placeholder="Enter the birthdata" v-model="form.birdthData"></el-date-picker>
         </div>
-        <label style="display: block">Email</label>
-        <el-input required v-model="form.email" placeholder="Please input" />
-        <label>Phone number</label>
+        <!-- <label style="display: block">Email</label> -->
+        <el-input required size="large" style="margin-top: 10px;" v-model="form.email" placeholder="Please input email" />
+        <!-- <label>Phone number</label> -->
         <el-input
           type="number"
-          placeholder="Please input the your phone number"
+          placeholder="Please input  phone number"
           v-model="form.phoneNumber"
+          size="large" style="margin-top: 10px;"
         ></el-input>
-        <label>Password</label>
+        <!-- <label>Password</label> -->
         <el-input
           required
           type="password"
           v-model="form.password"
           show-password
-          placeholder="Please input"
+          placeholder="Please input password"
+          size="large" style="margin-top: 10px;"
         />
-        <button>
-          <el-button type="primary">Register</el-button>
-        </button>
+        <div class="flex justify-center">
+          <el-button :loading="loading" type="primary">Register</el-button>
+        </div>
       </form>
     </div>
   </div>
@@ -40,6 +44,7 @@
 <script>
 import { mapActions, mapState, mapStores } from "pinia";
 import { userStore } from "../stores/management/user.store";
+import { loadingStore } from "../stores/loading.store";
 export default {
   data: () => {
     return {
@@ -50,14 +55,15 @@ export default {
         lastName: "",
         birdthData: "",
         phoneNumber: null,
-        role : "student"
+        role: "student",
       },
       loading: false,
-      smallScreen : false
+      smallScreen: false,
     };
   },
   computed: {
     ...mapState(userStore, ["user"]),
+    ...mapState(loadingStore, ["loading"]),
   },
   methods: {
     ...mapActions(userStore, ["createUser"]),
@@ -66,8 +72,8 @@ export default {
     },
   },
   created() {
-    this.smallScreen = window.innerWidth < 600
-  }
+    this.smallScreen = window.innerWidth < 600;
+  },
 };
 </script>
 <style>

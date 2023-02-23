@@ -1,11 +1,19 @@
 <template>
   <div v-if="questions.length">
-    <h5 class="sub-name">{{ subject?.name }}</h5>
+    <div class="flex items-center justify-between">
+      <h5 class="sub-name">{{ subject?.name }}</h5>
+      <div class="timer flex items-center" v-if="!isEnded">
+        <i class="bx bx-time" style="margin-right: 5px;"></i>
+        <n-countdown
+          :on-finish="onFinish"
+          :duration="subject.time * 60 * 1000"
+        ></n-countdown>
+      </div>
+    </div>
     <div v-if="!isEnded" class="bars" style="margin-bottom: 1rem">
-      <div class="flex justify-end">
+      <div class="flex justify-end items-center">
         <el-button class="cursor-pointer" type="primary" @click="endTest"
-          >Yakunlash</el-button
-        >
+          >Yakunlash</el-button>
       </div>
       <div></div>
       <div class="tabs">
@@ -180,8 +188,16 @@ export default {
     },
   },
   methods: {
-    timerFunc() {
-      this.timer += 0.01;
+    onFinish() {
+      setTimeout(() => {
+        let questions = [...this.questions];
+        questions.forEach((question, index) => {
+          return (question["number"] = index);
+        });
+        this.checkTests({ questions, point: this.subject?.point });
+        this.isEnded = true;
+        this.currentIndex = 0;
+      }, 1000);
     },
     ...mapActions(questionStore, ["getQuestions", "checkTests"]),
     ...mapActions(subjectStore, ["getById"]),
@@ -383,12 +399,18 @@ span {
   padding: 2px 10px;
   border-radius: 5px;
   color: #706f72;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 .notDifference > div {
   border: 1px solid #f2f0f5;
   padding: 5px 5px;
   border-radius: 5px;
   margin: 0 2px;
+}
+.timer {
+  font-size: 18px;
+  border: 1px solid #e3e5e9;
+  padding: 0 5px;
+  border-radius: 10px;
 }
 </style>

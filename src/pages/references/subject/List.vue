@@ -35,16 +35,13 @@
             </div>
           </a-list-item>
         </template>
-        <template #no-data>
-          jhg
-        </template>
       </a-list>
       <el-button
         class="cursor-pointer"
         v-if="!isInAdd"
         type="primary"
         @click="toAddOrUpdate"
-        >Qo'shish</el-button
+        ><i class='bx bx-plus' style="margin-right: 5px;"></i>Qo'shish</el-button
       >
     </div>
   </div>

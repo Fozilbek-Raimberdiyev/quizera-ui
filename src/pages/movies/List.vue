@@ -2,7 +2,7 @@
   <div>
     <label style="text-align: right">
       <el-input
-        style="width: 300px"
+        style="width: 80%; margin-right: 5px;"
         clearable
         size="large"
         v-model="searchName"
@@ -57,6 +57,8 @@
             layout="prev, pager, next"
             :total="total"
             background
+            :style="[smallScreen ? 'width: 380px; overflow-x: auto;' : '' ]"
+            style="padding: 10px;"
             :v-model:current-page="page"
             @update:current-page="updateCurPage"
           />
@@ -96,6 +98,7 @@ export default {
       app,
       rating: "",
       searchName: "",
+      smallScreen : false
     };
   },
   computed: {
@@ -124,6 +127,7 @@ export default {
   created() {
     this.getList();
     this.rating = "";
+    this.smallScreen = window.innerWidth < 600
   },
   components: { Loading },
 };
@@ -145,7 +149,8 @@ export default {
 .pagination {
   margin: 3rem 0;
   display: block;
-  margin-left: 3rem;
+  /* margin-left: 3rem; */
+  /* max-width: 600px; */
 }
 .title a {
   font-size: 18px;

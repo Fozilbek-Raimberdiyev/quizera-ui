@@ -10,7 +10,8 @@
       <div :class="[smallScreen ? 'block' : 'flex items-center justify-between']" class="">
         <h5>Test sinovlari</h5>
         <div>
-          <el-input :style="{'width : 100%' : smallScreen} " v-model="search" placeholder="Izlang..."> </el-input>
+          <!-- <i class='bx bx-search'></i> -->
+          <a-input-search :style="{'width : 100%' : smallScreen} " v-model:value="search" placeholder="Izlang..."> </a-input-search>
         </div>
       </div>
       <div class="table-responsive">
@@ -48,6 +49,7 @@
       <el-pagination
         small
         background
+        style="margin-top: 1rem;"
         layout="prev, pager, next"
         :total="total"
         :page-size="limit"
@@ -67,6 +69,7 @@
 import { mapActions, mapState } from "pinia";
 import { subjectStore } from "../../stores/references/subject";
 import notFound from "../notFound.vue";
+import { InputSearch } from 'ant-design-vue';
 export default {
   components: { notFound },
   data() {
@@ -75,7 +78,8 @@ export default {
       page: 1,
       limit: 5,
       loading: false,
-      smallScreen : false
+      smallScreen : false,
+      InputSearch
     };
   },
   computed: {

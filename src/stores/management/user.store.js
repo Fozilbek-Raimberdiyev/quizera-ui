@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import auth from "../../services/auth";
 import router from "../../router";
 import { useToast } from "vue-toastification";
+import { useLoadingBar } from "naive-ui";
 export const userStore = defineStore("userStore", {
   state: () => ({
     user: JSON.parse(localStorage.getItem("user")) || {},

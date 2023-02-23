@@ -2,8 +2,9 @@
 
 
 <template>
-  <a-layout  style="min-height: 100vh">
-    <a-layout-sider v-if="!smallScreen"
+  <a-layout style="min-height: 100vh">
+    <a-layout-sider
+      v-if="!smallScreen"
       style="
         overflow: auto;
         height: 100vh;
@@ -18,62 +19,74 @@
         <!-- <router-link v-else to="/"> <i class='bx bx-briefcase'></i></router-link> -->
       </div>
       <a-menu theme="dark" mode="inline">
-        <a-sub-menu v-if="currentUserRole=='admin'" key="sub1">
+        <a-sub-menu v-if="currentUserRole == 'admin'" key="sub1">
           <template #title>
-            <span v-if="!smallScreen">Boshqarish</span>
+            <span v-if="!smallScreen"><i class="bx bx-cog"></i>Boshqarish</span>
             <!-- <span v-else><i class="bi bi-sliders"></i></span> -->
           </template>
           <a-menu-item key="3"
             ><router-link to="/management/users"
-              >Foydalanuvchilar</router-link
+              ><i class="bx bx-user"></i>Foydalanuvchilar</router-link
             ></a-menu-item
           >
           <a-menu-item key="4"
             ><router-link to="/management/roles"
-              >Rollar</router-link
+              ><i class="bx bx-group"></i>Rollar</router-link
             ></a-menu-item
           >
           <a-menu-item key="5"
             ><router-link to="/management/permissions"
-              >Ruxsatlar</router-link
+              ><i class="bx bxs-key"></i>Ruxsatlar</router-link
             ></a-menu-item
           >
         </a-sub-menu>
         <a-menu-item key="2">
-          <router-link v-if="!smallScreen" to="/quiz">Test ishlash</router-link>
-          <router-link v-else to="/quiz"
-            ><i class="bi bi-question-square"></i
-          ></router-link>
+          <router-link v-if="!smallScreen" to="/quiz"
+            ><i class="bx bxs-flag-checkered"></i>Test ishlash</router-link
+          >
         </a-menu-item>
-        <a-menu-item key="15" v-if="currentUserRole==='admin'">
-          <router-link v-if="!smallScreen" to="/posts">Maqolalar</router-link>
+        <a-menu-item key="15" v-if="currentUserRole === 'admin'">
+          <router-link v-if="!smallScreen" to="/posts"
+            ><i class="bx bx-news"></i>Maqolalar</router-link
+          >
           <!-- <router-link v-else to="/posts"
             ><i class="bx bx-news"></i
           ></router-link> -->
         </a-menu-item>
 
-        <a-menu-item key="9" v-if="currentUserRole==='admin'">
-          <router-link v-if="!smallScreen" to="/movies">Kinolar</router-link>
+        <a-menu-item key="9" v-if="currentUserRole === 'admin'">
+          <router-link v-if="!smallScreen" to="/movies"
+            ><i class="bx bx-movie"></i>Kinolar</router-link
+          >
           <!-- <router-link v-else to="/movies"
             ><i class="bi bi-film"></i></router-link> -->
         </a-menu-item>
         <a-menu-item>
-          <router-link v-if="!smallScreen" to="/todos">Topshiriqlar</router-link>
+          <router-link v-if="!smallScreen" to="/todos"
+            ><i class="bx bx-task"></i>Topshiriqlar</router-link
+          >
           <!-- <router-link v-else to="/todos"
             ><i class="bi bi-check2-square"></i
           ></router-link> -->
         </a-menu-item>
-        <a-sub-menu key="sub2" v-if="currentUserRole==='teacher' || currentUserRole==='admin'">
+        <a-sub-menu
+          key="sub2"
+          v-if="currentUserRole === 'teacher' || currentUserRole === 'admin'"
+        >
           <template #title>
-            <span v-if="!smallScreen">Ma'lumotnomalar</span>
+            <span v-if="!smallScreen"
+              ><i class="bx bx-building"></i>Ma'lumotnomalar</span
+            >
             <!-- <span v-else><i class="bx bx-building"></i></span> -->
           </template>
-          <a-menu-item key="10"
-            ><router-link to="/references/quiz">Savollar</router-link></a-menu-item
+          <a-menu-item key="10">
+            <router-link to="/references/quiz"
+              ><i class="bx bx-question-mark"></i>Savollar</router-link
+            ></a-menu-item
           >
           <a-menu-item key="11"
             ><router-link to="/references/subject"
-              >Fanlar</router-link
+              ><i class="bx bx-folder-plus"></i>Fanlar</router-link
             ></a-menu-item
           >
           <!-- <a-menu-item key="12"
@@ -106,10 +119,12 @@
           </div>
           <div class="" v-show="loading">
             <!-- <a-spin /> -->
-            <loading v-model:active="loading"
-                 :can-cancel="false"
-                 :on-cancel="false"
-                 :is-full-page="true"/>
+            <loading
+              v-model:active="loading"
+              :can-cancel="false"
+              :on-cancel="false"
+              :is-full-page="true"
+            />
           </div>
         </div>
       </a-layout-content>
@@ -150,12 +165,12 @@ export default {
       return;
     },
   },
- provide() {
-  return {
-    currentUserRole : this.currentUserRole,
-    smallScreen : this.smallScreen
-  }
- },
+  provide() {
+    return {
+      currentUserRole: this.currentUserRole,
+      smallScreen: this.smallScreen,
+    };
+  },
   methods: {
     getState(value) {
       this.isOpen = value;
@@ -195,7 +210,10 @@ export default {
 .sidebar.big-screen {
   margin-left: 200px;
 }
-a{
+a {
   text-decoration: none !important;
+}
+i {
+  margin-right: 5px;
 }
 </style>

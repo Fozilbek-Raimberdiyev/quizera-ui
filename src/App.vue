@@ -14,6 +14,26 @@
     />
     <router-view></router-view>
   </div>
+  <n-back-top
+    :bottom="100"
+    :visibility-height="300"
+    :style="{
+      transition: 'all .3s cubic-bezier(.4, 0, .2, 1)',
+    }"
+  >
+    <div
+      style="
+        width: 50px;
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+        font-size: 18px;
+      "
+    >
+    <i class='bx bxs-to-top'></i>
+    <!-- <i class='bx bxs-upvote'></i> -->
+    </div>
+  </n-back-top>
 </template>
 <script>
 import { mapActions, mapState, mapStores } from "pinia";

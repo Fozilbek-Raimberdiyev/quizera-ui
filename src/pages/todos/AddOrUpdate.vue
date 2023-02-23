@@ -54,19 +54,20 @@
       <el-button
         v-if="!$route.params.id"
         :size="large"
-        class="btn"
+        style="margin-top: 5px"
         type="primary"
         native-type="submit"
+        class="cursor-pointer"
         >Create</el-button
       >
       <el-button
         v-else
         size="large"
-        class="btn"
         style="margin-top: 5px"
         type="primary"
         :disabled="disabled"
         native-type="submit"
+        class="cursor-pointer"
         >Update</el-button
       >
     </form>
