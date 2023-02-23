@@ -35,6 +35,9 @@
             </div>
           </a-list-item>
         </template>
+        <template #no-data>
+          jhg
+        </template>
       </a-list>
       <el-button
         class="cursor-pointer"
@@ -42,13 +45,6 @@
         type="primary"
         @click="toAddOrUpdate"
         >Qo'shish</el-button
-      >
-      <el-button
-        class="cursor-pointer"
-        v-if="isInAdd"
-        @click="toList"
-        type="danger"
-        >Yopish</el-button
       >
     </div>
   </div>

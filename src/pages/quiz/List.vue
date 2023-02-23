@@ -2,28 +2,31 @@
   <div v-if="loading" class="container">
     <div class="loading flex justify-center items-center">
       <div class="hidden"></div>
-      <img  src="../../assets/gif/ball-loading.gif" alt="loading" />
+      <img src="../../assets/gif/ball-loading.gif" alt="loading" />
     </div>
   </div>
-  <div v-else="!loading" class="wrapper">
-    <div class="flex items-center justify-between">
-      <h5>Yakuniy nazorat</h5>
-      <div>
-        <el-input v-model="search" placeholder="Izlang..."> </el-input>
+  <div v-else class="wrapper">
+    <div v-if="list.length">
+      <div :class="[smallScreen ? 'block' : 'flex items-center justify-between']" class="">
+        <h5>Test sinovlari</h5>
+        <div>
+          <el-input :style="{'width : 100%' : smallScreen} " v-model="search" placeholder="Izlang..."> </el-input>
+        </div>
       </div>
-    </div>
-    <div class="table" v-if="searchSubject">
-      <table id="list">
-        <thead>
-          <tr>
-            <th>Fan</th>
-            <th>Savollar soni</th>
-            <th>Belgilangan vaqt</th>
-            <th>Harakatlar</th>
-          </tr>
-        </thead>
-        <tbody>
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th style="vertical-align: middle;" scope="col">#</th>
+              <th style="vertical-align: middle;" scope="col">Fan</th>
+              <th style="vertical-align: middle;" scope="col">Savollar soni</th>
+              <th style="vertical-align: middle;" scope="col">Belgilangan vaqt</th>
+              <th style="vertical-align: middle;" scope="col">Harakatlar</th>
+            </tr>
+          </thead>
+          <tbody>
           <tr v-for="(subject, i) in searchSubject" :key="i">
+            <th scope="row">{{ i+1 }}</th>
             <td>{{ subject.name }}</td>
             <td>{{ subject.quizCount }}</td>
             <td>{{ subject.time }}</td>
@@ -39,19 +42,25 @@
             </td>
           </tr>
         </tbody>
-      </table>
+        </table>
+      </div>
+
+      <el-pagination
+        small
+        background
+        layout="prev, pager, next"
+        :total="total"
+        :page-size="limit"
+        v-model:current-page="page"
+      />
     </div>
     <div v-else>
-      <el-empty description="Fanlar toplimadi"></el-empty>
+      <n-empty
+        size="huge"
+        style="display: flex; justify-content: center; height: 400px"
+        description="Siz biriktirilgan testlar yo'q"
+      ></n-empty>
     </div>
-    <el-pagination
-      small
-      background
-      layout="prev, pager, next"
-      :total="total"
-      :page-size="limit"
-      v-model:current-page="page"
-    />
   </div>
 </template>
 <script>
@@ -66,6 +75,7 @@ export default {
       page: 1,
       limit: 5,
       loading: false,
+      smallScreen : false
     };
   },
   computed: {
@@ -78,7 +88,20 @@ export default {
       );
     },
   },
-  props : ["size", "large","small", "default", "type", "primart", "info", "succes", "text", "native-type", "submit", "cancel"],
+  props: [
+    "size",
+    "large",
+    "small",
+    "default",
+    "type",
+    "primart",
+    "info",
+    "succes",
+    "text",
+    "native-type",
+    "submit",
+    "cancel",
+  ],
   watch: {
     page(val) {
       this.getList(this.limit, val);
@@ -88,31 +111,32 @@ export default {
     ...mapActions(subjectStore, ["getList"]),
   },
   mounted() {
-    this.loading = true
+    this.loading = true;
     this.getList(this.limit, this.page);
-    this.loading = false
+    this.loading = false;
+    this.smallScreen = window.innerWidth < 600
   },
 };
 </script>
 <style scoped>
-#list {
+@import url("https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css");
+/* #list {
   font-family: Arial, Helvetica, sans-serif;
   border-collapse: collapse;
   width: 100%;
-}
-.table {
+} */
+/* .table {
   min-height: 350px;
-}
+} */
 
-#list td,
+/* #list td,
 #list th {
-  /* border: 1px solid #ddd; */
   padding: 8px;
-}
+} */
 
 /* #list tr:nth-child(even){background-color: #f2f2f2;} */
 
-#list tbody tr:hover {
+/* #list tbody tr:hover {
   background-color: #ecf3f3;
 }
 
@@ -120,10 +144,9 @@ export default {
   padding-top: 12px;
   padding-bottom: 12px;
   text-align: left;
-  /* background-color: #04AA6D; */
   color: #000;
   border-bottom: 2px solid #f7f8fc;
-}
+} */
 .container {
   position: relative;
 }
@@ -140,5 +163,14 @@ export default {
 .loading img {
   width: 200px;
   background: #e3e5e9;
+}
+a {
+  text-decoration: none !important;
+}
+.table-responsive {
+  border: 1px solid #dee2e6;
+  padding: 10px 5px;
+  border-radius: 5px;
+  margin-top: 10px !important;
 }
 </style>

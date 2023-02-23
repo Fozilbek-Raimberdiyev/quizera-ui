@@ -42,7 +42,7 @@
       </table>
     </div>
     <div v-else>
-      <el-empty description="Roles not found"></el-empty>
+      <n-empty size="huge" description="Rollar topilmadi..."></n-empty>
     </div>
   </div>
 </template>

@@ -2,7 +2,7 @@
   <div class="wrapper">
     <!-- <pre>{{ form.members }}</pre> -->
     <form @submit.prevent="submit">
-      <div class="input flex justify-between">
+      <div :class="[smallScreen ? 'block' : 'flex justify-between']">
         <label for="name">
           Fan nomini kiriting
           <el-input
@@ -97,7 +97,7 @@
     </form>
 
     <!--modal-->
-    <el-dialog @close="closeModal" v-model="dialogTableVisible">
+    <el-dialog width="80%" @close="closeModal" v-model="dialogTableVisible">
       <template #header>
         <h6>Savollarni ball tizimida sonini aniqlash</h6>
       </template>
@@ -223,6 +223,7 @@ export default {
       },
       grades: [1, 2, 3, 4, 5, 6],
       numbers: [],
+      smallScreen : false
     };
   },
   props: [
@@ -231,7 +232,7 @@ export default {
     "small",
     "default",
     "type",
-    "primart",
+    "primary",
     "info",
     "succes",
     "text",
@@ -441,11 +442,16 @@ export default {
     if (this.$route.params.id) {
       this.setFormData(this.$route.params.id);
     }
+    this.smallScreen = window.innerWidth < 600
+
     // this.getById(this.$route.params.id)
   },
 };
 </script>
-<style scoped>
+<style scoped lang="scss">
+input:active {
+  border: 1px solid #409eef !important;
+}
 .wrapper {
   border-bottom: 1px solid #e3e5e9;
   padding-bottom: 1rem;

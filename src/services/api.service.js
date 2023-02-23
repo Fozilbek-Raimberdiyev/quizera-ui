@@ -66,7 +66,7 @@ export const resInterceptor = $axios.interceptors.response.use(
   function (error) {
     error
       ? ElNotification({
-          title: error?.response.data.message || error.message,
+          title: error?.response?.data.message || error?.message,
           type: "error",
         })
       : "";

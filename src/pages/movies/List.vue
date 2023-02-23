@@ -68,7 +68,7 @@
           size="large"
           description="Ma'lumot topilmadi"
         /> -->
-      <a-empty></a-empty>
+      <n-empty size="huge" description="Kinolar topilmadi..."></n-empty>
       </div>
       <!-- <div v-else>
         

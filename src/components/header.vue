@@ -1,7 +1,28 @@
 <template>
-  <div class="d-flex justify-content-between header">
-    <div>
-      <breadCrumbs v-if="!smallScreen"></breadCrumbs>
+  <div class="header items-center">
+    <div v-if="!smallScreen">
+      <breadCrumbs></breadCrumbs>
+    </div>
+    <div v-else class="self-stretch">
+      <i
+        style="
+          display: block;
+          font-size: 30px;
+          margin-top: 3px;
+          margin-left: -5px;
+        "
+        @click="isshow = true"
+        class="bx bx-menu cursor-pointer"
+      ></i>
+      <el-drawer
+        style="background: #001529;"
+        size="85%"
+        :show-close="false"
+        direction="ltr"
+        v-model="isshow"
+      >
+        <mobile-menu @select="select"></mobile-menu>
+      </el-drawer>
     </div>
     <div>
       <el-dropdown placement="bottom-start" trigger="click">
@@ -13,7 +34,9 @@
         </el-button>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item class="cursor-pointer" @click="$router.push('/profile')"
+            <el-dropdown-item
+              class="cursor-pointer"
+              @click="$router.push('/profile')"
               ><i class="bx bxs-edit"></i>Ma'lumotlarni
               tahrirlash</el-dropdown-item
             >
@@ -31,9 +54,16 @@ import { mapState, mapStores } from "pinia";
 import breadCrumbs from "./breadCrumbs.vue";
 import { userStore } from "../stores/management/user.store";
 import { authStore } from "../stores/counter";
+import mobileMenu from "./mobileMenu.vue";
 export default {
+  data() {
+    return {
+      isshow: false,
+    };
+  },
   components: {
     breadCrumbs,
+    mobileMenu,
   },
   computed: {
     ...mapState(userStore, ["user"]),
@@ -50,6 +80,9 @@ export default {
     },
   },
   methods: {
+    select() {
+      this.isshow = false;
+    },
     logOut() {
       localStorage.removeItem("user");
       localStorage.setItem(
@@ -64,7 +97,7 @@ export default {
 <style scoped>
 .header {
   display: flex;
-  align-items: stretch;
+  align-items: center;
   justify-content: space-between;
 }
 </style>

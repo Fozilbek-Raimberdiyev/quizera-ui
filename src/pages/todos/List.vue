@@ -6,21 +6,23 @@
       >
       <!-- {{ $ability }} -->
     </div>
-    <div v-if="list.length">
-      <div style="min-height: 350px">
-        <table class="responsive-table striped">
+    <div style="min-height: 350px" v-if="list.length">
+      <div class="table-responsive">
+        <table class="table">
           <thead>
-            <th>№</th>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Begin date</th>
-            <th>End date</th>
-            <th>Time left</th>
-            <th>Actions</th>
-          </thead>
-          <tbody v-for="(todo, index) in list" :key="index">
             <tr>
-              <td>{{ index + 1 }}</td>
+              <th style="vertical-align: middle;" scope="col">№</th>
+              <th style="vertical-align: middle;" scope="col">Name</th>
+              <th style="vertical-align: middle;" scope="col">Description</th>
+              <th style="vertical-align: middle;" scope="col">Begin date</th>
+              <th style="vertical-align: middle;" scope="col">End date</th>
+              <th style="vertical-align: middle;" scope="col">Time left</th>
+              <th style="vertical-align: middle;" scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody  v-for="(todo, index) in list" :key="index">
+            <tr>
+              <th scope="row">{{ index + 1 }}</th>
               <td>{{ todo.name }}</td>
               <td>{{ todo.description }}</td>
               <td>{{ toDDMMYY(todo.date) }}</td>
@@ -29,7 +31,7 @@
               <td>
                 <div
                   style="
-                   display: flex;
+                    display: flex;
                     justify-content: space-between;
                     align-items: center;
                     flex-wrap: wrap;
@@ -68,7 +70,7 @@
       />
     </div>
     <div v-else>
-      <el-empty description="Todos not found"></el-empty>
+      <n-empty size="huge" description="Topshiriqlar topilmadi"></n-empty>
     </div>
   </div>
 </template>
@@ -104,7 +106,8 @@ export default {
 };
 </script>
 <style scoped>
-table {
+@import url("https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css");
+/* table {
   margin-top: 5px;
   font-family: arial, sans-serif;
   border-collapse: collapse;
@@ -113,7 +116,6 @@ table {
   border: 1px solid #ccc;
 }
 thead {
-  /* background: #2a2a2e; */
   color: #000;
 }
 td,
@@ -124,6 +126,11 @@ th {
 }
 
 tr:nth-child(even) {
-  /* background-color: #dddddd; */
+} */
+.table-responsive {
+  border: 1px solid #dee2e6;
+  padding: 5px;
+  border-radius: 5px;
+  margin-top: 5px !important;
 }
 </style>

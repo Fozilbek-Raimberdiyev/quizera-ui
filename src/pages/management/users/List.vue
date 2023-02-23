@@ -66,7 +66,7 @@
       </table>
     </div>
     <div v-else>
-      <el-empty description="Users not found"></el-empty>
+      <n-empty description="Foydalanuvchilar topilmadi..."></n-empty>
     </div>
   </div>
 </template>
