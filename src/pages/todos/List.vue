@@ -160,7 +160,6 @@
                     display: flex;
                     justify-content: end;
                     align-items: center;
-                    flex-wrap: wrap;
                   "
                 >
                   <el-button

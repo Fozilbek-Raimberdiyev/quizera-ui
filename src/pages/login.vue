@@ -6,17 +6,18 @@
     >
       <div class="bg-container"></div>
       <form
-      v-if="!isRegister"
-        :style="[smallScreen ? 'width: 100%;' : 'width : 50%']"
+        v-if="!isRegister"
+        :style="[smallScreen ? 'width: 100%;' : 'width : 65%']"
         class="shadow"
         @submit.prevent="login(form)"
       >
         <div :class="[smallScreen ? 'mt-5' : 'form']">
           <div class="flex items-center justify-center">
-            <p style="font-size: 1.5rem;" class="text-center">
-              Tizimga kirish
-            </p>
-            <i style="font-size: 1.5rem;" class="bi bi-box-arrow-in-right self-start"></i>
+            <p style="font-size: 1.5rem" class="text-center">Tizimga kirish</p>
+            <i
+              style="font-size: 1.5rem"
+              class="bi bi-box-arrow-in-right self-start"
+            ></i>
           </div>
           <el-input
             :prefix-icon="Avatar"
@@ -47,19 +48,30 @@
           <div class="sign-up flex items-center justify-between">
             <p>
               Akkountingiz yo'qmi?
-              <span @click="isRegister=true" class="register cursor-pointer" style="color: #409eef;">Ro'yhatdan o'tish</span>
+              <span
+                @click="isRegister = true"
+                class="register cursor-pointer"
+                style="color: #409eef"
+                >Ro'yhatdan o'tish</span
+              >
             </p>
           </div>
         </div>
       </form>
-      <form v-else @submit.prevent="submit">
+      <form
+        v-else
+        @submit.prevent="submit"
+        :style="[smallScreen ? 'width: 100%;' : 'width : 65%']"
+      >
         <!-- <label>Firstname</label> -->
-        <div class="flex items-center justify-center">
-            <p style="font-size: 1.5rem;" class="text-center">
-              Ro'yhatdan o'tish
-            </p>
-            <i style="font-size: 1.5rem;" class="bi bi-box-arrow-in-right self-start"></i>
-          </div>
+        <div  :class="[smallScreen ? 'mt-5' : 'form']">
+          <div class="flex items-center justify-center">
+          <p style="font-size: 1.5rem" class="text-center">Ro'yhatdan o'tish</p>
+          <i
+            style="font-size: 1.5rem"
+            class="bi bi-box-arrow-in-right self-start"
+          ></i>
+        </div>
         <el-input
           size="large"
           required
@@ -68,13 +80,32 @@
           :prefix-icon="Avatar"
         />
         <!-- <label>Lastname</label> -->
-        <el-input :prefix-icon="User" required size="large" style="margin-top: 10px;" v-model="rForm.lastName" placeholder="Please input lastname" />
+        <el-input
+          :prefix-icon="User"
+          required
+          size="large"
+          style="margin-top: 10px"
+          v-model="rForm.lastName"
+          placeholder="Please input lastname"
+        />
         <div class="birdthData">
           <!-- <label class="block">Birdth data</label> -->
-          <el-date-picker size="large" style="margin-top: 10px;" placeholder="Enter the birthdata" v-model="rForm.birdthData"></el-date-picker>
+          <el-date-picker
+            size="large"
+            style="margin-top: 10px"
+            placeholder="Enter the birthdata"
+            v-model="rForm.birdthData"
+          ></el-date-picker>
         </div>
         <!-- <label style="display: block">Email</label> -->
-        <el-input :prefix-icon="Message" required size="large" style="margin-top: 10px;" v-model="rForm.email" placeholder="Please input email" />
+        <el-input
+          :prefix-icon="Message"
+          required
+          size="large"
+          style="margin-top: 10px"
+          v-model="rForm.email"
+          placeholder="Please input email"
+        />
         <!-- <label>Phone number</label> -->
         <el-input
           type="number"
@@ -83,7 +114,8 @@
           min="0"
           placeholder="Please input  phone number"
           v-model="rForm.phoneNumber"
-          size="large" style="margin-top: 10px;"
+          size="large"
+          style="margin-top: 10px"
         ></el-input>
         <!-- <label>Password</label> -->
         <el-input
@@ -93,17 +125,26 @@
           v-model="rForm.password"
           show-password
           placeholder="Please input password"
-          size="large" style="margin-top: 10px;"
+          size="large"
+          style="margin-top: 10px"
         />
-        <div class="flex justify-center" style="margin-top: 1rem;">
-          <el-button :loading="loading" native-type="submit" type="primary">Register</el-button>
+        <div class="flex justify-center" style="margin-top: 1rem">
+          <el-button :loading="loading" native-type="submit" type="primary"
+            >Register</el-button
+          >
         </div>
         <div class="sign-up flex items-center justify-between">
-            <p>
-              Akkountingiz bormi?
-              <span @click="isRegister=false" class="register cursor-pointer" style="color: #409eef;">Tizimga kirish</span>
-            </p>
-          </div>
+          <p>
+            Akkountingiz bormi?
+            <span
+              @click="isRegister = false"
+              class="register cursor-pointer"
+              style="color: #409eef"
+              >Tizimga kirish</span
+            >
+          </p>
+        </div>
+        </div>
       </form>
     </div>
   </div>
@@ -112,8 +153,20 @@
 import { mapActions, mapState, mapStores } from "pinia";
 import { userStore } from "../stores/management/user.store";
 import { loadingStore } from "../stores/loading.store";
-import { Avatar, Key, Phone, User, Management, Message } from "@element-plus/icons-vue";
-import {  PhoneFilled, AccountBookFilled, SignalFilled, ContactsFilled } from "@ant-design/icons-vue";
+import {
+  Avatar,
+  Key,
+  Phone,
+  User,
+  Management,
+  Message,
+} from "@element-plus/icons-vue";
+import {
+  PhoneFilled,
+  AccountBookFilled,
+  SignalFilled,
+  ContactsFilled,
+} from "@ant-design/icons-vue";
 export default {
   data: () => {
     return {
@@ -135,13 +188,14 @@ export default {
       Avatar,
       Key,
       Phone,
-      User, Management,
+      User,
+      Management,
       Message,
       PhoneFilled,
       AccountBookFilled,
       SignalFilled,
       ContactsFilled,
-      isRegister : false
+      isRegister: false,
     };
   },
   computed: {
@@ -193,7 +247,7 @@ form div {
 }
 form {
   background: #fff;
-  margin: 5rem auto;
+  margin: 0.5rem auto;
   padding: 5px 10px;
   border-radius: 10px;
 }

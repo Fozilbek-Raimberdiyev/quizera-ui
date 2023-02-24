@@ -1,8 +1,7 @@
 <template>
   <div>
-    <div class="create_user">
+    <div class="create_user flex justify-end" style="margin: 5px 0">
       <el-button
-        style="float: right; margin-bottom: 2px"
         type="primary"
         class="cursor-pointer"
         @click="$router.push('/management/users/add')"
@@ -10,7 +9,7 @@
       >
       <!-- {{ $ability }} -->
     </div>
-    <div v-if="users.length">
+    <!-- <div v-if="users.length">
       <table class="responsive-table striped">
         <thead>
           <th>№</th>
@@ -64,15 +63,77 @@
           </tr>
         </tbody>
       </table>
+    </div> -->
+    <div class="q-pa-md" style="padding: 0">
+      <q-markup-table v-if="users.length">
+        <thead>
+          <tr>
+            <th class="text-left">#</th>
+            <th class="text-right">Ismi</th>
+            <th class="text-right">Familiyasi</th>
+            <th class="text-right">Telefon raqami</th>
+            <th class="text-right">Roli</th>
+            <th class="text-right">Ro'yhatdan o'tgan sanasi</th>
+            <th class="text-right">Harakatlar</th>
+          </tr>
+        </thead>
+        <tbody v-for="(user, index) in users" :key="index">
+          <tr>
+            <td class="text-left">{{ index + 1 }}</td>
+            <td class="text-right">{{ user.firstName }}</td>
+            <td class="text-right">{{ user.lastName }}</td>
+            <td class="text-right">{{ user.phoneNumber }}</td>
+            <td class="text-right">{{ user.role }}</td>
+            <td class="text-right">{{ dateParser(user.dataRegister) }}</td>
+            <td class="text-right">
+              <div>
+                <el-button type="text" style="cursor: pointer"
+                  ><i class="bx bxs-edit"></i
+                ></el-button>
+                <el-button
+                  style="cursor: pointer"
+                  @click="dialogVisible = true"
+                  type="text"
+                  ><i class="bi bi-trash"></i
+                ></el-button>
+                <el-dialog
+                  v-model="dialogVisible"
+                  title="Tips"
+                  width="30%"
+                  :before-close="handleClose"
+                >
+                  <span>Do you want delete this user?</span>
+                  <template #footer>
+                    <span class="dialog-footer">
+                      <el-button @click="dialogVisible = false"
+                        >Cancel</el-button
+                      >
+                      <el-button type="primary"> Confirm </el-button>
+                    </span>
+                  </template>
+                </el-dialog>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </q-markup-table>
+      <div v-else>
+        <n-empty description="Foydalanuvchilar topilmadi..."></n-empty>
+      </div>
     </div>
-    <div v-else>
-      <n-empty description="Foydalanuvchilar topilmadi..."></n-empty>
-    </div>
+    <el-pagination
+      style="margin-top: 1rem"
+      v-model:current-page="page"
+      background
+      layout="prev, pager, next"
+      :total="total"
+    />
   </div>
 </template>
 <script>
 import { mapActions, mapState, mapStores } from "pinia";
 import { userStore } from "../../../stores/management/user.store";
+import { dateParser } from "../../utils/date.formatter";
 export default {
   components: {},
   data() {
@@ -84,34 +145,13 @@ export default {
     ...mapState(userStore, ["user", "users"]),
   },
   methods: {
-    ...mapActions(userStore, ["getAllUsers"])
+    ...mapActions(userStore, ["getAllUsers"]),
+    dateParser,
   },
   created() {
-    this.getAllUsers()
-  }
+    this.getAllUsers();
+  },
 };
 </script>
 <style scoped>
-table {
-  margin-top: 5rem;
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
-  background: #fff;
-  border: 1px solid #ccc;
-}
-thead {
-  /* background: #2a2a2e; */
-  color: #000;
-}
-td,
-th {
-  border: 1px solid #dddddd;
-  text-align: left;
-  padding: 8px;
-}
-
-tr:nth-child(even) {
-  /* background-color: #dddddd; */
-}
 </style>

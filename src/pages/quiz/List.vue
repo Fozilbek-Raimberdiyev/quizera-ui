@@ -1,11 +1,11 @@
 <template>
-  <div v-if="loading" class="container">
+  <!-- <div v-if="loading" class="container">
     <div class="loading flex justify-center items-center">
-      <div class="hidden"></div>
       <img src="../../assets/gif/ball-loading.gif" alt="loading" />
+      loading
     </div>
-  </div>
-  <div v-else class="wrapper">
+  </div> -->
+  <div class="wrapper">
     <div v-if="list.length">
       <div
         :class="[smallScreen ? 'block' : 'flex items-center justify-between']"
@@ -53,7 +53,7 @@
         </tbody>
         </table>
       </div> -->
-      <div class="q-pa-md" style="padding: 0; margin-top: 1rem">
+      <div class="q-pa-md" style="padding: 0; margin-top: 1rem; min-height: 300px;">
         <q-markup-table>
           <thead>
             <tr>

@@ -3,7 +3,7 @@
     <!-- <pre>{{ form.members }}</pre> -->
     <form @submit.prevent="submit">
       <div
-        :class="[smallScreen ? 'block' : 'flex justify-between box items-end']"
+        :class="[smallScreen ? 'block' : 'flex  box items-end']"
       >
         <label for="name">
           Fan nomini kiriting
@@ -88,10 +88,15 @@
             :loading="loading"
             clearable
             remote
+            :disabled="form.isForAll"
             :clear-filter-after-select="false"
             @search="remoteMethod"
           />
           <!-- <pre>{{ form.members }}</pre> -->
+        </label>
+        <label>
+          Hamma uchun belgilash
+          <el-checkbox v-model="form.isForAll"></el-checkbox>
         </label>
       </div>
       <el-button
@@ -225,6 +230,7 @@ export default {
       isEnterednumber: false,
       isClickedSave: false,
       usersList: [],
+      membersFrequency : [],
       search: "",
       form: {
         name: "",
@@ -232,6 +238,7 @@ export default {
         quizCount: "",
         isDifferent: false,
         members: [],
+        isForAll : false,
         grades: [
           {
             grade: null,
@@ -332,6 +339,16 @@ export default {
       //   return { value: user.email, label: user.email };
       // });
     },
+    "form.isForAll"(value) {
+      // const members = [...this.form.members];
+
+      // if(value) {
+      //   this.form.members = []
+      // } else {
+      //   this.form.members = [...members];
+      //   console.log(members)
+      // }
+    }
   },
   methods: {
     ...mapActions(subjectStore, [
@@ -477,6 +494,7 @@ input:active {
 }
 label {
   flex-basis: 25%;
+  margin: 0.5rem 1rem;
 }
 b {
   display: block;
