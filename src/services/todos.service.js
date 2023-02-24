@@ -13,6 +13,13 @@ export default {
       },
     });
   },
+  updateStatusById(id, body) {
+    return $axios.put("/todos/statusUpdate", body, {
+      params : {
+        ID : id
+      }
+    })
+  },
   deleteTodo(id) {
     return $axios.delete(`/todos/delete`, {
       params: {

@@ -14,7 +14,7 @@
           <a-input-search :style="{'width : 100%' : smallScreen} " v-model:value="search" placeholder="Izlang..."> </a-input-search>
         </div>
       </div>
-      <div class="table-responsive">
+      <!-- <div class="table-responsive">
         <table class="table">
           <thead>
             <tr>
@@ -44,7 +44,44 @@
           </tr>
         </tbody>
         </table>
-      </div>
+      </div> -->
+      <div class="q-pa-md">
+    <q-markup-table>
+      <thead>
+        <tr>
+          <!-- <th class="text-left">Dessert (100g serving)</th>
+          <th class="text-right">Calories</th>
+          <th class="text-right">Fat (g)</th>
+          <th class="text-right">Carbs (g)</th>
+          <th class="text-right">Protein (g)</th>
+          <th class="text-right">Sodium (mg)</th> -->
+          <th class="text-left" style="vertical-align: middle;" scope="col">#</th>
+          <th class="text-left" style="vertical-align: middle;" scope="col">Savollar soni</th>
+          <th class="text-left" style="vertical-align: middle;" scope="col">Belgilangan vaqt</th>
+          <th class="text-left" style="vertical-align: middle;" scope="col">Harakatlar</th>
+          <th class="text-left" style="vertical-align: middle;" scope="col">Fan</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr v-for="(subject, i) in searchSubject" :key="i">
+            <td class="text-left" scope="row">{{ i+1 }}</td>
+            <td class="text-left">{{ subject.name }}</td>
+            <td class="text-left">{{ subject.quizCount }}</td>
+            <td class="text-left">{{ subject.time }}</td>
+            <td class="text-left">
+              <el-button
+                type="primary"
+                style="cursor: pointer"
+                size="small"
+                @click="$router.push(`/quiz/${subject._id}`)"
+              >
+                Kirish
+              </el-button>
+            </td>
+          </tr>
+        </tbody>
+    </q-markup-table>
+  </div>
 
       <el-pagination
         small

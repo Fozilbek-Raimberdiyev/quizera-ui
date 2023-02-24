@@ -32,3 +32,12 @@ export function minusTwoDates(decreasing, separable) {
       : (decreasingDate.getMonth() - separableDate.getMonth() + " oy")
   }   ${decreasingDate.getDate() - separableDate.getDate()}  kun`;
 }
+
+export function subtractDates(date1, date2) {
+  let difference =  new Date(date1).getTime() - new Date(date2).getTime();
+  let time = new Date(difference)
+  let day =  time.getDate() +"-kun";
+  let month = time.getMonth();
+  let year = time.getFullYear() - 1970;
+  return `${year < 1 ? '' : year+'-yil-'}${month < 1 ? '' : month+'-oy-'}${day}`
+}

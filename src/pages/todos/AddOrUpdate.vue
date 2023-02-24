@@ -88,6 +88,7 @@ export default {
       name: "",
       description: "",
       endDate: "",
+      isMaked : false
       // password: "",
       // rules : []
     },
