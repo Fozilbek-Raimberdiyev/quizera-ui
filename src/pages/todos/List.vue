@@ -2,18 +2,39 @@
   <div>
     <div class="flex justify-between items-center">
       <div class="tabs" v-if="list.length">
-        <span @click="status='all', currentTab='all'" :class="{active : currentTab==='all'}" class="tab">Hammasi</span>
-        <span @click="status='true', currentTab='true'" :class="{active : currentTab=='true'}" class="tab">Bajarilgan</span>
-        <span @click="status='false', currentTab='false'" :class="{active : currentTab=='false'}" class="tab">Bajarilmagan</span>
+        <span
+          @click="(status = 'all'), (currentTab = 'all')"
+          :class="{ active: currentTab === 'all' }"
+          class="tab"
+          >Hammasi</span
+        >
+        <span
+          @click="(status = 'true'), (currentTab = 'true')"
+          :class="{ active: currentTab == 'true' }"
+          class="tab"
+          >Bajarilgan</span
+        >
+        <span
+          @click="(status = 'false'), (currentTab = 'false')"
+          :class="{ active: currentTab == 'false' }"
+          class="tab"
+          >Bajarilmagan</span
+        >
       </div>
       <div :style="[smallScreen ? 'margin : 5px auto; margin-right: 0' : '']">
-        <el-button v-if="!smallScreen" type="primary" @click="$router.push({ name: 'Todo add' })"
+        <el-button
+          v-if="!smallScreen"
+          type="primary"
+          @click="$router.push({ name: 'Todo add' })"
           ><i class="bx bx-plus" style="margin-right: 5px"></i>Add
           todo</el-button
         >
-        <el-button v-else type="primary" @click="$router.push({ name: 'Todo add' })"
-          ><i class="bx bx-plus" style="margin-right: 5px"></i></el-button
-        >
+        <el-button
+          v-else
+          type="primary"
+          @click="$router.push({ name: 'Todo add' })"
+          ><i class="bx bx-plus" style="margin-right: 5px"></i
+        ></el-button>
       </div>
     </div>
     <div style="min-height: 350px" v-if="list.length">
@@ -70,7 +91,7 @@
           </tbody>
         </table>
       </div> -->
-      <div class="q-pa-md">
+      <div class="q-pa-md" style="padding: 0; margin-top: 1rem">
         <q-markup-table>
           <thead>
             <tr>
@@ -116,22 +137,28 @@
               <td class="text-left">{{ todo.description }}</td>
               <td class="text-right">{{ toDDMMYY(todo.date) }}</td>
               <td class="text-right">{{ toDDMMYY(todo.endDate) }}</td>
-              <td class="text-right">{{ todo.isMaked ? subtractDates(todo.makedDate, todo.date) : '-' }}</td>
               <td class="text-right">
-                {{ todo.isMaked ? '-' : subtractDates(todo.endDate,todo.date) }}
+                {{
+                  todo.isMaked ? subtractDates(todo.makedDate, todo.date) : "-"
+                }}
+              </td>
+              <td class="text-right">
+                {{
+                  todo.isMaked ? "-" : subtractDates(todo.endDate, todo.date)
+                }}
               </td>
               <td class="text-right">
                 <el-checkbox
-                  @change="todosService.updateStatusById(todo._id, {status : todo.isMaked})"
+                  @change="updateStatusById(todo._id, { status: todo.isMaked })"
                   v-model="todo.isMaked"
                   :disabled="todo.isMaked"
                 ></el-checkbox>
               </td>
               <td class="text-right">
-                <div 
+                <div
                   style="
                     display: flex;
-                    justify-content: end; 
+                    justify-content: end;
                     align-items: center;
                     flex-wrap: wrap;
                   "
@@ -176,27 +203,29 @@
 <script>
 import { mapActions, mapState } from "pinia";
 import { todoStore } from "../../stores/todos.store";
-import { toDDMMYY, minusTwoDates, subtractDates } from "../utils/date.formatter";
-import todosService from '../../services/todos.service';
+import {
+  toDDMMYY,
+  minusTwoDates,
+  subtractDates,
+} from "../utils/date.formatter";
 export default {
   data: () => ({
     page: 1,
     status: "all",
-    todosService,
-    currentTab : 'all',
-    smallScreen : false
+    currentTab: "all",
+    smallScreen: false,
   }),
   computed: {
     ...mapState(todoStore, ["list", "total", "params"]),
     listC() {
-      if(this.status==='all') {
-        return this.list
-      } else if(this.status==='true') {
-        return this.list.filter(todo => todo.isMaked)
+      if (this.status === "all") {
+        return this.list;
+      } else if (this.status === "true") {
+        return this.list.filter((todo) => todo.isMaked);
       } else {
-        return this.list.filter(todo => !todo.isMaked)
+        return this.list.filter((todo) => !todo.isMaked);
       }
-    }
+    },
   },
   watch: {
     page(value) {
@@ -204,8 +233,16 @@ export default {
       this.getList(this.params);
     },
   },
+  updated() {
+    // this.getList()
+  },
   methods: {
-    ...mapActions(todoStore, ["getList", "deleteById", "updateById"]),
+    ...mapActions(todoStore, [
+      "getList",
+      "deleteById",
+      "updateById",
+      "updateStatusById",
+    ]),
     toDDMMYY,
     minusTwoDates,
     subtractDates,
@@ -214,12 +251,12 @@ export default {
       this.getList();
     },
     change() {
-      alert("")
-    }
+      alert("");
+    },
   },
   created() {
     this.getList();
-    this.smallScreen = window.innerWidth < 600
+    this.smallScreen = window.innerWidth < 600;
   },
 };
 </script>

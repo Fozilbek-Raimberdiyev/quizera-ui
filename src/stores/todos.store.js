@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import auth from "../services/auth";
 import todosService from "../services/todos.service";
 
 export const todoStore = defineStore("todoStore", {
@@ -28,5 +29,9 @@ export const todoStore = defineStore("todoStore", {
     async deleteById(id) {
       return todosService.deleteTodo(id);
     },
+    async updateStatusById(id, body) {
+      let res = await todosService.updateStatusById(id,body);
+      return this.getList()
+    }
   },
 });

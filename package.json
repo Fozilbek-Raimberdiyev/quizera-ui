@@ -45,6 +45,7 @@
   },
   "devDependencies": {
     "@quasar/vite-plugin": "^1.3.0",
+    "@vicons/utils": "^0.1.4",
     "@vitejs/plugin-vue": "^4.0.0",
     "@vue-leaflet/vue-leaflet": "^0.7.0",
     "autoprefixer": "^10.4.13",

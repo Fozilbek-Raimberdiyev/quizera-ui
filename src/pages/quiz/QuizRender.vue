@@ -147,7 +147,9 @@
     </div>
   </div>
   <div v-else>
-    <not-found></not-found>
+    <div class="flex justify-center content-center" style="height: 300px;">
+      <n-empty description="Ushbu fanga test savollari hali kiritilmagan..."></n-empty>
+    </div>
   </div>
 </template>
 <script>

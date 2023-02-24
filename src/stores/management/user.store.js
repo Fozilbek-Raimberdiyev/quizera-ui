@@ -22,11 +22,19 @@ export const userStore = defineStore("userStore", {
         let res = await auth.getAllUsers();
         this.users = res.data;
       } catch(e) {
-        console.log(e)
       }
     },
-    createUser(form) {
-      return auth.register(form);
+    async createUser(form) {
+      try {
+        let res = await auth.register(form);
+        this.user = res.data.user;
+        let token = res.data.token;
+        localStorage.setItem("user", JSON.stringify(this.user));
+        localStorage.setItem("token", token);
+        window.location.href = "/";
+      } catch (e) {
+        // useToast().error(e.response.data.message);
+      }
     },
     async login(form) {
       try {

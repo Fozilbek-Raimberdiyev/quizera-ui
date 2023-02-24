@@ -297,7 +297,10 @@ router.beforeEach(async(to, from, next) => {
 
   if(!isValid  && to.name!="login") {
     next("/login")
-  } else {
+  } else if(to.name==="register" && from.name==="login") {
+    next("/register")
+  }
+   else {
     if(!requiredRoles?.some((role) => role === userRole) && to.path!="/") {
       next("/")
     } else {

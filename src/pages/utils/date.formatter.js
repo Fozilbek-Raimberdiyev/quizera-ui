@@ -19,6 +19,15 @@ export function toDDMMYY(date) {
   }-${data.getFullYear()}`;
 }
 
+export function dateParser(date) {
+  let data = new Date(date);
+  let day = data.getDate();
+  let month = data.getMonth() < 10 ? ("0"+(+data.getMonth() +1) ) : data.getMonth()
+  let year = data.getFullYear();
+  let DDMMYY = day + "-" + month + "-" + year;
+  return DDMMYY
+}
+
 export function minusTwoDates(decreasing, separable) {
   let decreasingDate = new Date(decreasing);
   let separableDate = new Date(separable);

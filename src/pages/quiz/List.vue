@@ -7,11 +7,19 @@
   </div>
   <div v-else class="wrapper">
     <div v-if="list.length">
-      <div :class="[smallScreen ? 'block' : 'flex items-center justify-between']" class="">
+      <div
+        :class="[smallScreen ? 'block' : 'flex items-center justify-between']"
+        class=""
+      >
         <h5>Test sinovlari</h5>
         <div>
           <!-- <i class='bx bx-search'></i> -->
-          <a-input-search :style="{'width : 100%' : smallScreen} " v-model:value="search" placeholder="Izlang..."> </a-input-search>
+          <a-input-search
+            :style="{ 'width : 100%': smallScreen }"
+            v-model:value="search"
+            placeholder="Izlang..."
+          >
+          </a-input-search>
         </div>
       </div>
       <!-- <div class="table-responsive">
@@ -45,48 +53,80 @@
         </tbody>
         </table>
       </div> -->
-      <div class="q-pa-md">
-    <q-markup-table>
-      <thead>
-        <tr>
-          <!-- <th class="text-left">Dessert (100g serving)</th>
+      <div class="q-pa-md" style="padding: 0; margin-top: 1rem">
+        <q-markup-table>
+          <thead>
+            <tr>
+              <!-- <th class="text-left">Dessert (100g serving)</th>
           <th class="text-right">Calories</th>
           <th class="text-right">Fat (g)</th>
           <th class="text-right">Carbs (g)</th>
           <th class="text-right">Protein (g)</th>
           <th class="text-right">Sodium (mg)</th> -->
-          <th class="text-left" style="vertical-align: middle;" scope="col">#</th>
-          <th class="text-left" style="vertical-align: middle;" scope="col">Savollar soni</th>
-          <th class="text-left" style="vertical-align: middle;" scope="col">Belgilangan vaqt</th>
-          <th class="text-left" style="vertical-align: middle;" scope="col">Harakatlar</th>
-          <th class="text-left" style="vertical-align: middle;" scope="col">Fan</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr v-for="(subject, i) in searchSubject" :key="i">
-            <td class="text-left" scope="row">{{ i+1 }}</td>
-            <td class="text-left">{{ subject.name }}</td>
-            <td class="text-left">{{ subject.quizCount }}</td>
-            <td class="text-left">{{ subject.time }}</td>
-            <td class="text-left">
-              <el-button
-                type="primary"
-                style="cursor: pointer"
-                size="small"
-                @click="$router.push(`/quiz/${subject._id}`)"
+              <th class="text-left" style="vertical-align: middle" scope="col">
+                #
+              </th>
+              <th class="text-left" style="vertical-align: middle" scope="col">
+                Fan
+              </th>
+              <th class="text-left" style="vertical-align: middle" scope="col">
+                Savollar soni
+              </th>
+              <th class="text-left" style="vertical-align: middle" scope="col">
+                Belgilangan vaqt
+              </th>
+              <th
+                class="text-left"
+                style="vertical-align: middle"
+                scope="col"
+                v-if="currentUserRole === 'admin'"
               >
-                Kirish
-              </el-button>
-            </td>
-          </tr>
-        </tbody>
-    </q-markup-table>
-  </div>
+                Yaratilgan vaqti
+              </th>
+              <th
+                class="text-left"
+                style="vertical-align: middle"
+                scope="col"
+                v-if="currentUserRole === 'admin'"
+              >
+                Muallifi
+              </th>
+              <th class="text-left" style="vertical-align: middle" scope="col">
+                Harakatlar
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(subject, i) in searchSubject" :key="i">
+              <td class="text-left" scope="row">{{ i + 1 }}</td>
+              <td class="text-left">{{ subject.name }}</td>
+              <td class="text-left">{{ subject.quizCount }}</td>
+              <td class="text-left">{{ subject.time }}</td>
+              <td class="text-left" v-if="currentUserRole === 'admin'">
+                {{ dateParser(subject.createdDate) }}
+              </td>
+              <td class="text-left" v-if="currentUserRole === 'admin'">
+                {{ subject.authorFullName ? subject.authorFullName : '-'}}
+              </td>
+              <td class="text-left">
+                <el-button
+                  type="primary"
+                  style="cursor: pointer"
+                  size="small"
+                  @click="$router.push(`/quiz/${subject._id}`)"
+                >
+                  Kirish
+                </el-button>
+              </td>
+            </tr>
+          </tbody>
+        </q-markup-table>
+      </div>
 
       <el-pagination
         small
         background
-        style="margin-top: 1rem;"
+        style="margin-top: 1rem"
         layout="prev, pager, next"
         :total="total"
         :page-size="limit"
@@ -106,7 +146,9 @@
 import { mapActions, mapState } from "pinia";
 import { subjectStore } from "../../stores/references/subject";
 import notFound from "../notFound.vue";
-import { InputSearch } from 'ant-design-vue';
+import { InputSearch } from "ant-design-vue";
+import { userStore } from "../../stores/management/user.store";
+import { dateParser } from "../../pages/utils/date.formatter";
 export default {
   components: { notFound },
   data() {
@@ -115,12 +157,13 @@ export default {
       page: 1,
       limit: 5,
       loading: false,
-      smallScreen : false,
-      InputSearch
+      smallScreen: false,
+      InputSearch,
     };
   },
   computed: {
     ...mapState(subjectStore, ["list", "total"]),
+    ...mapState(userStore, ["currentUserRole"]),
     searchSubject() {
       return this.list.filter((subject) =>
         subject.name
@@ -150,12 +193,13 @@ export default {
   },
   methods: {
     ...mapActions(subjectStore, ["getList"]),
+    dateParser,
   },
   mounted() {
     this.loading = true;
     this.getList(this.limit, this.page);
     this.loading = false;
-    this.smallScreen = window.innerWidth < 600
+    this.smallScreen = window.innerWidth < 600;
   },
 };
 </script>

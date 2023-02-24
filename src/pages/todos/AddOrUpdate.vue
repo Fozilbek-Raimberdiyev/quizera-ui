@@ -146,8 +146,7 @@ form {
   background: #fff;
   padding: 10px 15px;
 }
-.form {
-}
+
 .form > div > input,
 .form > div > label,
 .form > div > span {
