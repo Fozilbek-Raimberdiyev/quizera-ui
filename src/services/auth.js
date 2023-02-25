@@ -34,5 +34,8 @@ export default {
   },
   updateUser(form) {
     return $axios.put("/auth/updateUser", form)
+  },
+  deleteUser(ID) {
+    return $axios.delete("/auth/delete", {params : {ID}})
   }
 };

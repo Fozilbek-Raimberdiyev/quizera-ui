@@ -94,7 +94,7 @@
                 ></el-button>
                 <el-button
                   style="cursor: pointer"
-                  @click="open"
+                  @click="open(user._id)"
                   type="text"
                   ><i class="bi bi-trash"></i
                 ></el-button>
@@ -122,6 +122,7 @@ import { userStore } from "../../../stores/management/user.store";
 import { dateParser } from "../../utils/date.formatter";
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { useToast } from 'vue-toastification';
+import auth from '../../../services/auth';
 export default {
   components: {},
   data() {
@@ -135,7 +136,7 @@ export default {
   methods: {
     ...mapActions(userStore, ["getAllUsers"]),
     dateParser,
-    open() {
+     open(id) {
   ElMessageBox.confirm(
     'Ushbu foydalanuvchini haqiqatdan o\'chirmoqchimisiz?',
     'Ogohlantirish',
@@ -145,8 +146,9 @@ export default {
       type: 'warning',
     }
   )
-    .then(() => {
-      
+    .then(async() => {
+    let res = await  auth.deleteUser(id);
+    this.getAllUsers()
     })
     .catch(() => {
       useToast().info("Bekor qilindi")

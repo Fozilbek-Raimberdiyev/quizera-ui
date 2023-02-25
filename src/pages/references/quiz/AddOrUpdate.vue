@@ -413,7 +413,7 @@ export default {
     },
   },
   mounted() {
-    this.getList();
+    this.getList(10,5,true);
     this.$emit("emit", true);
     this.getQuestionById(this.$route.params.id);
   },
