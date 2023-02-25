@@ -3,7 +3,7 @@
     <div class="flex items-center justify-between">
       <h5 class="sub-name">{{ subject?.name }}</h5>
       <div class="timer flex items-center" v-if="!isEnded">
-        <i class="bx bx-time" style="margin-right: 5px;"></i>
+        <i class="bx bx-time" style="margin-right: 5px"></i>
         <n-countdown
           :on-finish="onFinish"
           :duration="subject.time * 60 * 1000"
@@ -13,7 +13,8 @@
     <div v-if="!isEnded" class="bars" style="margin-bottom: 1rem">
       <div class="flex justify-end items-center">
         <el-button class="cursor-pointer" type="primary" @click="endTest"
-          >Yakunlash</el-button>
+          >Yakunlash</el-button
+        >
       </div>
       <div></div>
       <div class="tabs">
@@ -147,9 +148,42 @@
     </div>
   </div>
   <div v-else>
-    <div class="flex justify-center content-center" style="height: 300px;">
-      <n-empty description="Ushbu fanga test savollari hali kiritilmagan..."></n-empty>
+    <div class="flex justify-center content-center" style="height: 300px">
+      <n-empty
+        description="Ushbu fanga test savollari hali kiritilmagan..."
+      ></n-empty>
     </div>
+    <el-dialog
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+      :show-close="false"
+      v-model="isShow"
+      title="Parolni kiriting..."
+      :width="smallScreen ? '70%' : '30%'"
+      :before-close="handleClose"
+    >
+      <div
+        style="
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        "
+      >
+        <a-input
+          placeholder="Parolni kiriting..."
+          v-model:value="subjectPassword"
+          type="password"
+          show-password
+        ></a-input>
+        <el-button
+          style="margin-left: 1px"
+          type="primary"
+          class="cursor-pointer"
+          @click="checkPasswordSubject"
+          >Kirish</el-button
+        >
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -168,6 +202,10 @@ export default {
       checkedCount: 0,
       isChange: false,
       subject: {},
+      isShow: false,
+      smallScreen: false,
+      subjectService,
+      subjectPassword: "",
     };
   },
   computed: {
@@ -263,13 +301,30 @@ export default {
         this.currentIndex = 0;
       }, 1000);
     },
+    async checkPasswordSubject() {
+      try {
+        let res = await subjectService.checkPasswordSubject(
+          this.subject,
+          this.subjectPassword
+        );
+        this.getQuestions(this.$route.params.id, "", "", "", this.subject);
+        this.isShow = false;
+      } catch (e) {
+        console.log(e);
+      }
+    },
   },
 
   mounted() {},
   async created() {
+    this.smallScreen = window.innerWidth < 600;
     let res = (await subjectService.getById(this.$route.params.id)).data;
     this.subject = res;
-    this.getQuestions(this.$route.params.id, "", "", "", res);
+    if (!res.isHasPassword) {
+      this.getQuestions(this.$route.params.id, "", "", "", res);
+    } else {
+      this.isShow = true;
+    }
   },
 };
 </script>

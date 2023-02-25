@@ -18,5 +18,8 @@ export default {
     },
     updateStatusSubject(body) {
         return $axios.put("/subjects/statusUpdate", body)
+    },
+    checkPasswordSubject(subject, password) {
+        return $axios.post("/subjects/checkPassword",{subject,password})
     }
 }

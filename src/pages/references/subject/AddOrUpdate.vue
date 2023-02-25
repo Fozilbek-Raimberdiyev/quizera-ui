@@ -24,11 +24,6 @@
         <label for="limit">
           Test miqdorini kiriting
           <div style="display: flex;">
-            <!-- <el-input
-              v-model="form.quizCount"
-              type="number"
-              placeholder="Savollar sonini kiriting..."
-            ></el-input> -->
             <a-input-number
               :controls="false"
               :min="0"
@@ -126,6 +121,33 @@
         <label>
           Hamma uchun belgilash
           <el-checkbox v-model="form.isForAll"></el-checkbox>
+        </label>
+        <!-- <label class="flex ">
+          <el-input placeholder="Parolni kiriting..." v-model="form.password" :disabled="!form.isHasPassword"></el-input>
+          <span class="flex ">
+            <span>Parol qo'yish</span>
+          <el-checkbox v-model="form.isHasPassword"></el-checkbox>
+          </span>
+        </label> -->
+        <label for="password">
+          <div style="display: flex;">
+            <a-input
+              placeholder="Parol kiriting..."
+              v-model:value="form.password"
+              size="middle"
+              id="password"
+              :disabled="!form.isHasPassword"
+            >
+          </a-input>
+            <span  style="margin-left: 5px;">
+              <el-checkbox
+              style="display: inline-block; margin-top: 0;"
+                size="large"
+                v-model="form.isHasPassword"
+                >Parol qo'yish</el-checkbox
+              >
+            </span>
+          </div>
         </label>
       </div>
       <el-button
@@ -287,6 +309,8 @@ export default {
             count: null,
           },
         ],
+        password : "",
+        isHasPassword : false
       },
       grades: [1, 2, 3, 4, 5, 6],
       numbers: [],
@@ -404,6 +428,7 @@ export default {
       if (!this.$route.params.id) {
         if (!this.v$.$error) {
           let form = { ...this.form };
+          if(!form.isHasPassword) form.password=undefined;
           form.point = this.countPointSubject;
           let members = [...form.members];
           members = members.map((member) => {
@@ -544,7 +569,7 @@ input:active {
 label {
   flex-basis: 25%;
   margin: 0.5rem 1rem;
-  min-height: 60px;
+  // min-height: 60px;
 }
 b {
   display: block;
