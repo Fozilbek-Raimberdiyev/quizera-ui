@@ -41,7 +41,7 @@
               tahrirlash</el-dropdown-item
             >
             <el-dropdown-item class="cursor-pointer" @click="logOut"
-              ><i class="bx bx-exit"></i>Tizimdan chiqish</el-dropdown-item
+              ><i class="bi bi-box-arrow-left"></i>Tizimdan chiqish</el-dropdown-item
             >
           </el-dropdown-menu>
         </template>

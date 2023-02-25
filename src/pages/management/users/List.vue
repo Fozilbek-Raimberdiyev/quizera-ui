@@ -65,7 +65,7 @@
       </table>
     </div> -->
     <div class="q-pa-md" style="padding: 0">
-      <q-markup-table v-if="users.length">
+      <q-markup-table :flat="smallScreen ? true : false" v-if="users.length">
         <thead>
           <tr>
             <th class="text-left">#</th>
@@ -128,6 +128,7 @@ export default {
   data() {
     return {
       dialogVisible: false,
+      smallScreen : false
     };
   },
   computed: {
@@ -157,6 +158,7 @@ export default {
   },
   created() {
     this.getAllUsers();
+    this.smallScreen = window.innerWidth < 600;
   },
 };
 </script>

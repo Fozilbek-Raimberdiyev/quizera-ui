@@ -518,6 +518,9 @@ export default {
   mounted() {
     this.v$.$validate();
   },
+  beforeRouteLeave() {
+    subjectStore().$patch({list : [], total : null})
+  },
   created() {
     this.getAllUsers();
     if (this.$route.params.id) {

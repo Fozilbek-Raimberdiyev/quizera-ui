@@ -54,7 +54,7 @@
         </table>
       </div> -->
       <div class="q-pa-md" style="padding: 0; margin-top: 1rem; min-height: 300px;">
-        <q-markup-table>
+        <q-markup-table :flat="smallScreen ? true : false" style="min-height: 150px;">
           <thead>
             <tr>
               <!-- <th class="text-left">Dessert (100g serving)</th>
@@ -63,61 +63,74 @@
           <th class="text-right">Carbs (g)</th>
           <th class="text-right">Protein (g)</th>
           <th class="text-right">Sodium (mg)</th> -->
-              <th class="text-left" style="vertical-align: middle" scope="col">
-                #
+              <th class="text-left" scope="col">
+                <span style="margin-top: 1rem; " class="flex items-center"><number-outlined style="margin-right: 5px;"></number-outlined></span>
               </th>
-              <th class="text-left" style="vertical-align: middle" scope="col">
-                Fan
+              <th class="text-left">
+                <span style="margin-top: 1rem; " class="flex items-center"><FolderOutlined style="margin-right: 5px;"></FolderOutlined>Fan</span>
               </th>
-              <th class="text-left" style="vertical-align: middle" scope="col">
-                Savollar soni
+              <th class="text-left" scope="col">
+                <span style="margin-top: 1rem;" class="flex items-center"><BarChartOutlined style="margin-right: 5px; display: inline-block;"></BarChartOutlined>Test savollari soni</span>
               </th>
-              <th class="text-left" style="vertical-align: middle" scope="col">
-                Belgilangan vaqt
+              <th class="text-left" scope="col">
+                <span style="margin-top: 1rem; " class="flex items-center"><hourglass-outlined style="margin-right: 5px;"></hourglass-outlined>Testga ajratilgan vaqt</span>
+              </th>
+              <th
+                class="text-left"
+                scope="col"
+                v-if="currentUserRole === 'admin'"
+              >
+              <span style="margin-top: 1rem;" class="flex items-center"><HistoryOutlined style="margin-right: 5px;"></HistoryOutlined>Yaratilgan vaqti</span>
+              </th>
+              <th
+                class="text-left"
+                scope="col"
+                style="vertical-align: middle"
+                v-if="currentUserRole==='admin'"
+              >
+              <span style="margin-top: 1rem; " class="flex items-center"><info-circle-outlined style="margin-right: 5px;"></info-circle-outlined>Test holati</span>
               </th>
               <th
                 class="text-left"
                 style="vertical-align: middle"
                 scope="col"
-                v-if="currentUserRole === 'admin'"
               >
-                Yaratilgan vaqti
+              <span style="margin-top: 1rem; " class="flex items-center"><user-outlined style="margin-right: 5px;"></user-outlined>Test muallifi</span>
               </th>
-              <th
-                class="text-left"
-                style="vertical-align: middle"
-                scope="col"
-                v-if="currentUserRole === 'admin'"
-              >
-                Muallifi
-              </th>
-              <th class="text-left" style="vertical-align: middle" scope="col">
-                Harakatlar
+              <th class="text-left" scope="col">
+                <span style="margin-top: 1rem; " class="flex items-center"><interaction-outlined style="margin-right: 5px;"></interaction-outlined>Harakatlar</span>
               </th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(subject, i) in searchSubject" :key="i">
+            <tr v-show="searchSubject.length" v-for="(subject, i) in searchSubject" :key="i">
               <td class="text-left" scope="row">{{ i + 1 }}</td>
-              <td class="text-left">{{ subject.name }}</td>
-              <td class="text-left">{{ subject.quizCount }}</td>
-              <td class="text-left">{{ subject.time }}</td>
-              <td class="text-left" v-if="currentUserRole === 'admin'">
+              <td class="text-left data">{{ subject.name }}</td>
+              <td class="text-left data">{{ subject.quizCount }}</td>
+              <td class="text-left data">{{ subject.time }}</td>
+              <td class="text-left data" v-if="currentUserRole === 'admin'">
                 {{ dateParser(subject.createdDate) }}
               </td>
-              <td class="text-left" v-if="currentUserRole === 'admin'">
+              <td v-if="currentUserRole==='admin'" class="text-left data"><span :class="[subject.isStarted ? 'active' : 'inactive']">{{ subject.isStarted ? 'Faol' : 'Nofaol' }}</span></td>
+              <td class="text-left data">
                 {{ subject.authorFullName ? subject.authorFullName : '-'}}
               </td>
-              <td class="text-left">
+              <td class="text-left data">
                 <el-button
                   type="primary"
                   style="cursor: pointer"
                   size="small"
                   @click="$router.push(`/quiz/${subject._id}`)"
                 >
-                  Kirish
+                  <span>
+                    <i class="bi bi-box-arrow-in-right"></i>
+                    Kirish
+                  </span>
                 </el-button>
               </td>
+            </tr>
+            <tr style="position: relative; min-height: 100px;" v-show="!searchSubject.length">
+              <n-empty style="margin: 0 auto; position: absolute; left: 45%;"></n-empty>
             </tr>
           </tbody>
         </q-markup-table>
@@ -149,8 +162,10 @@ import notFound from "../notFound.vue";
 import { InputSearch } from "ant-design-vue";
 import { userStore } from "../../stores/management/user.store";
 import { dateParser } from "../../pages/utils/date.formatter";
+import { CopyrightCircleOutlined, DeliveredProcedureOutlined, HourglassOutlined, FolderOutlined, InteractionOutlined, UserOutlined, LoginOutlined, BarChartOutlined, NumberOutlined, HistoryOutlined, InfoCircleOutlined } from "@ant-design/icons-vue";
+
 export default {
-  components: { notFound },
+  components: { notFound, CopyrightCircleOutlined, DeliveredProcedureOutlined, HourglassOutlined, FolderOutlined, InteractionOutlined, UserOutlined, LoginOutlined, BarChartOutlined, NumberOutlined, HistoryOutlined, InfoCircleOutlined },
   data() {
     return {
       search: "",
@@ -195,6 +210,9 @@ export default {
     ...mapActions(subjectStore, ["getList"]),
     dateParser,
   },
+  beforeRouteLeave() {
+    subjectStore().$patch({list : [], total : null})
+  },
   mounted() {
     this.loading = true;
     this.getList(this.limit, this.page, false);
@@ -205,6 +223,7 @@ export default {
 </script>
 <style scoped>
 @import url("https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css");
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css");
 /* #list {
   font-family: Arial, Helvetica, sans-serif;
   border-collapse: collapse;
@@ -258,4 +277,31 @@ a {
   border-radius: 5px;
   margin-top: 10px !important;
 }
+
+th {
+  font-size: 15px;
+}
+span.active {
+  background:yellowgreen;
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: #fff;
+}
+span.inactive {
+  background : red;
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: #fff;
+}
+@media screen and (max-width : 600px) {
+  td.data {
+  min-width: 200px;
+}
+}
+
+/* @media screen and (max-width: 992px) {
+  body {
+    background-color: blue;
+  }
+} */
 </style>

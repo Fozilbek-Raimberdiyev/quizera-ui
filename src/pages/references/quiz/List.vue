@@ -72,6 +72,9 @@ export default {
       this.isChildRendered = val;
     },
   },
+  beforeRouteLeave() {
+    subjectStore().$patch({list : [], total : null})
+  },
   mounted() {
     this.getList(this.limit, this.page);
   },
