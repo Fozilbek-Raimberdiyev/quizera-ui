@@ -2,22 +2,28 @@
   <div class="wrapper">
     <!-- <pre>{{ form.members }}</pre> -->
     <form @submit.prevent="submit">
-      <div
-        :class="[smallScreen ? 'block' : 'flex  box items-end']"
-      >
+      <div :class="[smallScreen ? 'block' : 'flex  box items-start']">
         <label for="name">
           Fan nomini kiriting
-          <el-input
-            v-model="form.name"
+          <a-input
+            v-model:value="form.name"
             placeholder="Fan nomini kiriting..."
-          ></el-input>
+            style="position: relative"
+          >
+          <template #prefix>
+              <CheckOutlined v-if="!v$.form.name.$error" />
+              <a-tooltip v-else title="Extra information">
+                <info-circle-outlined style="color: red" />
+              </a-tooltip>
+            </template>
+          </a-input>
           <span style="color: red" v-if="v$.form.name.$error"
             >Maydon to'ldirilishi shart...</span
           >
         </label>
         <label for="limit">
           Test miqdorini kiriting
-          <div style="display: flex; align-items: center">
+          <div style="display: flex;">
             <!-- <el-input
               v-model="form.quizCount"
               type="number"
@@ -30,9 +36,17 @@
               style="width: 100%"
               placeholder="Savollar sonini kiriting..."
               v-model:value="form.quizCount"
-            ></a-input-number>
-            <span style="margin-left: 5px">
+            >
+            <template #addonBefore>
+              <CheckOutlined v-if="!v$.form.quizCount.$error" />
+              <a-tooltip v-else title="Extra information">
+                <info-circle-outlined style="color: red" />
+              </a-tooltip>
+            </template>
+          </a-input-number>
+            <span  style="margin-left: 5px;">
               <el-checkbox
+              style="display: inline-block; margin-top: 0;"
                 size="large"
                 v-if="isDefined"
                 v-model="form.isDifferent"
@@ -44,7 +58,7 @@
             >Maydon to'ldirilishi shart...</span
           >
         </label>
-        <label for="time">
+        <label class="components-input-demo-presuffix" for="time">
           Testga ajratiladigan daqiqani kiriting
           <!-- <el-input
             class="minute"
@@ -56,10 +70,25 @@
             placeholder="Ajratiladigan vaqtni kiriting(daqiqa hisobida)"
             v-model:value="form.time"
             :controls="false"
-            style="width: 100%;"
+            style="width: 100%"
             :min="0"
             :max="60"
-          ></a-input-number>
+          >
+            <!-- <template #suffix>
+            <div style="font-size: 16px;">
+              <CheckOutlined  v-if="!v$.form.time.$error"/>
+              <a-tooltip v-else title="Extra information">
+          <info-circle-outlined style="color: red" />
+        </a-tooltip>
+            </div>
+          </template> -->
+            <template #addonBefore>
+              <CheckOutlined v-if="!v$.form.time.$error" />
+              <a-tooltip v-else title="Extra information">
+                <info-circle-outlined style="color: red" />
+              </a-tooltip>
+            </template>
+          </a-input-number>
           <span style="color: red" v-if="v$.form.time.$error"
             >Maydon to'ldirilishi shart...</span
           >
@@ -202,7 +231,7 @@
         type="primary"
         style="margin-top: 5px"
         class="cursor-pointer"
-        ><i class='bx bx-plus' style="margin-right: 5px;"></i>Qo'shish</el-button
+        ><i class="bx bx-plus" style="margin-right: 5px"></i>Qo'shish</el-button
       >
     </el-dialog>
   </div>
@@ -216,29 +245,42 @@ import { useToast } from "vue-toastification";
 import { userStore } from "../../../stores/management/user.store";
 import AsyncMulSelect from "../../../components/form/AsyncMulSelect.vue";
 import auth from "../../../services/auth";
-import { NSelect } from "naive-ui";
+import { CloseBold, Select } from "@element-plus/icons-vue";
+import {
+  InfoCircleOutlined,
+  InfoCircleFilled,
+  CheckOutlined,
+} from "@ant-design/icons-vue";
 export default {
   components: {
     AsyncMulSelect,
+    CloseBold,
+    Select,
+    InfoCircleOutlined,
+    InfoCircleFilled,
+    CheckOutlined,
   },
   data() {
     return {
       v$: useVuelidate(),
+      Select,
+      CloseBold,
       dialogTableVisible: false,
       currentIndex: "",
       isDefined: false,
       isEnterednumber: false,
       isClickedSave: false,
       usersList: [],
-      membersFrequency : [],
+      membersFrequency: [],
       search: "",
       form: {
         name: "",
         time: "",
+        isStarted: false,
         quizCount: "",
         isDifferent: false,
         members: [],
-        isForAll : false,
+        isForAll: false,
         grades: [
           {
             grade: null,
@@ -341,14 +383,13 @@ export default {
     },
     "form.isForAll"(value) {
       // const members = [...this.form.members];
-
       // if(value) {
       //   this.form.members = []
       // } else {
       //   this.form.members = [...members];
       //   console.log(members)
       // }
-    }
+    },
   },
   methods: {
     ...mapActions(subjectStore, [
@@ -376,6 +417,8 @@ export default {
           let res = await this.addSubject(form);
           this.$emit("created", res);
           this.$router.push("/references/subject");
+          this.getList(10, 5, true);
+
         }
       } else {
         if (!this.v$.$error) {
@@ -393,7 +436,7 @@ export default {
           form.point = this.countPointSubject;
           let res = await this.updateSubject(form, this.$route.params.id);
           this.$router.push("/references/subject");
-          this.getList();
+          this.getList(10, 5, true);
         }
       }
     },
@@ -472,6 +515,9 @@ export default {
       }
     },
   },
+  mounted() {
+    this.v$.$validate();
+  },
   created() {
     this.getAllUsers();
     if (this.$route.params.id) {
@@ -495,6 +541,7 @@ input:active {
 label {
   flex-basis: 25%;
   margin: 0.5rem 1rem;
+  min-height: 60px;
 }
 b {
   display: block;

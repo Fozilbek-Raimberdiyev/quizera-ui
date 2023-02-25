@@ -67,7 +67,7 @@ const routes = [
               },
 
               {
-                path: "update",
+                path: ":id/update",
                 name: "User update",
                 component: () =>
                   import("../pages/management/users/AddOrUpdate.vue"),

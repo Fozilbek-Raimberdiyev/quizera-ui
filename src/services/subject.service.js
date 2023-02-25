@@ -1,8 +1,8 @@
 import {$axios} from "./auth"
 
 export default {
-    getSubjects(limit, page) {
-        return $axios.get("/subjects", {params : {limit, page}})
+    getSubjects(limit, page, isForReference) {
+        return $axios.get("/subjects", {params : {limit, page, isForReference}})
     },
     addSubject(body) {
         return $axios.post("/subjects/add", body)
@@ -15,5 +15,8 @@ export default {
     },
     deleteSubjectAndQuestions(id) {
         return $axios.delete("/subjects/delete", {params : {ID : id}})
+    },
+    updateStatusSubject(body) {
+        return $axios.put("/subjects/statusUpdate", body)
     }
 }

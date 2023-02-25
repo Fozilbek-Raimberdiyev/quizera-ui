@@ -197,7 +197,7 @@ export default {
   },
   mounted() {
     this.loading = true;
-    this.getList(this.limit, this.page);
+    this.getList(this.limit, this.page, false);
     this.loading = false;
     this.smallScreen = window.innerWidth < 600;
   },

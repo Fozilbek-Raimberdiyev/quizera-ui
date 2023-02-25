@@ -28,5 +28,11 @@ export default {
   },
   getUserByEmail(email) {
     return $axios.get(`/auth/user/${email}`)
+  },
+  getByIDUser(id) {
+    return $axios.get(`/auth/${id}/user`)
+  },
+  updateUser(form) {
+    return $axios.put("/auth/updateUser", form)
   }
 };

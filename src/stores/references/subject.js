@@ -22,8 +22,8 @@ export const subjectStore = defineStore("subject", {
   }),
   getters: {},
   actions: {
-    async getList(limit, page) {
-      let res = await subjectService.getSubjects(limit, page);
+    async getList(limit, page, isForReference) {
+      let res = await subjectService.getSubjects(limit, page, isForReference);
       this.list = res.data.subjects;
       this.total = res.data.total;
     },
@@ -39,12 +39,17 @@ export const subjectStore = defineStore("subject", {
     },
     async deleteSubjectAndQuestions(id) {
       let res = await subjectService.deleteSubjectAndQuestions(id);
-      this.getList();
+      this.getList(10,5,true);
       // Toast.fire({
       //   icon: "success",
       //   title: res.data.message,
       // });
       // useToast().success(res.data.message);
     },
+    async updateSubjectStatus(body) {
+      let res = await subjectService.updateStatusSubject(body);
+      this.list = res.data.subjects;
+      this.total = res.data.total
+    }
   },
 });

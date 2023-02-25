@@ -11,10 +11,30 @@
       <a-list item-layout="horizontal" :data-source="list">
         <template #renderItem="{ item }">
           <a-list-item>
-            <div class="flex items-center">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
               <span style="margin-right: 1rem">{{ item.name }}</span>
-              <div class="actions flex items-center">
-                <el-button style="margin-right: 0.5rem;" class="cursor-pointer" type="text">
+              <div class="flex items-center justify-between">
+                  <span
+                    @click="
+                      updateSubjectStatus({ subjectID: item._id, status: true })
+                    "
+                    v-if="!item.isStarted"
+                    class="start"
+                    ><i class="bx bx-play"></i>Start</span
+                  >
+                  <span
+                    @click="
+                      updateSubjectStatus({ subjectID: item._id, status: false })
+                    "
+                    v-else
+                    class="finish"
+                    ><i class="bx bx-stop"></i>Stop</span
+                  >
+                <el-button
+                  style="margin-right: 0.5rem"
+                  class="cursor-pointer"
+                  type="text"
+                >
                   <router-link :to="`/references/subject/${item._id}/update`">
                     <i class="bx bxs-edit"></i>
                   </router-link>
@@ -41,7 +61,7 @@
         v-if="!isInAdd"
         type="primary"
         @click="toAddOrUpdate"
-        ><i class='bx bx-plus' style="margin-right: 5px;"></i>Qo'shish</el-button
+        ><i class="bx bx-plus" style="margin-right: 5px"></i>Qo'shish</el-button
       >
     </div>
   </div>
@@ -49,12 +69,14 @@
 <script>
 import { mapActions, mapState } from "pinia";
 import { subjectStore } from "../../../stores/references/subject";
+import subjectService from "../../../services/subject.service";
 export default {
   data() {
     return {
       subjectId: "",
       number: 0,
       isInAdd: false,
+      subjectService,
       // stat  : false
     };
   },
@@ -62,7 +84,11 @@ export default {
     ...mapState(subjectStore, ["list"]),
   },
   methods: {
-    ...mapActions(subjectStore, ["getList", "deleteSubjectAndQuestions"]),
+    ...mapActions(subjectStore, [
+      "getList",
+      "deleteSubjectAndQuestions",
+      "updateSubjectStatus",
+    ]),
     getStat(val) {
       if (val) {
         this.getList();
@@ -76,13 +102,16 @@ export default {
       this.isInAdd = false;
       this.$router.push("/references/subject");
     },
-    async deleteSubject (id) {
-      let res= await this.deleteSubjectAndQuestions(id);
-      this.$router.push("/references/subject")
+    async deleteSubject(id) {
+      let res = await this.deleteSubjectAndQuestions(id);
+      this.$router.push("/references/subject");
     },
   },
+  beforeRouteLeave() {
+  return  subjectStore().$patch({list : []})
+  },
   mounted() {
-    this.getList();
+    this.getList(10, 5, true);
   },
 };
 </script>
@@ -95,5 +124,27 @@ ul {
 li {
   font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
     "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+}
+.start {
+  background: yellowgreen;
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+  margin: 0 5px;
+}
+.finish {
+  background: red;
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+  margin: 0 5px;
+}
+label {
+  min-height: 60px;
+}
+.ant-list-items {
+  justify-content: space-between !important;
 }
 </style>
