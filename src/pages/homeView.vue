@@ -4,7 +4,7 @@
 <template>
   <a-layout style="min-height: 100vh">
     <a-layout-sider
-      v-if="!smallScreen"
+      v-if="!smallScreen && !fullScreen && !bigScreen"
       style="
         overflow: auto;
         height: 100vh;
@@ -89,6 +89,11 @@
               ><i class="bx bx-folder-plus"></i>Fanlar</router-link
             ></a-menu-item
           >
+          <a-menu-item key="11"
+            ><router-link to="/references/subject"
+              ><i class="bi bi-people"></i>Guruhlar</router-link
+            ></a-menu-item
+          >
           <!-- <a-menu-item key="12"
             ><router-link to="">Item1</router-link></a-menu-item
           > -->
@@ -97,11 +102,14 @@
     </a-layout-sider>
     <a-layout
       class="sidebar"
-      :class="[smallScreen ? 'small-screen' : 'big-screen']"
+      :class="[(smallScreen || fullScreen || bigScreen) ? 'small-screen' : 'big-screen']"
     >
       <a-layout-header style="background: #fff; padding: 0">
         <header-menu
+          @getFullscreen="getFullscreen"
+          @getBigscreen = "getBigscreen"
           :smallScreen="smallScreen"
+          :fullScreen="fullScreen"
           style="margin: 16px; padding: 0 24px"
         ></header-menu>
       </a-layout-header>
@@ -154,6 +162,8 @@ export default {
       fullPage: false,
       collapsed: false,
       smallScreen: false,
+      fullScreen: false,
+      bigScreen : false
     };
   },
   computed: {
@@ -186,6 +196,12 @@ export default {
     checkScreenSize() {
       this.smallScreen = window.innerWidth < 600;
     },
+    getFullscreen(val) {
+      this.fullScreen = val;
+    },
+    getBigscreen(val) {
+      this.bigScreen = val
+    }
   },
   mounted() {
     window.addEventListener("resize", this.checkScreenSize());
@@ -197,6 +213,7 @@ export default {
 };
 </script>
 <style scoped>
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css");
 .example {
   display: flex;
   flex-wrap: wrap;

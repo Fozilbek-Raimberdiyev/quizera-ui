@@ -157,7 +157,7 @@
       :show-close="false"
       v-model="isShow"
       title="Parolni kiriting..."
-      :width="smallScreen ? '70%' : '30%'"
+      :width="smallScreen ? '70%' : '30%'"  
       :before-close="handleClose"
     >
       <div

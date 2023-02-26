@@ -84,6 +84,11 @@
             ><i class="bx bx-folder-plus"></i>Fanlar</router-link
           ></a-menu-item
         >
+        <a-menu-item key="11"
+            ><router-link to="/references/subject"
+              ><i class="bi bi-people"></i>Guruhlar</router-link
+            ></a-menu-item
+          >
         <!-- <a-menu-item key="12"
             ><router-link to="">Item1</router-link></a-menu-item
           > -->
@@ -130,6 +135,7 @@ export default defineComponent({
 });
 </script>
   <style scoped>
+  @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css");
 .ant-menu .ant-menu-root {
   background: red !important;
 }
