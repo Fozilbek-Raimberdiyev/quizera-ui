@@ -379,7 +379,7 @@ export default {
             this.form.ball = null;
             if (res) this.isSaved = true;
             this.getById(this.subjectId);
-            useToast().success(res.data);
+            useToast().success(res.data.message);
             // return ElNotification({
             //   title: "Succes",
             //   message: "Succesfully added",
@@ -399,6 +399,10 @@ export default {
             false,
             this.subject
           );
+          let options = [...this.form.options]
+          options.forEach(option => option.optionLabel = "")
+          this.form = [];
+          this.form.options = options
         } catch (e) {
           useToast().error(e.data.message || "Error");
         }

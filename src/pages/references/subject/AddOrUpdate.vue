@@ -458,6 +458,9 @@ export default {
           form.members = members;
           form._id = undefined;
           form.__v = undefined;
+          if(!form.isHasPassword) {
+            form.password = undefined
+          }
           form.point = this.countPointSubject;
           let res = await this.updateSubject(form, this.$route.params.id);
           this.$router.push("/references/subject");

@@ -23,7 +23,7 @@ export const questionStore = defineStore("question", {
         boolean,
         subject
       );
-      let questions = res.data?.questions;
+      let questions = res.data?.questions || res.data;
       try {
         questions.forEach((q, i) => {
           return (q["number"] = i + 1);

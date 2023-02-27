@@ -157,7 +157,7 @@
       :show-close="false"
       v-model="isShow"
       title="Parolni kiriting..."
-      :width="smallScreen ? '70%' : '30%'"  
+      :width="smallScreen ? '70%' : '30%'"
       :before-close="handleClose"
     >
       <div
@@ -226,15 +226,17 @@ export default {
     },
   },
   methods: {
-    onFinish() {
+    async onFinish() {
       setTimeout(() => {
-        let questions = [...this.questions];
-        questions.forEach((question, index) => {
-          return (question["number"] = index);
-        });
-        this.checkTests({ questions, point: this.subject?.point });
-        this.isEnded = true;
-        this.currentIndex = 0;
+        try {
+          let questions = [...this.questions];
+          questions.forEach((question, index) => {
+            return (question["number"] = index);
+          });
+          let res = this.checkTests({ questions, point: this.subject?.point });
+          this.isEnded = true;
+          this.currentIndex = 0;
+        } catch (e) {}
       }, 1000);
     },
     ...mapActions(questionStore, ["getQuestions", "checkTests"]),
@@ -266,15 +268,16 @@ export default {
       option["lastSelectNumber"] = timestamp;
       this.countSelectedQuestions();
     },
-    endTest() {
-      setTimeout(() => {
-        let questions = [...this.questions];
-        questions.forEach((question, index) => {
-          return (question["number"] = index);
-        });
-        this.checkTests({ questions, point: this.subject?.point });
-        this.isEnded = true;
-        this.currentIndex = 0;
+     endTest() {
+      setTimeout(async() => {
+          let questions = [...this.questions];
+          questions.forEach((question, index) => {
+            return (question["number"] = index);
+          });
+         try{let res = await this.checkTests({ questions, point: this.subject?.point });
+          this.isEnded = true;
+          this.currentIndex = 0;} 
+          catch(e) {}
       }, 1000);
     },
     markNumberQuestion() {

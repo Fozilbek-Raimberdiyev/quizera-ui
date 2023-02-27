@@ -18,7 +18,7 @@
         ></i>
         <el-drawer
           style="background: #001529"
-          :size="smallScreen ? '75%' : '20%'"
+          :size="smallScreen ? '75%' : '25%'"
           :show-close="false"
           direction="ltr"
           v-model="isshow"
@@ -36,7 +36,7 @@
         mode="horizontal"
         :options="menuOptionsC"
       /> -->
-      <div>
+      <div v-if="currentUserRole==='admin'">
         <el-dropdown>
           <span
             style="font-size: 18px; margin-top: -4px"
@@ -88,7 +88,7 @@
           <i class="bx bxs-flag-checkered"></i>Test ishlash
         </router-link>
       </div>
-      <div class="single">
+      <div class="single" v-if="currentUserRole==='admin'">
         <router-link
           to="/posts"
           @click="currentIndex = 6"
@@ -97,7 +97,7 @@
           <i class="bx bx-news"></i>Maqolalar
         </router-link>
       </div>
-      <div class="single">
+      <div class="single" v-if="currentUserRole==='admin'">
         <router-link
           to="/movies"
           @click="currentIndex = 7"
@@ -115,7 +115,16 @@
           <i class="bx bx-task"></i>Topshiriqlar
         </router-link>
       </div>
-      <div>
+      <div class="single">
+        <router-link
+          to="/statistic"
+          @click="currentIndex = 12"
+          :class="{ active: currentIndex === 12 }"
+        >
+        <i class='bx bx-bar-chart-alt-2'></i>Statistika
+        </router-link>
+      </div>
+      <div v-if="currentUserRole==='admin' || currentUserRole==='teacher'">
         <el-dropdown>
           <span
             style="font-size: 18px; margin-top: -2px"
@@ -157,6 +166,7 @@
           </template>
         </el-dropdown>
       </div>
+      
     </div>
     <div class="flex items-center">
       <div>

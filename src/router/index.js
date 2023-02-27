@@ -237,6 +237,14 @@ const routes = [
         },
       },
       {
+        path : "/statistic",
+        component : () => import("../pages/statistic/List.vue"),
+        name : "Statistika",
+        meta : {
+          roles : ["admin", "student", "teacher"]
+        }
+      },
+      {
         ...references,
       },
     ],

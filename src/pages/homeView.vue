@@ -89,7 +89,7 @@
               ><i class="bx bx-folder-plus"></i>Fanlar</router-link
             ></a-menu-item
           >
-          <a-menu-item key="11"
+          <a-menu-item key="12"
             ><router-link to="/references/subject"
               ><i class="bi bi-people"></i>Guruhlar</router-link
             ></a-menu-item
@@ -102,12 +102,14 @@
     </a-layout-sider>
     <a-layout
       class="sidebar"
-      :class="[(smallScreen || fullScreen || bigScreen) ? 'small-screen' : 'big-screen']"
+      :class="[
+        smallScreen || fullScreen || bigScreen ? 'small-screen' : 'big-screen',
+      ]"
     >
       <a-layout-header style="background: #fff; padding: 0">
         <header-menu
           @getFullscreen="getFullscreen"
-          @getBigscreen = "getBigscreen"
+          @getBigscreen="getBigscreen"
           :smallScreen="smallScreen"
           :fullScreen="fullScreen"
           style="margin: 16px; padding: 0 24px"
@@ -115,7 +117,8 @@
       </a-layout-header>
       <a-layout-content style="margin: 16px">
         <div
-          :style="{ padding: '24px', background: '#fff', minHeight: '400px' }"
+          style="padding: 24px; background: #fff;"
+          :style="[smallScreen ? `min-height : 450px` : `min-height : 600px`]"
         >
           <!-- <router-view></router-view> -->
           <div v-show="!loading">
@@ -137,7 +140,8 @@
         </div>
       </a-layout-content>
       <a-layout-footer style="text-align: center">
-        Fozilbek Raimberdiyev 2023-yil
+        <CopyrightCircleOutlined></CopyrightCircleOutlined> Fozilbek
+        Raimberdiyev 2023-yil
       </a-layout-footer>
     </a-layout>
   </a-layout>
@@ -154,8 +158,15 @@ import breadCrumbs from "../components/breadCrumbs.vue";
 import headerMenu from "../components/header.vue";
 import { subject } from "@casl/ability";
 import { userStore } from "../stores/management/user.store";
+import { CopyrightCircleOutlined } from "@ant-design/icons-vue";
 export default {
-  components: { Sidebar, Loading, breadCrumbs, headerMenu },
+  components: {
+    Sidebar,
+    Loading,
+    breadCrumbs,
+    headerMenu,
+    CopyrightCircleOutlined,
+  },
   data() {
     return {
       isOpen: true,
@@ -163,7 +174,7 @@ export default {
       collapsed: false,
       smallScreen: false,
       fullScreen: false,
-      bigScreen : false
+      bigScreen: false,
     };
   },
   computed: {
@@ -200,8 +211,8 @@ export default {
       this.fullScreen = val;
     },
     getBigscreen(val) {
-      this.bigScreen = val
-    }
+      this.bigScreen = val;
+    },
   },
   mounted() {
     window.addEventListener("resize", this.checkScreenSize());
