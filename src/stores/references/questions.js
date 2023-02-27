@@ -31,7 +31,7 @@ export const questionStore = defineStore("question", {
       } catch (e) {
         console.log(e);
       }
-      this.questions = questions;
+      this.questions = questions.filter(question => question);
       this.total = res.data?.total;
     },
     async addQuestion(body) {

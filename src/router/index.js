@@ -150,18 +150,43 @@ const routes = [
             path: ":id",
             component: () => import("../pages/quiz/QuizRender.vue"),
             name: "",
-          },
-          {
-            path: "add",
-            component: () => import("../pages/quiz/AddOrUpdate.vue.vue"),
-            name: "Qo'shish",
-          },
-          {
-            path: "edit",
-            component: () => import("../pages/quiz/AddOrUpdate.vue.vue"),
-            name: "Tahrirlash",
-          },
+          }
         ],
+      },
+      {
+        path : "/cabinet",
+        name : "Kabinet",
+        component: {
+          render() {
+            return h(resolveComponent("router-view"));
+          },
+        },
+        children : [
+          {
+            path : "",
+            name : "",
+            component : () => import("../pages/groups/List.vue"),
+            meta : {roles : ["teacher"]}
+          },
+          {
+            path : "/groups",
+            name : "Guruhlar",
+            component : () => import(""),
+            meta : {roles : ["teacher"]},
+            children : [
+              
+            ]
+          },
+          {
+            path : "/students",
+            name : "O'quvchilar",
+            component : () => import(""),
+            meta : {roles : ["teacher"]},
+            children : [
+
+            ]
+          }
+        ]
       },
       {
         path: "/posts",

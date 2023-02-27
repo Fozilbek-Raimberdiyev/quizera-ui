@@ -288,7 +288,7 @@ export default {
     },
     countSelectedQuestions() {
       let counts = [];
-      this.questions.forEach((question) => {
+      this.questions?.forEach((question) => {
         if (question["isChecked"]) {
           counts.push("count");
         }
@@ -326,6 +326,7 @@ export default {
     this.smallScreen = window.innerWidth < 600;
     let res = (await subjectService.getById(this.$route.params.id)).data;
     this.subject = res;
+    
     if (!res.isHasPassword) {
       this.getQuestions(this.$route.params.id, "", "", "", res);
     } else {

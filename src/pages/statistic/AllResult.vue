@@ -1,6 +1,7 @@
 <template>
     <div class="q-pa-md">
-      <div class="tabs flex items-center tabs">
+      <div class="bar flex justify-between items-center">
+        <div class="tabs flex items-center tabs">
         <span
           @click="currentStatus = 'Passed'"
           :class="{ active: currentStatus === 'Passed' }"
@@ -20,24 +21,28 @@
           >Hammasi</span
         >
       </div>
+      <div class="right-bar">
+        <a-input v-model:value="search" placeholder="Search result"></a-input>
+      </div>
+      </div>
       <q-markup-table style="min-height: 160px;">
         <thead>
           <tr>
             <th class="text-left">Ism-sharifi</th>
             <th class="text-right">Fan nomi</th>
-            <th class="text-right">Test savollari soni</th>
-            <th class="text-right">Testga ajratilgan vaqt</th>
+            <th class="text-right">Test sav-lari soni</th>
+            <th class="text-right">Testga ajr-gan vaqt</th>
             <th class="text-right">Testni ishlagan vaqti</th>
             <th class="text-right">Testga ketgan vaqt</th>
             <th class="text-right">Holat</th>
-            <th class="text-right">To'g'ri savollar soni</th>
-            <th class="text-right">Noto'g'ri savollar soni</th>
-            <th class="text-right">Belgilanmagan savollar savollar soni</th>
-            <th class="text-right">To'g'ri belgilangan savollar</th>
-            <th class="text-right">Noto'g'ri belgilangan savollar</th>
-            <th class="text-right">Belgilanmagan savollar</th>
+            <th class="text-right">To'g'ri sav-lar soni</th>
+            <th class="text-right">Noto'g'ri sav-lar soni</th>
+            <th class="text-right">Bel-magan sav-lar soni</th>
+            <th class="text-right">To'g'ri bel-gan sav-lar</th>
+            <th class="text-right">Noto'g'ri bel-gan sav-lar</th>
+            <th class="text-right">Bel-magan sav-lar</th>
             <th class="text-right">Test bali</th>
-            <th class="text-right">Testdan olingan bal</th>
+            <th class="text-right">To'plangan bal</th>
             <th class="text-right">Foiz</th>
             <th class="text-right">Izohlar</th>
           </tr>
@@ -48,7 +53,7 @@
             <td class="text-right">{{ result.subjectName }}</td>
             <td class="text-right">{{ result.questionsCount }}</td>
             <td class="text-right">{{ result.subjectQuizTime }}</td>
-            <td class="text-right">{{ result.workingTime }}</td>
+            <td class="text-right">{{ new Date(result.workingTime).toLocaleDateString() }} {{ new Date(result.workingTime).toLocaleTimeString() }}</td>
             <td class="text-right">{{ result.workingDurationTime }}</td>
             <td class="text-right">
               <span
@@ -87,7 +92,7 @@
           </tr>
         </tbody>
         <tbody v-else style="position: relative;">
-          <tr style="position: absolute; left: 40%; padding: 10px 0;">
+          <tr style="position: absolute; padding: 10px 0;" :style="[bigScreen ? 'left : 50%' : 'left : 40%']">
               <n-empty></n-empty>
           </tr>
         </tbody>
@@ -98,10 +103,15 @@
           <h5 v-if="titleCode === 1">Noto'g'ri belgilangan savollar</h5>
           <h5 v-if="titleCode === 2">Belgilanmagan savollar</h5>
           <div v-for="(item, index) in items" :key="index">
-            {{ item.question }}
-            <span v-for="(option, i) in item.options" :key="i">
+            <div style="border: 1px solid #e3e5e9; padding: 10px; margin: 5px 0; border-radius: 5px;">
+              <div class="flex items-center flex-wrap">
+              <h6 style="margin-right: 5px;">{{ item.number +1 }}.</h6>
+              <h6>{{ item.question }}</h6>
+            </div>
+            <span :class="{correct : option.isTrue,error : !option.isTrue && option.selected}" style="margin: 0 5px;" v-for="(option, i) in item.options" :key="i">
               {{ option.optionLabel }}
             </span>
+            </div>
           </div>
         </div>
         <div v-else>
@@ -112,6 +122,7 @@
   </template>
   <script>
   import { subject } from "@casl/ability";
+  import { parseDate } from "element-plus";
   import { mapActions, mapState } from "pinia";
   import { resultStore } from "../../stores/references/result.store";
   
@@ -123,18 +134,22 @@
         isShow: false,
         items: [],
         titleCode: null,
+        bigScreen : false,
+        smallScreeen : false,
+        search : "",
+        parseDate
       };
     },
     computed: {
       ...mapState(resultStore, ["list"]),
       listC() {
           if(this.currentStatus==='Failed') {
-              return this.list.filter(item => item.status==='Failed')
+              return this.list.filter(item => item.status==='Failed').filter(item => item.fullName.toLocaleLowerCase().includes(this.search.toLocaleLowerCase()))
           }
           if(this.currentStatus==='Passed') {
-              return this.list.filter(item => item.status==='Passed')
+              return this.list.filter(item => item.status==='Passed').filter(item => item.fullName.toLocaleLowerCase().includes(this.search.toLocaleLowerCase()))
           }
-          return this.list
+          return this.list.filter(item => item.fullName.toLocaleLowerCase().includes(this.search.toLocaleLowerCase()))
       }
     },
     methods: {
@@ -156,6 +171,8 @@
       },
     },
     created() {
+      this.smallScreeen = window.innerWidth < 600
+      this.bigScreen = window.innerWidth > 1400
       this.getList(this.query);
     },
   };
@@ -193,5 +210,17 @@
     font-size: 18px;
     cursor: pointer;
     color: navy;
+  }
+  .correct {
+      background: yellowgreen;
+      padding: 5px 10px;
+      border-radius: 5px;
+      color: #fff;
+  }
+  .error {
+      background: red;
+      padding: 5px 10px;
+      border-radius: 5px;
+      color: #fff;
   }
   </style>

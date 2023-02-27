@@ -20,7 +20,7 @@
         >Hammasi</span
       >
     </div>
-    <q-markup-table style="min-height: 160px;">
+    <q-markup-table style="min-height: 160px">
       <thead>
         <tr>
           <th class="text-left">Ism-sharifi</th>
@@ -48,8 +48,13 @@
           <td class="text-right">{{ result.subjectName }}</td>
           <td class="text-right">{{ result.questionsCount }}</td>
           <td class="text-right">{{ result.subjectQuizTime }}</td>
-          <td class="text-right">{{ new Date(result.workingTime).toLocaleDateString() }} {{ new Date(result.workingTime).toLocaleTimeString() }}</td>
-          <td class="text-right">{{ result.workingDurationTime }}</td>
+          <td class="text-right">
+            {{ new Date(result.workingTime).toLocaleDateString() }}
+            {{ new Date(result.workingTime).toLocaleTimeString() }}
+          </td>
+          <td class="text-right">
+            {{ parseWorkingDurationtTimeToMinute(+result.workingDurationTime) }}
+          </td>
           <td class="text-right">
             <span
               :class="{
@@ -86,9 +91,12 @@
           <td class="text-right">{{ result.comments }}</td>
         </tr>
       </tbody>
-      <tbody v-else style="position: relative;">
-        <tr style="position: absolute; padding: 10px 0;" :style="[bigScreen ? 'left : 50%' : 'left : 40%']">
-            <n-empty></n-empty>
+      <tbody v-else style="position: relative">
+        <tr
+          style="position: absolute; padding: 10px 0"
+          :style="[bigScreen ? 'left : 50%' : 'left : 40%']"
+        >
+          <n-empty></n-empty>
         </tr>
       </tbody>
     </q-markup-table>
@@ -98,14 +106,29 @@
         <h5 v-if="titleCode === 1">Noto'g'ri belgilangan savollar</h5>
         <h5 v-if="titleCode === 2">Belgilanmagan savollar</h5>
         <div v-for="(item, index) in items" :key="index">
-          <div style="border: 1px solid #e3e5e9; padding: 10px; margin: 5px 0; border-radius: 5px;">
+          <div
+            style="
+              border: 1px solid #e3e5e9;
+              padding: 10px;
+              margin: 5px 0;
+              border-radius: 5px;
+            "
+          >
             <div class="flex items-center flex-wrap">
-            <h6 style="margin-right: 5px;">{{ item.number +1 }}.</h6>
-            <h6>{{ item.question }}</h6>
-          </div>
-          <span :class="{correct : option.isTrue,error : !option.isTrue && option.selected}" style="margin: 0 5px;" v-for="(option, i) in item.options" :key="i">
-            {{ option.optionLabel }}
-          </span>
+              <h6 style="margin-right: 5px">{{ item.number + 1 }}.</h6>
+              <h6>{{ item.question }}</h6>
+            </div>
+            <span
+              :class="{
+                correct: option.isTrue,
+                error: !option.isTrue && option.selected,
+              }"
+              style="margin: 0 5px"
+              v-for="(option, i) in item.options"
+              :key="i"
+            >
+              {{ option.optionLabel }}
+            </span>
           </div>
         </div>
       </div>
@@ -129,22 +152,22 @@ export default {
       isShow: false,
       items: [],
       titleCode: null,
-      bigScreen : false,
-      smallScreeen : false,
-      parseDate
+      bigScreen: false,
+      smallScreeen: false,
+      parseDate,
     };
   },
   computed: {
     ...mapState(resultStore, ["list"]),
     listC() {
-        if(this.currentStatus==='Failed') {
-            return this.list.filter(item => item.status==='Failed')
-        }
-        if(this.currentStatus==='Passed') {
-            return this.list.filter(item => item.status==='Passed')
-        }
-        return this.list
-    }
+      if (this.currentStatus === "Failed") {
+        return this.list.filter((item) => item.status === "Failed");
+      }
+      if (this.currentStatus === "Passed") {
+        return this.list.filter((item) => item.status === "Passed");
+      }
+      return this.list;
+    },
   },
   methods: {
     ...mapActions(resultStore, ["getList"]),
@@ -163,10 +186,29 @@ export default {
       this.items = value;
       this.titleCode = titleCode;
     },
+    modulo(num1, num2) {
+      if (isNaN(num1) || isNaN(num2)) {
+        return NaN;
+      }
+
+      var strResult = (num1 / num2).toString();
+
+      var decimalPart = parseFloat(strResult.substr(strResult.indexOf(".")));
+
+      var remainder = Math.round(decimalPart * num2);
+      return remainder;
+    },
+    parseWorkingDurationtTimeToMinute(number) {
+      if (number > 60) {
+        return Math.floor(number / 60) + " daqiqa " + this.modulo(number, 60) + " soniya";
+      } else {
+        return number + ' soniya'
+      }
+    },
   },
   created() {
-    this.smallScreeen = window.innerWidth < 600
-    this.bigScreen = window.innerWidth > 1400
+    this.smallScreeen = window.innerWidth < 600;
+    this.bigScreen = window.innerWidth > 1400;
     this.getList(this.query);
   },
 };
@@ -206,15 +248,15 @@ i {
   color: navy;
 }
 .correct {
-    background: yellowgreen;
-    padding: 5px 10px;
-    border-radius: 5px;
-    color: #fff;
+  background: yellowgreen;
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: #fff;
 }
 .error {
-    background: red;
-    padding: 5px 10px;
-    border-radius: 5px;
-    color: #fff;
+  background: red;
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: #fff;
 }
 </style>
