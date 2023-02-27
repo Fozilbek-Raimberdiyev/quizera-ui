@@ -64,6 +64,10 @@
             ><i class="bi bi-check2-square"></i
           ></router-link> -->
       </a-menu-item>
+      <a-menu-item class="single" key="17"
+        ><i class="bx bx-bar-chart-alt-2"></i>
+        <router-link to="/statistic"> Statistika </router-link>
+      </a-menu-item>
       <a-sub-menu
         key="sub2"
         v-if="currentUserRole === 'teacher' || currentUserRole === 'admin'"
@@ -85,10 +89,10 @@
           ></a-menu-item
         >
         <a-menu-item key="11"
-            ><router-link to="/references/subject"
-              ><i class="bi bi-people"></i>Guruhlar</router-link
-            ></a-menu-item
-          >
+          ><router-link to="/references/subject"
+            ><i class="bi bi-people"></i>Guruhlar</router-link
+          ></a-menu-item
+        >
         <!-- <a-menu-item key="12"
             ><router-link to="">Item1</router-link></a-menu-item
           > -->
@@ -135,7 +139,7 @@ export default defineComponent({
 });
 </script>
   <style scoped>
-  @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css");
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css");
 .ant-menu .ant-menu-root {
   background: red !important;
 }

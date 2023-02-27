@@ -45,7 +45,7 @@
             ><i class="bx bxs-flag-checkered"></i>Test ishlash</router-link
           >
         </a-menu-item>
-        <a-menu-item key="15" v-if="currentUserRole === 'admin'">
+        <a-menu-item key="16" v-if="currentUserRole === 'admin'">
           <router-link v-if="!smallScreen" to="/posts"
             ><i class="bx bx-news"></i>Maqolalar</router-link
           >
@@ -61,7 +61,7 @@
           <!-- <router-link v-else to="/movies"
             ><i class="bi bi-film"></i></router-link> -->
         </a-menu-item>
-        <a-menu-item>
+        <a-menu-item key="14">
           <router-link v-if="!smallScreen" to="/todos"
             ><i class="bx bx-task"></i>Topshiriqlar</router-link
           >
@@ -69,6 +69,13 @@
             ><i class="bi bi-check2-square"></i
           ></router-link> -->
         </a-menu-item>
+        <a-menu-item key="15">
+        <router-link
+          to="/statistic"
+        >
+        <i class='bx bx-bar-chart-alt-2'></i>Statistika
+        </router-link>
+      </a-menu-item>
         <a-sub-menu
           key="sub2"
           v-if="currentUserRole === 'teacher' || currentUserRole === 'admin'"

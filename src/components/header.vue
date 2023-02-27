@@ -131,7 +131,7 @@
             class="el-dropdown-link no-single"
             :class="{
               active:
-                currentIndex === 9 || currentIndex === 10 || currentIndex === 1,
+                currentIndex === 9 || currentIndex === 10 || currentIndex === 11,
             }"
           >
             <i class="bx bx-building"></i>Ma'lumotnomalar
@@ -309,7 +309,7 @@ a {
 }
 .active,
 .active a {
-  color: #409eff;
+  color: #409eff !important;
 }
 span.single,
 span.no-single {

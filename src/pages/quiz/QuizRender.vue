@@ -204,6 +204,7 @@ export default {
       smallScreen: false,
       subjectService,
       subjectPassword: "",
+      workingDurationTime : 0
     };
   },
   computed: {
@@ -274,7 +275,7 @@ export default {
           questions.forEach((question, index) => {
             return (question["number"] = index);
           });
-         try{let res = await this.checkTests({ questions, point: this.subject?.point });
+         try{let res = await this.checkTests({ questions, point: this.subject?.point, workingDurationTime : this.workingDurationTime, subject : this.subject });
           this.isEnded = true;
           this.currentIndex = 0;} 
           catch(e) {}
@@ -316,7 +317,11 @@ export default {
     },
   },
 
-  mounted() {},
+  mounted() {
+    setInterval(() => {
+      this.workingDurationTime++
+    }, 1000);
+  },
   async created() {
     this.smallScreen = window.innerWidth < 600;
     let res = (await subjectService.getById(this.$route.params.id)).data;
