@@ -63,7 +63,7 @@
         </a-menu-item>
         <a-menu-item key="14">
           <router-link v-if="!smallScreen" to="/todos"
-            ><i class="bx bx-task"></i>Topshiriqlar</router-link
+            ><i class="bx bx-task"></i>Eslatmalar</router-link
           >
           <!-- <router-link v-else to="/todos"
             ><i class="bi bi-check2-square"></i
@@ -155,7 +155,7 @@
 </template>
 <script>
 import Sidebar from "@/components/sidebar.vue";
-import { mapState, mapStores } from "pinia";
+import { mapActions, mapState, mapStores } from "pinia";
 import { authStore } from "../stores/counter";
 import { ElNotification } from "element-plus";
 import { loadingStore } from "../stores/loading.store";
@@ -166,6 +166,7 @@ import headerMenu from "../components/header.vue";
 import { subject } from "@casl/ability";
 import { userStore } from "../stores/management/user.store";
 import { CopyrightCircleOutlined } from "@ant-design/icons-vue";
+import { NotificationStore } from '../stores/notifications.store';
 export default {
   components: {
     Sidebar,
@@ -185,6 +186,7 @@ export default {
     };
   },
   computed: {
+    ...mapState(NotificationStore, ["list"]),
     ...mapState(authStore, ["user", "authLogout", "authSucces"]),
     ...mapState(loadingStore, ["loading"]),
     ...mapState(userStore, ["currentUserRole"]),
@@ -200,6 +202,7 @@ export default {
     };
   },
   methods: {
+    ...mapActions(NotificationStore, ["getNotifications"]),
     getState(value) {
       this.isOpen = value;
     },
@@ -224,6 +227,7 @@ export default {
   mounted() {
     window.addEventListener("resize", this.checkScreenSize());
     this.checkScreenSize();
+    this.getNotifications()
   },
   beforeDestroy() {
     window.removeEventListener("resize", this.checkScreenSize());

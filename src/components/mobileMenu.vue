@@ -59,7 +59,7 @@
       </a-menu-item>
       <a-menu-item>
         <i class="bx bx-task"></i>
-        <router-link to="/todos">Topshiriqlar</router-link>
+        <router-link to="/todos">Eslatmalar</router-link>
         <!-- <router-link v-else to="/todos"
             ><i class="bi bi-check2-square"></i
           ></router-link> -->

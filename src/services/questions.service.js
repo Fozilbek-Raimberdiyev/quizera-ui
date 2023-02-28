@@ -21,5 +21,12 @@ export default {
   },
   updateQuestion(id, body) {
     return $axios.put("/questions/update", body, {params : {ID : id}})
+  },
+  deleteTodo(id) {
+    return $axios.delete(`/questions/delete`, {
+      params: {
+        ID: id,
+      },
+    });
   }
 };

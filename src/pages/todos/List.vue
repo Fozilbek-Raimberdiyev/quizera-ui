@@ -169,9 +169,9 @@
                     ><i class="bx bxs-edit"></i
                   ></el-button>
                   <a-popconfirm
-                    title="Are you sure delete this todo?"
-                    ok-text="Yes"
-                    cancel-text="No"
+                    title="Haqiqatdan ushbu eslatmani o'chirmoqchimisiz?"
+                    ok-text="Ha"
+                    cancel-text="Yo'q"
                     @confirm="deleteTodo(todo._id)"
                     @cancel="cancel"
                   >

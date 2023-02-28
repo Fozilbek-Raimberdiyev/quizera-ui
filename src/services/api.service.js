@@ -1,13 +1,10 @@
-import axios from "axios";
 import swal from "sweetalert2";
 import { $axios } from "./auth";
 import { ElNotification } from "element-plus";
 import { useToast } from "vue-toastification";
 import auth from "./auth";
 import { loadingStore } from "../stores/loading.store";
-import { useLoading } from "vue-loading-overlay";
-import nProgress from "nprogress";
-// import "nprogress.css"
+import { NotificationStore } from "../stores/notifications.store";
 const toast = useToast();
 const Toast = swal.mixin({
   toast: true,
@@ -21,22 +18,9 @@ const Toast = swal.mixin({
   },
 });
 
-const loader = null;
-
 export const reqinterceptor = $axios.interceptors.request.use(
   function (config) {
-    config.url != "/auth/user" ? loadingStore().$patch({ loading: true }) : "";
-    // nProgress.done()
-    // loader = useLoading().show({
-    //   color: "#000000",
-    //   loader: "spinner",
-    //   width: 64,
-    //   height: 64,
-    //   backgroundColor: "#ffffff",
-    //   opacity: 0.5,
-    //   zIndex: 999,
-    // });
-    return config;
+    config.url != "/auth/user" ? loadingStore().$patch({ loading: true }) : ""; return config;
   },
   function (error) {
     alert(error);
@@ -46,12 +30,7 @@ export const reqinterceptor = $axios.interceptors.request.use(
 ``;
 export const resInterceptor = $axios.interceptors.response.use(
   function (response) {
-    // Toast.fire({
-    //   icon: "success",
-    //   title: response.data.message || response.message || "succes",
-    // });
     loadingStore().$patch({ loading: false });
-    // loader.hide()
     response.data.message
       ? ElNotification({
           title: response?.message || response.data.message,

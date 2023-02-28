@@ -36,7 +36,7 @@
         mode="horizontal"
         :options="menuOptionsC"
       /> -->
-      <div v-if="currentUserRole==='admin'">
+      <div v-if="currentUserRole === 'admin'">
         <el-dropdown>
           <span
             style="font-size: 18px; margin-top: -4px"
@@ -88,7 +88,7 @@
           <i class="bx bxs-flag-checkered"></i>Test ishlash
         </router-link>
       </div>
-      <div class="single" v-if="currentUserRole==='admin'">
+      <div class="single" v-if="currentUserRole === 'admin'">
         <router-link
           to="/posts"
           @click="currentIndex = 6"
@@ -97,7 +97,7 @@
           <i class="bx bx-news"></i>Maqolalar
         </router-link>
       </div>
-      <div class="single" v-if="currentUserRole==='admin'">
+      <div class="single" v-if="currentUserRole === 'admin'">
         <router-link
           to="/movies"
           @click="currentIndex = 7"
@@ -112,7 +112,7 @@
           @click="currentIndex = 8"
           :class="{ active: currentIndex === 8 }"
         >
-          <i class="bx bx-task"></i>Topshiriqlar
+          <i class="bx bx-task"></i>Eslatmalar
         </router-link>
       </div>
       <div class="single">
@@ -121,17 +121,19 @@
           @click="currentIndex = 12"
           :class="{ active: currentIndex === 12 }"
         >
-        <i class='bx bx-bar-chart-alt-2'></i>Statistika
+          <i class="bx bx-bar-chart-alt-2"></i>Statistika
         </router-link>
       </div>
-      <div v-if="currentUserRole==='admin' || currentUserRole==='teacher'">
+      <div v-if="currentUserRole === 'admin' || currentUserRole === 'teacher'">
         <el-dropdown>
           <span
             style="font-size: 18px; margin-top: -2px"
             class="el-dropdown-link no-single"
             :class="{
               active:
-                currentIndex === 9 || currentIndex === 10 || currentIndex === 11,
+                currentIndex === 9 ||
+                currentIndex === 10 ||
+                currentIndex === 11,
             }"
           >
             <i class="bx bx-building"></i>Ma'lumotnomalar
@@ -166,9 +168,18 @@
           </template>
         </el-dropdown>
       </div>
-      
     </div>
     <div class="flex items-center">
+      <div
+        class="notifications flex items-start"
+        v-if="list"
+        @click="drawer = true"
+      >
+        <i
+          style="margin-top: -25px !important; font-size: 22px"
+          class="bi bi-bell"
+        ></i>
+      </div>
       <div>
         <el-dropdown placement="bottom-start" trigger="click">
           <el-button class="cursor-pointer" style="padding: 10px" type="info">
@@ -204,6 +215,65 @@
         ></i>
       </div>
     </div>
+    <el-drawer
+      style="background: teal; color: #fff"
+      v-model="drawer"
+      title="Bildirishnomalar"
+      :with-header="false"
+    >
+      <div>
+        <div v-if="todos.length">
+          <div
+            class="flex items-center"
+            style="background: teal; color: #e3e5e9"
+          >
+            <i
+              style="font-size: 1.5rem; margin-top: -7px"
+              class="bx bx-task"
+            ></i>
+            <h5>Eslatmalar</h5>
+          </div>
+          <div v-for="(todo, index) in todos" :key="index">
+            <!-- <table>
+              <thead>
+                <tr>
+                  <th style="max-width: 50% !important; overflow-x: auto;">Eslatma</th>
+                  <th style="max-width: 50% !important;">Qolgan muddati</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="max-width: 100px !important; overflow-x: auto !important;">{{ todo.name }}</td>
+                  <td>{{  new Date(new Date(todo.endDate) - new Date(todo.date)).getDate()  }}</td>
+                </tr>
+              </tbody>
+            </table> -->
+            <div class="q-pa-md">
+              <q-markup-table>
+                <thead>
+                  <tr>
+                    <th class="text-left">Eslatma nomi</th>
+                    <th class="text-right">Tugashiga qolgan muddat</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="text-left">{{ todo.name }}</td>
+                    <td class="text-right">
+                      {{
+                        new Date(
+                          new Date(todo.endDate) - new Date(todo.date)
+                        ).getDate()
+                      }}
+                    </td>
+                  </tr>
+                </tbody>
+              </q-markup-table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </el-drawer>
   </div>
 </template>
 <script>
@@ -223,13 +293,15 @@ import {
   TeamOutlined,
   UserOutlined,
 } from "@ant-design/icons-vue";
+import { NotificationStore } from "../stores/notifications.store";
 export default {
   data() {
     return {
       isshow: false,
       fullScreen: false,
       currentIndex: "",
-      bigScreen : false
+      bigScreen: false,
+      drawer: false,
     };
   },
   components: {
@@ -238,6 +310,7 @@ export default {
   },
   computed: {
     ...mapState(userStore, ["user", "currentUserRole"]),
+    ...mapState(NotificationStore, ["list", "todos"]),
     ...mapStores(authStore),
     menuOptionsC() {
       return this.menuOptions;
@@ -271,13 +344,12 @@ export default {
     emitFullscreen() {
       this.fullScreen = !this.fullScreen;
       this.$emit("getFullscreen", this.fullScreen);
-      
     },
   },
   created() {
     this.bigScreen = window.innerWidth > 1400;
-    this.$emit("getBigscreen", this.bigScreen)
-  }
+    this.$emit("getBigscreen", this.bigScreen);
+  },
 };
 </script>
 <style scoped lang="scss">
@@ -314,5 +386,38 @@ a {
 span.single,
 span.no-single {
   color: #000;
-} i {display: inline-block; margin-right: 5px;}
+}
+i {
+  display: inline-block;
+  margin-right: 5px;
+}
+.notifications {
+  cursor: pointer;
+}
+// table,
+// table thead,
+// table tr,
+// table tbody,
+// table td,
+// table th {
+//   margin: 0 !important;
+//   padding: 0 !important;
+//   line-height: 15px !important;
+//   max-height: 100px !important;
+//   border: 1px solid #e3e5e9;
+//   padding: 5px 15px !important;
+//   border-radius: 10px !important;
+//   border-collapse: collapse !important;
+//   font-style: italic;
+//   margin: 5px 0 !important;
+// }
+table {
+  background: teal !important;
+  box-shadow: none;
+  text-shadow: none;
+}
+tr th, tr td {
+  max-width: 45% !important;
+  overflow: auto !important;
+}
 </style>

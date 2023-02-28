@@ -162,23 +162,25 @@
           v-for="(question, index) in questions"
           :key="index"
         >
-          <div class="question">
+          <div :id="question" class="question">
             <div class="actions flex items-center">
               <div v-if="question?.ball" class="ball">{{ question?.ball }}</div>
               <el-button
                 type="text"
                 class="cursor-pointer"
-                @click="toUpdate(question._id)"
+                @click="toUpdate(question._id, question)"
               >
-                <i class="bx icon bx-pencil"></i>
-              </el-button>
-              <el-button
-                type="text"
+                <i class="bx icon bx-pencil"></i> </el-button
+              ><a-popconfirm
+                title="Haqiqatdan o'chirmoqchimisiz?"
+                ok-text="Ha"
                 class="cursor-pointer"
-                @click="deleteQuestion"
+                cancel-text="Yo'q"
+                @confirm="deleteQuestion(question._id)"
+                @cancel="cancel"
               >
                 <i class="bx icon bxs-trash"></i>
-              </el-button>
+              </a-popconfirm>
             </div>
             <div class="flex items-center">
               <h6 class="q-number">{{ question?.number }}.</h6>
@@ -212,13 +214,16 @@ import useVuelidate from "@vuelidate/core";
 import { required, requiredIf, helpers } from "@vuelidate/validators";
 import { questionStore } from "../../../stores/references/questions";
 import { useToast } from "vue-toastification";
+import questionsService from "../../../services/questions.service";
 export default {
   data() {
     return {
       v$: useVuelidate(),
+      question: "",
       isSaved: false,
       currentPage: 1,
       subjectId: "",
+      questionsService,
       items: [],
       form: {
         question: "",
@@ -259,7 +264,20 @@ export default {
       currentIndex: "",
     };
   },
-  props : ["size", "large","small", "default", "type", "primart", "info", "succes", "text", "native-type", "submit", "cancel"],
+  props: [
+    "size",
+    "large",
+    "small",
+    "default",
+    "type",
+    "primart",
+    "info",
+    "succes",
+    "text",
+    "native-type",
+    "submit",
+    "cancel",
+  ],
   validations() {
     return {
       form: {
@@ -380,11 +398,6 @@ export default {
             if (res) this.isSaved = true;
             this.getById(this.subjectId);
             useToast().success(res.data.message);
-            // return ElNotification({
-            //   title: "Succes",
-            //   message: "Succesfully added",
-            //   type: "success",
-            // });
           } catch (e) {
             useToast().error(e.data.message);
           }
@@ -399,27 +412,35 @@ export default {
             false,
             this.subject
           );
-          let options = [...this.form.options]
-          options.forEach(option => option.optionLabel = "")
+          this.$router.push(`/references/quiz/${this.question._id}/update`);
+          let options = [...this.form.options];
+          options.forEach((option) => (option.optionLabel = ""));
           this.form = [];
-          this.form.options = options
+          this.form.options = options;
         } catch (e) {
           useToast().error(e.data.message || "Error");
         }
       }
     },
-    toUpdate(id) {
+    toUpdate(id, question) {
       this.$router.push(`/references/quiz/${id}/update`);
       window.scrollTo({ top: 0, behavior: "smooth" });
+      this.question = question;
     },
-    deleteQuestion() {
+    async deleteQuestion(id) {
       // console.log("delete");
+      try {
+        let res = await this.questionsService.deleteTodo(id);
+        return this.getQuestions(this.subjectId, 5, this.currentPage, true);
+      } catch (e) {}
     },
   },
   mounted() {
-    this.getList(10,5,true);
+    this.getList(10, 5, true);
     this.$emit("emit", true);
-    this.getQuestionById(this.$route.params.id);
+    if (this.$route.params.id) {
+      this.getQuestionById(this.$route.params.id);
+    }
   },
   created() {},
 };

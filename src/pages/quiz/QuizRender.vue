@@ -12,9 +12,16 @@
     </div>
     <div v-if="!isEnded" class="bars" style="margin-bottom: 1rem">
       <div class="flex justify-end items-center">
-        <el-button class="cursor-pointer" type="primary" @click="endTest"
-          >Yakunlash</el-button
-        >
+        <a-popconfirm
+                  title="Haqiqatdan yakunlamoqchimisiz?"
+                  ok-text="Ha"
+                  cancel-text="Yo'q"
+                  @confirm="endTest"
+                  @cancel="cancel"
+                  class="cursor-pointer"
+                >
+                <span class="button">Yakunlash</span>
+                </a-popconfirm>
       </div>
       <div></div>
       <div class="tabs">
@@ -476,5 +483,12 @@ span {
   border: 1px solid #e3e5e9;
   padding: 0 5px;
   border-radius: 10px;
+}
+.button {
+  background: #409eef;
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: #fff;
+  margin-top: 10px;
 }
 </style>
