@@ -153,41 +153,41 @@ const routes = [
           }
         ],
       },
-      {
-        path : "/cabinet",
-        name : "Kabinet",
-        component: {
-          render() {
-            return h(resolveComponent("router-view"));
-          },
-        },
-        children : [
-          {
-            path : "",
-            name : "",
-            component : () => import("../pages/groups/List.vue"),
-            meta : {roles : ["teacher"]}
-          },
-          {
-            path : "/groups",
-            name : "Guruhlar",
-            component : () => import(""),
-            meta : {roles : ["teacher"]},
-            children : [
+      // {
+      //   path : "/cabinet",
+      //   name : "Kabinet",
+      //   component: {
+      //     render() {
+      //       return h(resolveComponent("router-view"));
+      //     },
+      //   },
+      //   children : [
+      //     {
+      //       path : "",
+      //       name : "",
+      //       component : () => import("../pages/groups/List.vue"),
+      //       meta : {roles : ["teacher"]}
+      //     },
+      //     {
+      //       path : "/groups",
+      //       name : "Guruhlar",
+      //       component : () => import(""),
+      //       meta : {roles : ["teacher"]},
+      //       children : [
               
-            ]
-          },
-          {
-            path : "/students",
-            name : "O'quvchilar",
-            component : () => import(""),
-            meta : {roles : ["teacher"]},
-            children : [
+      //       ]
+      //     },
+      //     {
+      //       path : "/students",
+      //       name : "O'quvchilar",
+      //       component : () => import(""),
+      //       meta : {roles : ["teacher"]},
+      //       children : [
 
-            ]
-          }
-        ]
-      },
+      //       ]
+      //     }
+      //   ]
+      // },
       {
         path: "/posts",
         component: () => import("../pages/posts.vue"),
