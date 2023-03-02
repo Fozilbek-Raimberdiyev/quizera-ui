@@ -1,6 +1,6 @@
 <template>
   <div class="header items-center">
-    <div class="flex">
+    <div class="flex items-center">
       <div
         style="margin-right: 10px"
         v-if="smallScreen || fullScreen"
@@ -21,16 +21,11 @@
           <mobile-menu @select="select"></mobile-menu>
         </el-drawer>
       </div>
-      <div v-if="!smallScreen" class="self-stretch">
+      <div v-if="!smallScreen" class="self-center">
         <breadCrumbs></breadCrumbs>
       </div>
     </div>
     <div class="flex items-center big-screen-size" v-if="bigScreen">
-      <!-- <n-menu
-        v-model:value="activeKey"
-        mode="horizontal"
-        :options="menuOptionsC"
-      /> -->
       <div class="flex" v-if="currentUserRole === 'admin'">
         <el-dropdown>
           <span
@@ -252,20 +247,6 @@
             <h5>Eslatmalar</h5>
           </div>
           <div v-for="(todo, index) in todos" :key="index">
-            <!-- <table>
-              <thead>
-                <tr>
-                  <th style="max-width: 50% !important; overflow-x: auto;">Eslatma</th>
-                  <th style="max-width: 50% !important;">Qolgan muddati</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td style="max-width: 100px !important; overflow-x: auto !important;">{{ todo.name }}</td>
-                  <td>{{  new Date(new Date(todo.endDate) - new Date(todo.date)).getDate()  }}</td>
-                </tr>
-              </tbody>
-            </table> -->
             <div class="q-pa-md">
               <q-markup-table>
                 <thead>
