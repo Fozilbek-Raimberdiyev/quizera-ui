@@ -113,13 +113,12 @@
         smallScreen || fullScreen || bigScreen ? 'small-screen' : 'big-screen',
       ]"
     >
-      <a-layout-header style="background: #fff; padding: 0">
+      <a-layout-header style="background: #fff;">
         <header-menu
           @getFullscreen="getFullscreen"
           @getBigscreen="getBigscreen"
           :smallScreen="smallScreen"
           :fullScreen="fullScreen"
-          style="margin: 16px; padding: 0 24px"
         ></header-menu>
       </a-layout-header>
       <a-layout-content style="margin: 16px">

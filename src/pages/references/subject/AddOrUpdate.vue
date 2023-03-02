@@ -1,6 +1,5 @@
 <template>
   <div class="wrapper">
-    <!-- <pre>{{ form.members }}</pre> -->
     <form @submit.prevent="submit">
       <div :class="[smallScreen ? 'block' : 'flex  box items-start']">
         <label for="name">
@@ -10,7 +9,7 @@
             placeholder="Fan nomini kiriting..."
             style="position: relative"
           >
-          <template #prefix>
+            <template #prefix>
               <CheckOutlined v-if="!v$.form.name.$error" />
               <a-tooltip v-else title="Extra information">
                 <info-circle-outlined style="color: red" />
@@ -23,7 +22,7 @@
         </label>
         <label for="limit">
           Test miqdorini kiriting
-          <div style="display: flex;">
+          <div style="display: flex">
             <a-input-number
               :controls="false"
               :min="0"
@@ -32,16 +31,16 @@
               placeholder="Savollar sonini kiriting..."
               v-model:value="form.quizCount"
             >
-            <template #addonBefore>
-              <CheckOutlined v-if="!v$.form.quizCount.$error" />
-              <a-tooltip v-else title="Extra information">
-                <info-circle-outlined style="color: red" />
-              </a-tooltip>
-            </template>
-          </a-input-number>
-            <span  style="margin-left: 5px;">
+              <template #addonBefore>
+                <CheckOutlined v-if="!v$.form.quizCount.$error" />
+                <a-tooltip v-else title="Extra information">
+                  <info-circle-outlined style="color: red" />
+                </a-tooltip>
+              </template>
+            </a-input-number>
+            <span style="margin-left: 5px">
               <el-checkbox
-              style="display: inline-block; margin-top: 0;"
+                style="display: inline-block; margin-top: 0"
                 size="large"
                 v-if="isDefined"
                 v-model="form.isDifferent"
@@ -55,12 +54,6 @@
         </label>
         <label class="components-input-demo-presuffix" for="time">
           Testga ajratiladigan daqiqani kiriting
-          <!-- <el-input
-            class="minute"
-            v-model="form.time"
-            placeholder="Ajratiladigan vaqtni kiriting(daqiqa hisobida)"
-          >
-          </el-input> -->
           <a-input-number
             placeholder="Ajratiladigan vaqtni kiriting(daqiqa hisobida)"
             v-model:value="form.time"
@@ -69,14 +62,6 @@
             :min="0"
             :max="60"
           >
-            <!-- <template #suffix>
-            <div style="font-size: 16px;">
-              <CheckOutlined  v-if="!v$.form.time.$error"/>
-              <a-tooltip v-else title="Extra information">
-          <info-circle-outlined style="color: red" />
-        </a-tooltip>
-            </div>
-          </template> -->
             <template #addonBefore>
               <CheckOutlined v-if="!v$.form.time.$error" />
               <a-tooltip v-else title="Extra information">
@@ -90,19 +75,6 @@
         </label>
         <label>
           Test ishtirokchilarini tanlang
-          <!-- <el-select-v2
-            v-model="form.members"
-            style="width: 240px"
-            multiple
-            filterable
-            remote
-            :remote-method="remoteMethod"
-            clearable
-            :options="usersList"
-            :loading="loading"
-            placeholder="Please enter a keyword"
-          >
-        </el-select-v2> -->
           <n-select
             v-model:value="form.members"
             multiple
@@ -116,21 +88,13 @@
             :clear-filter-after-select="false"
             @search="remoteMethod"
           />
-          <!-- <pre>{{ form.members }}</pre> -->
         </label>
         <label>
           Hamma uchun belgilash
           <el-checkbox v-model="form.isForAll"></el-checkbox>
         </label>
-        <!-- <label class="flex ">
-          <el-input placeholder="Parolni kiriting..." v-model="form.password" :disabled="!form.isHasPassword"></el-input>
-          <span class="flex ">
-            <span>Parol qo'yish</span>
-          <el-checkbox v-model="form.isHasPassword"></el-checkbox>
-          </span>
-        </label> -->
         <label for="password">
-          <div style="display: flex;">
+          <div style="display: flex">
             <a-input
               placeholder="Parol kiriting..."
               v-model:value="form.password"
@@ -138,10 +102,10 @@
               id="password"
               :disabled="!form.isHasPassword"
             >
-          </a-input>
-            <span  style="margin-left: 5px;">
+            </a-input>
+            <span style="margin-left: 5px">
               <el-checkbox
-              style="display: inline-block; margin-top: 0;"
+                style="display: inline-block; margin-top: 0"
                 size="large"
                 v-model="form.isHasPassword"
                 >Parol qo'yish</el-checkbox
@@ -309,8 +273,8 @@ export default {
             count: null,
           },
         ],
-        password : "",
-        isHasPassword : false
+        password: "",
+        isHasPassword: false,
       },
       grades: [1, 2, 3, 4, 5, 6],
       numbers: [],
@@ -428,7 +392,7 @@ export default {
       if (!this.$route.params.id) {
         if (!this.v$.$error) {
           let form = { ...this.form };
-          if(!form.isHasPassword) form.password=undefined;
+          if (!form.isHasPassword) form.password = undefined;
           form.point = this.countPointSubject;
           let members = [...form.members];
           members = members.map((member) => {
@@ -443,7 +407,6 @@ export default {
           this.$emit("created", res);
           this.$router.push("/references/subject");
           this.getList(10, 5, true);
-
         }
       } else {
         if (!this.v$.$error) {
@@ -458,8 +421,8 @@ export default {
           form.members = members;
           form._id = undefined;
           form.__v = undefined;
-          if(!form.isHasPassword) {
-            form.password = undefined
+          if (!form.isHasPassword) {
+            form.password = undefined;
           }
           form.point = this.countPointSubject;
           let res = await this.updateSubject(form, this.$route.params.id);
@@ -486,9 +449,16 @@ export default {
       }
     },
     deleteGradeOption(index) {
-      let temp = [...this.form.grades];
-      temp[index] = { grade: null, count: null };
-      this.form.grades = temp;
+      if (this.form.grades.length > 1) {
+        let temp = [...this.form.grades];
+        temp[index] = { grade: null, count: null };
+        temp = temp.filter((grade) => grade.grade && grade.count);
+        this.form.grades = temp
+      } else {
+        let temp = [...this.form.grades];
+        temp[index] = { grade: null, count: null };
+        this.form.grades = temp
+      }
     },
     saveGradeOption() {
       if (this.sumCountGrades > this.form.quizCount) {
@@ -547,7 +517,7 @@ export default {
     this.v$.$validate();
   },
   beforeRouteLeave() {
-    subjectStore().$patch({list : [], total : null})
+    subjectStore().$patch({ list: [], total: null });
   },
   created() {
     this.getAllUsers();

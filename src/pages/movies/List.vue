@@ -2,7 +2,7 @@
   <div>
     <label style="text-align: right">
       <el-input
-        style="width: 80%; margin-right: 5px;"
+        style="width: 80%; margin-right: 5px"
         clearable
         size="large"
         v-model="searchName"
@@ -16,7 +16,13 @@
     </label>
     <div>
       <div class="movies" v-if="list.length">
-          <a-row :gutter="[8,48]" class="movie" v-for="movie in list" :key="movie?.id">
+        <div v-if="listC.length">
+          <a-row
+            :gutter="[8, 48]"
+            class="movie"
+            v-for="movie in list"
+            :key="movie?.id"
+          >
             <a-card :span="12">
               <router-link @click="toInfo = true" :to="`/movies/${movie.id}`">
                 <p class="title">
@@ -50,34 +56,29 @@
               </p>
             </a-card>
           </a-row>
-        <div class="pagination">
-          <el-pagination
-            :page-size="20"
-            :pager-count="11"
-            layout="prev, pager, next"
-            :total="total"
-            background
-            :style="[smallScreen ? 'width: 380px; overflow-x: auto;' : '' ]"
-            style="padding: 10px;"
-            :v-model:current-page="page"
-            @update:current-page="updateCurPage"
-          />
+          <div class="pagination">
+            <el-pagination
+              :page-size="20"
+              :pager-count="11"
+              layout="prev, pager, next"
+              :total="total"
+              background
+              :style="[smallScreen ? 'width: 380px; overflow-x: auto;' : '']"
+              style="padding: 10px"
+              :v-model:current-page="page"
+              @update:current-page="updateCurPage"
+            />
+          </div>
+        </div>
+        <div v-else>
+          <n-empty size="huge" description="Kinolar topilmadi..."></n-empty>
         </div>
       </div>
       <div v-else>
-        <!-- <el-empty
-          :image-size="350"
-          size="large"
-          description="Ma'lumot topilmadi"
-        /> -->
-      <n-empty size="huge" description="Kinolar topilmadi..."></n-empty>
+        <div style="display: flex; justify-content: center; height: 400px">
+          <n-empty size="huge" description="Kinolar topilmadi..."></n-empty>
+        </div>
       </div>
-      <!-- <div v-else>
-        
-        <loading 
-        v-model:active="$loading"
-        :is-full-page="true"/>
-        </div> -->
     </div>
   </div>
 </template>
@@ -90,6 +91,7 @@ import { Search } from "@element-plus/icons-vue";
 import { mapActions, mapState } from "pinia";
 import { movieStore } from "../../stores/movie.store";
 import { loadingStore } from "../../stores/loading.store";
+import FadeLoader from "vue-spinner/src/FadeLoader.vue";
 export default {
   data() {
     return {
@@ -98,23 +100,35 @@ export default {
       app,
       rating: "",
       searchName: "",
-      smallScreen : false
+      smallScreen: false,
     };
   },
   computed: {
     ...mapState(movieStore, ["list", "total", "search"]),
     ...mapState(loadingStore, ["loading"]),
+    listC() {
+      return this.list;
+    },
   },
-  props : ["size", "large","small", "default", "type", "primart", "info", "succes", "text", "native-type", "submit", "cancel"],
+  props: [
+    "size",
+    "large",
+    "small",
+    "default",
+    "type",
+    "primart",
+    "info",
+    "succes",
+    "text",
+    "native-type",
+    "submit",
+    "cancel",
+  ],
   watch: {
     search() {
       if (!this.search) {
-        // this.movieStore.total = this.movieStore.movies?.total_results;
         this.getMovies();
       }
-      // movieStore.search = val
-      // this.movieStore.search = val;
-      // this.movieStore.searchMovies(this.movieStore.search)
     },
   },
   methods: {
@@ -127,9 +141,9 @@ export default {
   created() {
     this.getList();
     this.rating = "";
-    this.smallScreen = window.innerWidth < 600
+    this.smallScreen = window.innerWidth < 600;
   },
-  components: { Loading },
+  components: { Loading, FadeLoader },
 };
 </script>
 <style scoped>

@@ -2,18 +2,6 @@ import { defineStore } from "pinia";
 import { useToast } from "vue-toastification";
 import subjectService from "../../services/subject.service";
 import swal from "sweetalert2";
-
-const Toast = swal.mixin({
-  toast: true,
-  position: "top-end",
-  showConfirmButton: false,
-  timer: 3000,
-  timerProgressBar: true,
-  didOpen: (toast) => {
-    toast.addEventListener("mouseenter", swal.stopTimer);
-    toast.addEventListener("mouseleave", swal.resumeTimer);
-  },
-});
 export const subjectStore = defineStore("subject", {
   state: () => ({
     list: [],

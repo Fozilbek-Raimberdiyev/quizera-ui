@@ -1,18 +1,13 @@
 <template>
-  <div class="header items-center" :class="[]">
-    <div class="flex" style="margin-top: -35px">
+  <div class="header items-center">
+    <div class="flex">
       <div
         style="margin-right: 10px"
         v-if="smallScreen || fullScreen"
         class="self-stretch"
       >
         <i
-          style="
-            display: block;
-            font-size: 30px;
-            margin-top: 3px;
-            margin-left: -5px;
-          "
+          style="display: block; font-size: 30px; margin-left: -5px"
           @click="isshow = true"
           class="bx bx-menu cursor-pointer"
         ></i>
@@ -26,20 +21,20 @@
           <mobile-menu @select="select"></mobile-menu>
         </el-drawer>
       </div>
-      <div v-if="!smallScreen" class="self-stretch" style="margin-top: 10px">
+      <div v-if="!smallScreen" class="self-stretch">
         <breadCrumbs></breadCrumbs>
       </div>
     </div>
-    <div class="big-screen-size" v-if="bigScreen">
+    <div class="flex items-center big-screen-size" v-if="bigScreen">
       <!-- <n-menu
         v-model:value="activeKey"
         mode="horizontal"
         :options="menuOptionsC"
       /> -->
-      <div v-if="currentUserRole === 'admin'">
+      <div class="flex" v-if="currentUserRole === 'admin'">
         <el-dropdown>
           <span
-            style="font-size: 18px; margin-top: -4px"
+            style="font-size: 18px"
             :class="{
               active:
                 currentIndex === 2 || currentIndex === 3 || currentIndex === 4,
@@ -78,6 +73,15 @@
             </el-dropdown-menu>
           </template>
         </el-dropdown>
+      </div>
+      <div class="single">
+        <router-link
+          to="/cabinet"
+          @click="currentIndex = 13"
+          :class="{ active: currentIndex === 13 }"
+        >
+          <i class="bi bi-person-workspace"></i>Shaxsiy kabinet
+        </router-link>
       </div>
       <div class="single">
         <router-link
@@ -124,10 +128,10 @@
           <i class="bx bx-bar-chart-alt-2"></i>Statistika
         </router-link>
       </div>
-      <div v-if="currentUserRole === 'admin' || currentUserRole === 'teacher'">
+      <div class="flex" v-if="currentUserRole === 'admin' || currentUserRole === 'teacher'">
         <el-dropdown>
           <span
-            style="font-size: 18px; margin-top: -2px"
+            style="font-size: 18px"
             class="el-dropdown-link no-single"
             :class="{
               active:
@@ -170,7 +174,7 @@
       </div>
     </div>
     <div class="flex items-center">
-      <div
+      <!-- <div
         class="notifications flex items-start"
         v-if="list"
         @click="drawer = true"
@@ -179,8 +183,24 @@
           style="margin-top: -25px !important; font-size: 22px"
           class="bi bi-bell"
         ></i>
+      </div> -->
+      <div
+        class="flex"
+        v-if="todos.length"
+        @click="drawer = true"
+        style="cursor: pointer"
+      >
+        <!-- <el-badge :value="todos.length" :max="99" class="item">
+          <i
+          style="font-size: 22px"
+          class="bi bi-bell"
+        ></i>
+        </el-badge> -->
+        <a-badge :count="todos.length" style="margin: 0 0.5rem;">
+          <BellOutlined style="margin: 0 0.5rem; font-size: 1.5rem;" />
+        </a-badge>
       </div>
-      <div>
+      <div class="flex">
         <el-dropdown placement="bottom-start" trigger="click">
           <el-button class="cursor-pointer" style="padding: 10px" type="info">
             <i class="bx bx-user"></i>
@@ -207,7 +227,7 @@
       <div
         v-if="!smallScreen && !bigScreen"
         @click="emitFullscreen"
-        style="margin-top: -15px; margin-left: 10px; font-size: 18px"
+        style="margin-left: 10px; font-size: 18px"
         class="self-start cursor-pointer"
       >
         <i
@@ -219,6 +239,7 @@
       style="background: teal; color: #fff"
       v-model="drawer"
       title="Bildirishnomalar"
+      :size="smallScreen ? '75%' : '30%'"
       :with-header="false"
     >
       <div>
@@ -227,10 +248,7 @@
             class="flex items-center"
             style="background: teal; color: #e3e5e9"
           >
-            <i
-              style="font-size: 1.5rem; margin-top: -7px"
-              class="bx bx-task"
-            ></i>
+            <i style="font-size: 1.5rem" class="bx bx-task"></i>
             <h5>Eslatmalar</h5>
           </div>
           <div v-for="(todo, index) in todos" :key="index">
@@ -252,19 +270,23 @@
               <q-markup-table>
                 <thead>
                   <tr>
-                    <th class="text-left">Eslatma nomi</th>
-                    <th class="text-right">Tugashiga qolgan muddat</th>
+                    <th style="width: 70px" class="text-left">Eslatma nomi</th>
+                    <th style="width: 70px" class="text-right">
+                      Tugashiga qolgan muddat
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td class="text-left">{{ todo.name }}</td>
-                    <td class="text-right">
+                    <td style="width: 70px" class="text-left">
+                      {{ todo.name }}
+                    </td>
+                    <td style="width: 70px" class="text-right">
                       {{
                         new Date(
                           new Date(todo.endDate) - new Date(todo.date)
                         ).getDate()
-                      }}
+                      }} kun
                     </td>
                   </tr>
                 </tbody>
@@ -292,6 +314,7 @@ import {
   SettingOutlined,
   TeamOutlined,
   UserOutlined,
+  BellOutlined
 } from "@ant-design/icons-vue";
 import { NotificationStore } from "../stores/notifications.store";
 export default {
@@ -307,6 +330,7 @@ export default {
   components: {
     breadCrumbs,
     mobileMenu,
+    BellOutlined
   },
   computed: {
     ...mapState(userStore, ["user", "currentUserRole"]),
@@ -360,20 +384,16 @@ export default {
   justify-content: space-between;
 }
 .big-screen-size {
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
-  margin-top: 25px;
   font-size: 18px;
 }
 .big-screen-size > div {
   margin: 0 0.5rem;
 }
 .big-screen-size > div.single {
-  margin-top: -25px;
+  // margin-top: -25px;
 }
 .big-screen-size > div.no-single {
-  margin-bottom: -25px;
+  // margin-bottom: -25px;
 }
 a {
   text-decoration: none;
@@ -416,7 +436,8 @@ table {
   box-shadow: none;
   text-shadow: none;
 }
-tr th, tr td {
+tr th,
+tr td {
   max-width: 45% !important;
   overflow: auto !important;
 }

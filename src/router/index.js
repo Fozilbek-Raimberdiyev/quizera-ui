@@ -150,44 +150,104 @@ const routes = [
             path: ":id",
             component: () => import("../pages/quiz/QuizRender.vue"),
             name: "",
-          }
+          },
         ],
       },
-      // {
-      //   path : "/cabinet",
-      //   name : "Kabinet",
-      //   component: {
-      //     render() {
-      //       return h(resolveComponent("router-view"));
-      //     },
-      //   },
-      //   children : [
-      //     {
-      //       path : "",
-      //       name : "",
-      //       component : () => import("../pages/groups/List.vue"),
-      //       meta : {roles : ["teacher"]}
-      //     },
-      //     {
-      //       path : "/groups",
-      //       name : "Guruhlar",
-      //       component : () => import(""),
-      //       meta : {roles : ["teacher"]},
-      //       children : [
-              
-      //       ]
-      //     },
-      //     {
-      //       path : "/students",
-      //       name : "O'quvchilar",
-      //       component : () => import(""),
-      //       meta : {roles : ["teacher"]},
-      //       children : [
-
-      //       ]
-      //     }
-      //   ]
-      // },
+      {
+        path: "/cabinet",
+        name: "Kabinet",
+        component: {
+          render() {
+            return h(resolveComponent("router-view"));
+          },
+        },
+        children: [
+          {
+            path: "",
+            name: "",
+            component: {
+              render() {
+                return h(resolveComponent("router-view"));
+              },
+            },
+            meta: { roles: ["teacher"] },
+            children : [
+              {
+                path  : "",
+                name : "",
+                component: () => import("../pages/cabinet/Profile.vue"),
+              },
+              {
+                path : "/groups",
+                name : "Guruhlar",
+                component: {
+                  render() {
+                    return h(resolveComponent("router-view"));
+                  },
+                },
+                children : [
+                  {
+                    path : "",
+                    component : () => import("../pages/cabinet/groups/List.vue"),
+                    name : "Guruhlar"
+                  }
+                ]
+              },
+              {
+                path : "students",
+                name : "O'quvchilar",
+                component: {
+                  render() {
+                    return h(resolveComponent("router-view"));
+                  },
+                },
+                children : [
+                  {
+                    path : "",
+                    component : () => import("../pages/cabinet/groups/students/List.vue")
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            path: "groups",
+            name: "Guruhlar",
+            meta: { roles: ["teacher"] },
+            component: {
+              render() {
+                return h(resolveComponent("router-view"));
+              },
+            },
+            children: [
+              {
+                path: "",
+                name: "",
+                component: {
+                  render() {
+                    return h(resolveComponent("router-view"));
+                  },
+                },
+                children: [
+                  {
+                    path: "",
+                    name: "",
+                    component: () => import("../pages/cabinet/groups/List.vue"),
+                  },
+                ],
+              },
+              {
+                path: "students",
+                name: "O'quvchilar",
+                component: () =>
+                  import("../pages/cabinet/groups/students/List.vue"),
+                meta: { roles: ["teacher"] },
+                children: [],
+              },
+            ],
+          },
+        ],
+      },
       {
         path: "/posts",
         component: () => import("../pages/posts.vue"),
@@ -262,12 +322,12 @@ const routes = [
         },
       },
       {
-        path : "/statistic",
-        component : () => import("../pages/statistic/List.vue"),
-        name : "Statistika",
-        meta : {
-          roles : ["admin", "student", "teacher"]
-        }
+        path: "/statistic",
+        component: () => import("../pages/statistic/List.vue"),
+        name: "Statistika",
+        meta: {
+          roles: ["admin", "student", "teacher"],
+        },
       },
       {
         ...references,
@@ -312,15 +372,14 @@ const router = createRouter({
   routes: routes,
 });
 
-router.beforeEach(async(to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   // let userRole = userStore().currentUserRole;
-  let userRole = null
-  try{
-    userStore().getCurrentUserRole()
-    userRole =  userStore().currentUserRole;
-
-  }catch(e) {
-    userRole = "student"
+  let userRole = null;
+  try {
+    userStore().getCurrentUserRole();
+    userRole = userStore().currentUserRole;
+  } catch (e) {
+    userRole = "student";
   }
   const requiredRoles = to.meta.roles;
   let { exp } = jwtDecode(token) || null;
@@ -328,16 +387,15 @@ router.beforeEach(async(to, from, next) => {
   let isValid = current <= exp;
   const isAuth = userStore().isAuth;
 
-  if(!isValid  && to.name!="login") {
-    next("/login")
-  } else if(to.name==="register" && from.name==="login") {
-    next("/register")
-  }
-   else {
-    if(!requiredRoles?.some((role) => role === userRole) && to.path!="/") {
-      next("/")
+  if (!isValid && to.name != "login") {
+    next("/login");
+  } else if (to.name === "register" && from.name === "login") {
+    next("/register");
+  } else {
+    if (!requiredRoles?.some((role) => role === userRole) && to.path != "/") {
+      next("/");
     } else {
-      next()
+      next();
     }
   }
 });

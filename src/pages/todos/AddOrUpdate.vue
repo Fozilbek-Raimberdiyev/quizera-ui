@@ -21,8 +21,14 @@
             :autosize="{ minRows: 4, maxRows: 6 }"
             @input="v$.$touch()"
           ></el-input>
-          <span class="error" v-if="v$.form.name.$error"
+          <span class="error" v-if="v$.form.name.required.$invalid"
             >Maydon to'ldirlishi shart!</span
+          >
+          <span class="error" v-if="v$.form.name.minLength.$invalid"
+            >{{  v$.form.name.minLength.$params.min}} ta harf yoki belgidan kam bo'lmasligi kerak!</span
+          >
+          <span class="error" v-if="v$.form.name.maxLength.$invalid"
+            >{{ v$.form.name.maxLength.$params.max }} ta harf yoki belgidan ko'p bo'lmasligi kerak!</span
           >
         </div>
         <div>
@@ -75,7 +81,7 @@
 </template>
   <script>
 import { useVuelidate } from "@vuelidate/core";
-import { required } from "@vuelidate/validators";
+import { required,minLength, maxLength } from "@vuelidate/validators";
 import { mapActions, mapState } from "pinia";
 import axios from "axios";
 import { todoStore } from "../../stores/todos.store";
@@ -99,6 +105,8 @@ export default {
       form: {
         name: {
           required,
+          minLength : minLength(4),
+          maxLength : maxLength(35)
         },
         description: {
           required,

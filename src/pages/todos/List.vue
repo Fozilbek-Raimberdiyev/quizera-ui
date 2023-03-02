@@ -38,176 +38,180 @@
       </div>
     </div>
     <div style="min-height: 350px" v-if="list.length">
-      <!-- <div class="table-responsive">
-        <table class="table">
-          <thead>
-            <tr>
-              <th style="vertical-align: middle;" scope="col">№</th>
-              <th style="vertical-align: middle;" scope="col">Name</th>
-              <th style="vertical-align: middle;" scope="col">Description</th>
-              <th style="vertical-align: middle;" scope="col">Begin date</th>
-              <th style="vertical-align: middle;" scope="col">End date</th>
-              <th style="vertical-align: middle;" scope="col">Time left</th>
-              <th style="vertical-align: middle;" scope="col">Actions</th>
-            </tr>
-          </thead>
-          <tbody  v-for="(todo, index) in list" :key="index">
-            <tr>
-              <th scope="row">{{ index + 1 }}</th>
-              <td>{{ todo.name }}</td>
-              <td>{{ todo.description }}</td>
-              <td>{{ toDDMMYY(todo.date) }}</td>
-              <td>{{ toDDMMYY(todo.endDate) }}</td>
-              <td>{{ minusTwoDates(todo.endDate, Date.now()) }}</td>
-              <td>
-                <div
-                  style="
-                    display: flex;
-                    align-items: center;
-                    flex-wrap: wrap;
-                  "
-                >
-                  <el-button
-                    @click="$router.push(`/todos/${todo._id}/update`)"
-                    type="text"
-                    style="cursor: pointer; margin: 10px;"
-                    ><i class="bx bxs-edit"></i
-                  ></el-button>
-                  <a-popconfirm
-                    title="Are you sure delete this todo?"
-                    ok-text="Yes"
-                    cancel-text="No"
-                    @confirm="deleteTodo(todo._id)"
-                    @cancel="cancel"
-                  >
-                    <i
-                      style="cursor: pointer; color: #429fff"
-                      class="bi bi-trash"
-                    ></i>
-                  </a-popconfirm>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div> -->
       <div class="q-pa-md" style="padding: 0; margin-top: 1rem">
-        <q-markup-table>
-          <thead>
-            <tr>
-              <!-- <th class="text-left">Dessert (100g serving)</th>
-          <th class="text-right">Calories</th>
-          <th class="text-right">Fat (g)</th>
-          <th class="text-right">Carbs (g)</th>
-          <th class="text-right">Protein (g)</th>
-          <th class="text-right">Sodium (mg)</th> -->
-              <th class="text-left" style="vertical-align: middle" scope="col">
-                №
-              </th>
-              <th class="text-left" style="vertical-align: middle" scope="col">
-                Name
-              </th>
-              <th class="text-left" style="vertical-align: middle" scope="col">
-                Description
-              </th>
-              <th class="text-right" style="vertical-align: middle" scope="col">
-                Begin date
-              </th>
-              <th class="text-right" style="vertical-align: middle" scope="col">
-                End date
-              </th>
-              <th class="text-right" style="vertical-align: middle" scope="col">
-                Bajarilish vaqti
-              </th>
-              <th class="text-right" style="vertical-align: middle" scope="col">
-                Time left
-              </th>
-              <th class="text-right" style="vertical-align: middle" scope="col">
-                Holati
-              </th>
-              <th class="text-right" style="vertical-align: middle" scope="col">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody v-for="(todo, index) in listC" :key="index">
-            <tr>
-              <td class="text-left" scope="row">{{ index + 1 }}</td>
-              <td class="text-left">{{ todo.name }}</td>
-              <td class="text-left">{{ todo.description }}</td>
-              <td class="text-right">{{ toDDMMYY(todo.date) }}</td>
-              <td class="text-right">{{ toDDMMYY(todo.endDate) }}</td>
-              <td class="text-right">
-                {{
-                  todo.isMaked ? subtractDates(todo.makedDate, todo.date) : "-"
-                }}
-              </td>
-              <td class="text-right">
-                {{
-                  todo.isMaked ? "-" : subtractDates(todo.endDate, todo.date)
-                }}
-              </td>
-              <td class="text-right">
-                <el-checkbox
-                  @change="updateStatusById(todo._id, { status: todo.isMaked })"
-                  v-model="todo.isMaked"
-                  :disabled="todo.isMaked"
-                ></el-checkbox>
-              </td>
-              <td class="text-right">
-                <div
-                  style="
-                    display: flex;
-                    justify-content: end;
-                    align-items: center;
-                  "
-                >
-                  <el-button
-                    @click="$router.push(`/todos/${todo._id}/update`)"
-                    type="text"
-                    style="cursor: pointer; margin: 10px"
-                    ><i class="bx bxs-edit"></i
-                  ></el-button>
-                  <a-popconfirm
-                    title="Haqiqatdan ushbu eslatmani o'chirmoqchimisiz?"
-                    ok-text="Ha"
-                    cancel-text="Yo'q"
-                    @confirm="deleteTodo(todo._id)"
-                    @cancel="cancel"
+        <div>
+          <div v-if="listC.length">
+            <q-markup-table style="min-height: 150px">
+              <thead>
+                <tr>
+                  <th
+                    class="text-left"
+                    style="vertical-align: middle"
+                    scope="col"
                   >
-                    <i
-                      style="cursor: pointer; color: #429fff"
-                      class="bi bi-trash"
-                    ></i>
-                  </a-popconfirm>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </q-markup-table>
+                    №
+                  </th>
+                  <th
+                    class="text-left"
+                    style="vertical-align: middle"
+                    scope="col"
+                  >
+                    Name
+                  </th>
+                  <th
+                    class="text-left"
+                    style="vertical-align: middle"
+                    scope="col"
+                  >
+                    Description
+                  </th>
+                  <th
+                    class="text-right"
+                    style="vertical-align: middle"
+                    scope="col"
+                  >
+                    Begin date
+                  </th>
+                  <th
+                    class="text-right"
+                    style="vertical-align: middle"
+                    scope="col"
+                  >
+                    End date
+                  </th>
+                  <th
+                    class="text-right"
+                    style="vertical-align: middle"
+                    scope="col"
+                  >
+                    Bajarilish vaqti
+                  </th>
+                  <th
+                    class="text-right"
+                    style="vertical-align: middle"
+                    scope="col"
+                  >
+                    Time left
+                  </th>
+                  <th
+                    class="text-right"
+                    style="vertical-align: middle"
+                    scope="col"
+                  >
+                    Holati
+                  </th>
+                  <th
+                    class="text-right"
+                    style="vertical-align: middle"
+                    scope="col"
+                  >
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody v-if="listC.length">
+                <tr v-for="(todo, index) in listC" :key="index">
+                  <td class="text-left" scope="row">{{ index + 1 }}</td>
+                  <td class="text-left">{{ todo.name }}</td>
+                  <td class="text-left">{{ todo.description }}</td>
+                  <td class="text-right">{{ toDDMMYY(todo.date) }}</td>
+                  <td class="text-right">{{ toDDMMYY(todo.endDate) }}</td>
+                  <td class="text-right">
+                    {{
+                      todo.isMaked
+                        ? subtractDates(todo.makedDate, todo.date)
+                        : "-"
+                    }}
+                  </td>
+                  <td class="text-right">
+                    {{
+                      todo.isMaked
+                        ? "-"
+                        : subtractDates(todo.endDate, todo.date)
+                    }}
+                  </td>
+                  <td class="text-right">
+                    <el-checkbox
+                      @change="
+                        updateStatusById(todo._id, { status: todo.isMaked })
+                      "
+                      v-model="todo.isMaked"
+                      :disabled="todo.isMaked"
+                    ></el-checkbox>
+                  </td>
+                  <td class="text-right">
+                    <div
+                      style="
+                        display: flex;
+                        justify-content: end;
+                        align-items: center;
+                      "
+                    >
+                      <el-button
+                        @click="$router.push(`/todos/${todo._id}/update`)"
+                        type="text"
+                        style="cursor: pointer; margin: 10px"
+                        ><i class="bx bxs-edit"></i
+                      ></el-button>
+                      <a-popconfirm
+                        title="Haqiqatdan ushbu eslatmani o'chirmoqchimisiz?"
+                        ok-text="Ha"
+                        cancel-text="Yo'q"
+                        @confirm="deleteTodo(todo._id)"
+                        @cancel="cancel"
+                      >
+                        <i
+                          style="cursor: pointer; color: #429fff"
+                          class="bi bi-trash"
+                        ></i>
+                      </a-popconfirm>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+              <tbody v-else style="position: relative">
+                <tr
+                  style="position: absolute; padding: 10px 0"
+                  :style="[bigScreen ? 'left : 50%' : 'left : 40%']"
+                >
+                  <n-empty></n-empty>
+                </tr>
+              </tbody>
+            </q-markup-table>
+            <el-pagination
+              style="margin-top: 1rem"
+              v-model:current-page="page"
+              background
+              layout="prev, pager, next"
+              :total="total"
+            />
+          </div>
+          <div v-else>
+            <n-empty size="huge" description="Topshiriqlar topilmadi"></n-empty>
+          </div>
+        </div>
       </div>
-      <el-pagination
-        style="margin-top: 1rem"
-        v-model:current-page="page"
-        background
-        layout="prev, pager, next"
-        :total="total"
-      />
     </div>
     <div v-else>
-      <n-empty size="huge" description="Topshiriqlar topilmadi"></n-empty>
+      <div style="display: flex; justify-content: center; height: 400px">
+        <FadeLoader color="#409eef" class="self-center"></FadeLoader>
+      </div>
     </div>
   </div>
 </template>
 <script>
 import { mapActions, mapState } from "pinia";
 import { todoStore } from "../../stores/todos.store";
+import FadeLoader from "vue-spinner/src/FadeLoader.vue";
 import {
   toDDMMYY,
   minusTwoDates,
   subtractDates,
 } from "../utils/date.formatter";
 export default {
+  components: {
+    FadeLoader,
+  },
   data: () => ({
     page: 1,
     status: "all",
