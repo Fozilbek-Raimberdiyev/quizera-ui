@@ -1,7 +1,11 @@
 <template>
   <div class="">
     <div class="slider">
-      <a-carousel arrows style="margin-bottom: 1rem;">
+      <div class="flex items-center justify-center">
+        <i class="bi bi-table" style="font-size: 1.2rem; margin-right: 5px"></i>
+        <span style="font-size: 2rem">Doska</span>
+      </div>
+      <a-carousel arrows style="margin-bottom: 1rem">
         <template #prevArrow>
           <div class="custom-slick-arrow" style="left: 10px; z-index: 1">
             <i class="bi bi-arrow-left-circle-fill"></i>
@@ -18,27 +22,43 @@
         <div><h3>4</h3></div>
       </a-carousel>
     </div>
-    <hr style="margin-bottom: 1rem; color: #e3e5e9;">
-    <div class="bar flex shadow-md justify-between">
-      <div class="teachers shadow-md">
-        <i class="bi bi-briefcase"></i>
-        <span>O'qituvchilar soni</span>
-        <p>35</p>
+    <!-- <hr style="margin-bottom: 1rem; color: #e3e5e9;"> -->
+    <div style="margin: 1rem 0">
+      <div class="flex justify-center items-center">
+        <i
+          class="bx bx-bar-chart-alt-2"
+          style="font-size: 1.2rem; margin-right: 5px"
+        ></i>
+        <span style="font-size: 2rem">Statistika</span>
       </div>
-      <div class="students">
-        <i class="bi bi-mortarboard"></i>
-        <span>O'quvchilar soni</span>
-        <p>75</p>
-      </div>
-      <div class="opentests">
-        <i class="bi bi-question-square"></i>
-        <span>Ochiq testlar soni</span>
-        <p>100</p>
+      <div class="bar flex shadow-md justify-between">
+        <div class="teachers shadow-md">
+          <i class="bi bi-briefcase"></i>
+          <span>O'qituvchilar soni</span>
+          <p>35</p>
+        </div>
+        <div class="students">
+          <i class="bi bi-mortarboard"></i>
+          <span>O'quvchilar soni</span>
+          <p>75</p>
+        </div>
+        <div class="opentests">
+          <i class="bi bi-question-square"></i>
+          <span>Ochiq testlar soni</span>
+          <p>100</p>
+        </div>
       </div>
     </div>
-    <div class="flex">
-      <div style="height: 200px">
-        <bar-chart style="position: relative"></bar-chart>
+    <div class="charts">
+      <!-- <hr style="margin: 1rem 0; color: #e3e5e9;"> -->
+      <div class="flex items-center justify-center">
+        <i style="font-size: 1.2rem; margin-right: 5px;" class="bx bx-chart"></i>
+        <span style="font-size: 2rem;">Infografika</span>
+      </div>
+      <div class="flex justify-center">
+        <div style="height: 200px">
+          <bar-chart style="position: relative"></bar-chart>
+        </div>
       </div>
     </div>
   </div>
