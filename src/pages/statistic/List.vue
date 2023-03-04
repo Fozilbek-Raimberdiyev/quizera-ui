@@ -8,34 +8,44 @@
         >Mening natijalarim</span
       >
       <span
-      v-if="currentUserRole==='admin' || currentUserRole==='teacher'"
+        v-if="currentUserRole === 'admin' || currentUserRole === 'teacher'"
         @click="currentComponent = 'Students'"
         :class="{ active: currentComponent === 'Students' }"
         class="tab"
         >O'quvchilar natijalari</span
       >
       <span
-      v-if="currentUserRole==='admin'"
+        v-if="currentUserRole === 'admin'"
         @click="currentComponent = 'All'"
         :class="{ active: currentComponent === 'All' }"
         class="tab"
         >Hamma natijalar</span
+      >
+      <span
+        v-if="currentUserRole != 'student'"
+        @click="currentComponent = 'mySubjects'"
+        :class="{ active: currentComponent === 'mySubjects' }"
+        class="tab"
+        >Fanlarim natijalari</span
       >
     </div>
     <component :is="currentComponent"></component>
   </div>
 </template>
 <script>
-import { mapState } from 'pinia';
-import { userStore } from '../../stores/management/user.store';
+import { mapState } from "pinia";
+import { userStore } from "../../stores/management/user.store";
 import All from "./AllResult.vue";
 import Me from "./MeResult.vue";
 import Students from "./StudentsResult.vue";
+import mySubjects from "./mySubjects.vue";
+import { resultStore } from '../../stores/references/result.store';
 export default {
   components: {
     Me,
     Students,
     All,
+    mySubjects,
   },
   data() {
     return {
@@ -43,7 +53,12 @@ export default {
     };
   },
   computed: {
-    ...mapState(userStore, ["currentUserRole"])
+    ...mapState(userStore, ["currentUserRole"]),
+  },
+  watch: {
+currentComponent(val) {
+  resultStore().$patch({list : [], total : null})
+}
   }
 };
 </script>

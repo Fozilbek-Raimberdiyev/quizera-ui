@@ -1,5 +1,5 @@
 <template>
-  <div class="header items-center">
+  <div class="header items-center" :style="[smallScreen ? '' : 'margin : 0 24px']">
     <div class="flex items-center">
       <div
         style="margin-right: 10px"
@@ -265,7 +265,7 @@
                     <td style="width: 70px" class="text-right">
                       {{
                         new Date(
-                          new Date(todo.endDate) - new Date(todo.date)
+                          new Date(todo.endDate) - new Date()
                         ).getDate()
                       }} kun
                     </td>
@@ -363,6 +363,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  // color: #fff;
 }
 .big-screen-size {
   font-size: 18px;
@@ -382,7 +383,9 @@ a {
 }
 .active,
 .active a {
-  color: #409eff !important;
+  color: #429eef !important;
+  border-bottom: 3px solid #429eef;
+  padding-bottom: 17px;
 }
 span.single,
 span.no-single {

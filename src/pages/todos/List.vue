@@ -127,7 +127,7 @@
                     {{
                       todo.isMaked
                         ? "-"
-                        : subtractDates(todo.endDate, todo.date)
+                        : subtractDates(todo.endDate, new Date())
                     }}
                   </td>
                   <td class="text-right">

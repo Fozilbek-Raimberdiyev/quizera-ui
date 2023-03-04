@@ -102,10 +102,10 @@
     </q-markup-table>
     <el-dialog v-model="isShow">
       <div v-if="items.length">
-        <h5 v-if="titleCode === 0">To'g'ri belgilangan savollar</h5>
-        <h5 v-if="titleCode === 1">Noto'g'ri belgilangan savollar</h5>
-        <h5 v-if="titleCode === 2">Belgilanmagan savollar</h5>
-        <div v-for="(item, index) in items" :key="index">
+        <h4 v-if="titleCode === 0">To'g'ri belgilangan savollar</h4>
+        <h4 v-if="titleCode === 1">Noto'g'ri belgilangan savollar</h4>
+        <h4 v-if="titleCode === 2">Belgilanmagan savollar</h4>
+        <h6 v-for="(item, index) in items" :key="index">
           <div
             style="
               border: 1px solid #e3e5e9;
@@ -130,7 +130,7 @@
               {{ option.optionLabel }}
             </span>
           </div>
-        </div>
+        </h6>
       </div>
       <div v-else>
         <n-empty></n-empty>

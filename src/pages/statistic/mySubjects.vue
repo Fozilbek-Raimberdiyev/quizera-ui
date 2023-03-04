@@ -21,6 +21,15 @@
           >Hammasi</span
         >
       </div>
+      <div class="select">
+        <a-select
+          v-model:value="subjectOption"
+          style="width: 200px"
+          :options="subjectOptions"
+          label="name"
+          value="name"
+        ></a-select>
+      </div>
       <div class="right-bar">
         <a-input v-model:value="search" placeholder="Search result"></a-input>
       </div>
@@ -57,7 +66,9 @@
             {{ new Date(result.workingTime).toLocaleDateString() }}
             {{ new Date(result.workingTime).toLocaleTimeString() }}
           </td>
-          <td class="text-right">{{parseWorkingDurationtTimeToMinute(result.workingDurationTime)  }}</td>
+          <td class="text-right">
+            {{ parseWorkingDurationtTimeToMinute(result.workingDurationTime) }}
+          </td>
           <td class="text-right">
             <span
               :class="{
@@ -144,56 +155,67 @@
     </el-dialog>
   </div>
 </template>
-  <script>
+    <script>
 import { subject } from "@casl/ability";
 import { parseDate } from "element-plus";
 import { mapActions, mapState } from "pinia";
 import { resultStore } from "../../stores/references/result.store";
-
+import { subjectStore } from "../../stores/references/subject";
 export default {
   data() {
     return {
-      currentStatus: "Passed",
-      query: "all",
+      currentStatus: "All",
+      query: "mySubjects",
       isShow: false,
       items: [],
       titleCode: null,
       bigScreen: false,
       smallScreeen: false,
+      subjectOption: null,
+      subjectOptions: [],
       search: "",
       parseDate,
     };
   },
   computed: {
     ...mapState(resultStore, ["list"]),
+    ...mapState(subjectStore, { subjects: "list" }),
     listC() {
-      if (this.currentStatus === "Failed") {
+      if (this.currentStatus === "All") {
         return this.list
-          .filter((item) => item.status === "Failed")
-          .filter((item) =>
-            item.fullName
+          .filter((result) => result.subjectName === this.subjectOption)
+          .filter((result) =>
+            result.fullName
+              .toLocaleLowerCase()
+              .includes(this.search.toLocaleLowerCase())
+          );
+      } else {
+        return this.list
+          .filter((result) => result.status === this.currentStatus)
+          .filter((result) => result.subjectName === this.subjectOption)
+          .filter((result) =>
+            result.fullName
               .toLocaleLowerCase()
               .includes(this.search.toLocaleLowerCase())
           );
       }
-      if (this.currentStatus === "Passed") {
-        return this.list
-          .filter((item) => item.status === "Passed")
-          .filter((item) =>
-            item.fullName
-              .toLocaleLowerCase()
-              .includes(this.search.toLocaleLowerCase())
-          );
-      }
-      return this.list.filter((item) =>
-        item.fullName
-          .toLocaleLowerCase()
-          .includes(this.search.toLocaleLowerCase())
-      );
+    },
+  },
+  watch: {
+    subjects() {
+      let subjects = [...this.subjects];
+      this.subjectOptions = subjects.map((subject) => {
+        return {
+          label: subject.name,
+          value: subject.name,
+        };
+      });
+      this.subjectOption = this.subjectOptions[0].value;
     },
   },
   methods: {
     ...mapActions(resultStore, ["getList"]),
+    ...mapActions(subjectStore, { getSubjects: "getList" }),
     showCorrectAnswers(value, titleCode) {
       this.isShow = true;
       this.items = value;
@@ -234,14 +256,16 @@ export default {
       }
     },
   },
+  mounted() {},
   created() {
     this.smallScreeen = window.innerWidth < 600;
     this.bigScreen = window.innerWidth > 1400;
     this.getList(this.query);
+    this.getSubjects(null, null, true);
   },
 };
 </script>
-  <style scoped>
+    <style scoped>
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css");
 .tabs {
   margin: 10px 0;

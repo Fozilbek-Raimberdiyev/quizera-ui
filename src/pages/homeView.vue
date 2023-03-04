@@ -113,7 +113,7 @@
         smallScreen || fullScreen || bigScreen ? 'small-screen' : 'big-screen',
       ]"
     >
-      <a-layout-header style="background: #fff;">
+      <a-layout-header :class="[bigScreen  ? 'big-header' : 'small-header']" style="background: #fff;">
         <header-menu
           @getFullscreen="getFullscreen"
           @getBigscreen="getBigscreen"
@@ -121,10 +121,10 @@
           :fullScreen="fullScreen"
         ></header-menu>
       </a-layout-header>
-      <a-layout-content style="margin: 16px">
+      <a-layout-content :style="[smallScreen ? 'margin: 5px' : 'margin: 16px']">
         <div
-          style="padding: 24px; background: #fff;"
-          :style="[smallScreen ? `min-height : 450px` : `min-height : 600px`]"
+          style="background: #fff;"
+          :style="[smallScreen ? `min-height : 450px; padding:15px;` : `min-height : 600px; padding: 24px;`]"
         >
           <!-- <router-view></router-view> -->
           <div v-show="!loading">
@@ -253,5 +253,12 @@ a {
 }
 i {
   margin-right: 5px;
+}
+.small-header {
+  margin: 0;
+}
+
+.ant-layout-header.small-header {
+  padding: 0 20px !important;
 }
 </style>
