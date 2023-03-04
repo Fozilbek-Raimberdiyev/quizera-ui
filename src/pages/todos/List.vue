@@ -26,8 +26,8 @@
           v-if="!smallScreen"
           type="primary"
           @click="$router.push({ name: 'Todo add' })"
-          ><i class="bx bx-plus" style="margin-right: 5px"></i>Add
-          todo</el-button
+          ><i class="bx bx-plus" style="margin-right: 5px"></i>Eslatma
+          qo'shish</el-button
         >
         <el-button
           v-else
@@ -56,42 +56,42 @@
                     style="vertical-align: middle"
                     scope="col"
                   >
-                    Name
+                    Eslatma nomi
                   </th>
                   <th
                     class="text-left"
                     style="vertical-align: middle"
                     scope="col"
                   >
-                    Description
+                    Izoh
                   </th>
                   <th
                     class="text-right"
                     style="vertical-align: middle"
                     scope="col"
                   >
-                    Begin date
+                    Boshlanish vaqti
                   </th>
                   <th
                     class="text-right"
                     style="vertical-align: middle"
                     scope="col"
                   >
-                    End date
+                    Yakunlanish vaqti
                   </th>
                   <th
                     class="text-right"
                     style="vertical-align: middle"
                     scope="col"
                   >
-                    Bajarilish vaqti
+                    Bajarilish oralig'i
                   </th>
                   <th
                     class="text-right"
                     style="vertical-align: middle"
                     scope="col"
                   >
-                    Time left
+                    Qolgan muddat
                   </th>
                   <th
                     class="text-right"
@@ -105,7 +105,7 @@
                     style="vertical-align: middle"
                     scope="col"
                   >
-                    Actions
+                    Harakatlar
                   </th>
                 </tr>
               </thead>
@@ -124,20 +124,28 @@
                     }}
                   </td>
                   <td class="text-right">
-                    {{
-                      todo.isMaked
-                        ? "-"
-                        : subtractDates(todo.endDate, new Date())
-                    }}
+                    <span v-html="defineStatusTodo(todo)"></span>
                   </td>
                   <td class="text-right">
-                    <el-checkbox
-                      @change="
+                    <a-popconfirm
+                      title="Eslatma bajarilgandan so'ng uni qayta tahrirlab bo'lmaydi"
+                      ok-text="Ha"
+                      :disabled="todo.isMaked || todo.isLated"
+                      cancel-text="Yo'q"
+                      :style="{ 'cursor : auto; background : red': todo.isMaked || todo.isLated }"
+                      @confirm="
                         updateStatusById(todo._id, { status: todo.isMaked })
                       "
-                      v-model="todo.isMaked"
-                      :disabled="todo.isMaked"
-                    ></el-checkbox>
+                      @cancel="cancel"
+                    >
+                      <el-checkbox
+                        @change="isChanged = true"
+                        :style="{
+                          'cursor : auto': todo.isMaked || todo.isLated,
+                        }"
+                        v-model="todo.isMaked"
+                      ></el-checkbox>
+                    </a-popconfirm>
                   </td>
                   <td class="text-right">
                     <div
@@ -151,6 +159,7 @@
                         @click="$router.push(`/todos/${todo._id}/update`)"
                         type="text"
                         style="cursor: pointer; margin: 10px"
+                        :disabled="todo.isMaked"
                         ><i class="bx bxs-edit"></i
                       ></el-button>
                       <a-popconfirm
@@ -217,6 +226,7 @@ export default {
     status: "all",
     currentTab: "all",
     smallScreen: false,
+    isChanged: false,
   }),
   computed: {
     ...mapState(todoStore, ["list", "total", "params"]),
@@ -255,6 +265,17 @@ export default {
     },
     change() {
       alert("");
+    },
+    defineStatusTodo(todo) {
+      let content = document.createElement("div");
+      if (todo.isMaked && !todo.isLated) {
+        content = "<span style='color:yellowgreen'>Bajarilgan</span>";
+      } else if (todo.isLated && !todo.isMaked) {
+        content = "<span style='color:red'>Bajarilmagan</span>";
+      } else {
+        content = this.subtractDates(todo.endDate, new Date());
+      }
+      return content;
     },
   },
   created() {
