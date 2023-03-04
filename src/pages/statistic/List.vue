@@ -22,7 +22,7 @@
         >Hamma natijalar</span
       >
       <span
-        v-if="currentUserRole != 'student'"
+        v-if="currentUserRole === 'teacher'"
         @click="currentComponent = 'mySubjects'"
         :class="{ active: currentComponent === 'mySubjects' }"
         class="tab"
