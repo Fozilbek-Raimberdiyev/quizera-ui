@@ -65,37 +65,226 @@
         </div>
       </div>
       <div v-if="subjectId">
-        <label for="question">Savolni kiriting</label>
-        <el-input
+        <h6 style="color: #429eef;" for="question">Savolni kiriting</h6>
+        <!-- <el-input
           type="textarea"
           placeholder="Savolni kiriting..."
           v-model="form.question"
           id="question"
         >
-        </el-input>
+        </el-input> -->
+        <div class="q-pa-md q-gutter-sm">
+          <q-editor
+            v-model="form.question"
+            :dense="$q.screen.lt.md"
+            :toolbar="[
+              [
+                {
+                  label: $q.lang.editor.align,
+                  icon: $q.iconSet.editor.align,
+                  fixedLabel: true,
+                  list: 'only-icons',
+                  options: ['left', 'center', 'right', 'justify'],
+                },
+                {
+                  label: $q.lang.editor.align,
+                  icon: $q.iconSet.editor.align,
+                  fixedLabel: true,
+                  options: ['left', 'center', 'right', 'justify'],
+                },
+              ],
+              [
+                'bold',
+                'italic',
+                'strike',
+                'underline',
+                'subscript',
+                'superscript',
+              ],
+              ['token', 'hr', 'link', 'custom_btn'],
+              ['print', 'fullscreen'],
+              [
+                {
+                  label: $q.lang.editor.formatting,
+                  icon: $q.iconSet.editor.formatting,
+                  list: 'no-icons',
+                  options: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'code'],
+                },
+                {
+                  label: $q.lang.editor.fontSize,
+                  icon: $q.iconSet.editor.fontSize,
+                  fixedLabel: true,
+                  fixedIcon: true,
+                  list: 'no-icons',
+                  options: [
+                    'size-1',
+                    'size-2',
+                    'size-3',
+                    'size-4',
+                    'size-5',
+                    'size-6',
+                    'size-7',
+                  ],
+                },
+                {
+                  label: $q.lang.editor.defaultFont,
+                  icon: $q.iconSet.editor.font,
+                  fixedIcon: true,
+                  list: 'no-icons',
+                  options: [
+                    'default_font',
+                    'arial',
+                    'arial_black',
+                    'comic_sans',
+                    'courier_new',
+                    'impact',
+                    'lucida_grande',
+                    'times_new_roman',
+                    'verdana',
+                  ],
+                },
+                'removeFormat',
+              ],
+              ['quote', 'unordered', 'ordered', 'outdent', 'indent'],
+
+              ['undo', 'redo'],
+              ['viewsource'],
+            ]"
+            :fonts="{
+              arial: 'Arial',
+              arial_black: 'Arial Black',
+              comic_sans: 'Comic Sans MS',
+              courier_new: 'Courier New',
+              impact: 'Impact',
+              lucida_grande: 'Lucida Grande',
+              times_new_roman: 'Times New Roman',
+              verdana: 'Verdana',
+            }"
+          />
+        </div>
         <span class="error" v-if="v$.form.question.$error"
           >Savol kiritilishi shart</span
         >
       </div>
       <div v-show="subjectId" class="flex justify-between">
         <div class="options">
-          <p>Variantlarni kiriting</p>
+          <h6 style="color: #429eef;">Variantlarni kiriting</h6>
           <div
             for="questionLabel"
             v-for="(option, index) in form.options"
             :key="index"
           >
             <label>
-              <el-input
+              <!-- <el-input
                 type="textarea"
-                :class="{ true: option.isTrue, false: !option.isTrue }"
+                
                 class="option"
                 rows="1"
                 cols="100"
                 :placeholder="option.placeholder"
                 v-model="option.optionLabel"
                 id="questionLabel"
-              ></el-input>
+              ></el-input> -->
+              <div class="q-pa-md q-gutter-sm">
+                <q-editor
+                  class="option"
+                  :class="{ true: option.isTrue, false: !option.isTrue }"
+                  v-model="option.optionLabel"
+                  :dense="$q.screen.lt.md"
+                  :toolbar="[
+                    [
+                      {
+                        label: $q.lang.editor.align,
+                        icon: $q.iconSet.editor.align,
+                        fixedLabel: true,
+                        list: 'only-icons',
+                        options: ['left', 'center', 'right', 'justify'],
+                      },
+                      {
+                        label: $q.lang.editor.align,
+                        icon: $q.iconSet.editor.align,
+                        fixedLabel: true,
+                        options: ['left', 'center', 'right', 'justify'],
+                      },
+                    ],
+                    [
+                      'bold',
+                      'italic',
+                      'strike',
+                      'underline',
+                      'subscript',
+                      'superscript',
+                    ],
+                    ['token', 'hr', 'link', 'custom_btn'],
+                    ['print', 'fullscreen'],
+                    [
+                      {
+                        label: $q.lang.editor.formatting,
+                        icon: $q.iconSet.editor.formatting,
+                        list: 'no-icons',
+                        options: [
+                          'p',
+                          'h1',
+                          'h2',
+                          'h3',
+                          'h4',
+                          'h5',
+                          'h6',
+                          'code',
+                        ],
+                      },
+                      {
+                        label: $q.lang.editor.fontSize,
+                        icon: $q.iconSet.editor.fontSize,
+                        fixedLabel: true,
+                        fixedIcon: true,
+                        list: 'no-icons',
+                        options: [
+                          'size-1',
+                          'size-2',
+                          'size-3',
+                          'size-4',
+                          'size-5',
+                          'size-6',
+                          'size-7',
+                        ],
+                      },
+                      {
+                        label: $q.lang.editor.defaultFont,
+                        icon: $q.iconSet.editor.font,
+                        fixedIcon: true,
+                        list: 'no-icons',
+                        options: [
+                          'default_font',
+                          'arial',
+                          'arial_black',
+                          'comic_sans',
+                          'courier_new',
+                          'impact',
+                          'lucida_grande',
+                          'times_new_roman',
+                          'verdana',
+                        ],
+                      },
+                      'removeFormat',
+                    ],
+                    ['quote', 'unordered', 'ordered', 'outdent', 'indent'],
+
+                    ['undo', 'redo'],
+                    ['viewsource'],
+                  ]"
+                  :fonts="{
+                    arial: 'Arial',
+                    arial_black: 'Arial Black',
+                    comic_sans: 'Comic Sans MS',
+                    courier_new: 'Courier New',
+                    impact: 'Impact',
+                    lucida_grande: 'Lucida Grande',
+                    times_new_roman: 'Times New Roman',
+                    verdana: 'Verdana',
+                  }"
+                />
+              </div>
             </label>
             <div
               v-for="error in v$.form.options.$each.$response.$errors[index]
@@ -184,7 +373,7 @@
             </div>
             <div class="flex items-center">
               <h6 class="q-number">{{ question?.number }}.</h6>
-              <h6>{{ question.question }}</h6>
+              <h6><span v-html="question.question"></span></h6>
             </div>
             <p
               class="option"
@@ -195,7 +384,7 @@
                 true: o.isTrue,
               }"
             >
-              {{ o.optionLabel }}
+              <span v-html="o.optionLabel"></span>
             </p>
           </div>
         </div>

@@ -13,15 +13,15 @@
     <div v-if="!isEnded" class="bars" style="margin-bottom: 1rem">
       <div class="flex justify-end items-center">
         <a-popconfirm
-                  title="Haqiqatdan yakunlamoqchimisiz?"
-                  ok-text="Ha"
-                  cancel-text="Yo'q"
-                  @confirm="endTest"
-                  @cancel="cancel"
-                  class="cursor-pointer"
-                >
-                <span class="button">Yakunlash</span>
-                </a-popconfirm>
+          title="Haqiqatdan yakunlamoqchimisiz?"
+          ok-text="Ha"
+          cancel-text="Yo'q"
+          @confirm="endTest"
+          @cancel="cancel"
+          class="cursor-pointer"
+        >
+          <span class="button">Yakunlash</span>
+        </a-popconfirm>
       </div>
       <div></div>
       <div class="tabs">
@@ -38,7 +38,7 @@
         </span>
       </div>
       <div style="margin-top: 1rem" class="flex justify-between items-center">
-        <h6>{{ questions[currentIndex]?.question }}</h6>
+        <h6><span v-html="questions[currentIndex]?.question"></span></h6>
         <span v-if="questions[currentIndex]?.ball" class="ball"
           >{{ questions[currentIndex]?.ball }} ball</span
         >
@@ -60,7 +60,7 @@
             @change="selectOption(option)"
           />
           <label :for="index">
-            {{ option.optionLabel }}
+            <span v-html="option.optionLabel"></span>
           </label>
         </div>
       </div>
@@ -118,7 +118,7 @@
         </div>
       </div>
       <div style="margin-top: 1rem" class="flex justify-between items-center">
-        <h6>{{ answers[currentIndex]?.question }}</h6>
+        <h6><span v-html="answers[currentIndex]?.question"></span></h6>
         <span v-if="questions[currentIndex]?.ball" class="ball"
           >{{ questions[currentIndex]?.ball }} ball</span
         >
@@ -139,7 +139,7 @@
                 answers[currentIndex].isChecked,
             }"
           >
-            {{ option.optionLabel }}
+            <span v-html="option.optionLabel"></span>
           </p>
         </div>
       </div>
@@ -211,7 +211,7 @@ export default {
       smallScreen: false,
       subjectService,
       subjectPassword: "",
-      workingDurationTime : 0
+      workingDurationTime: 0,
     };
   },
   computed: {
@@ -276,16 +276,22 @@ export default {
       option["lastSelectNumber"] = timestamp;
       this.countSelectedQuestions();
     },
-     endTest() {
-      setTimeout(async() => {
-          let questions = [...this.questions];
-          questions.forEach((question, index) => {
-            return (question["number"] = index);
+    endTest() {
+      setTimeout(async () => {
+        let questions = [...this.questions];
+        questions.forEach((question, index) => {
+          return (question["number"] = index);
+        });
+        try {
+          let res = await this.checkTests({
+            questions,
+            point: this.subject?.point,
+            workingDurationTime: this.workingDurationTime,
+            subject: this.subject,
           });
-         try{let res = await this.checkTests({ questions, point: this.subject?.point, workingDurationTime : this.workingDurationTime, subject : this.subject });
           this.isEnded = true;
-          this.currentIndex = 0;} 
-          catch(e) {}
+          this.currentIndex = 0;
+        } catch (e) {}
       }, 1000);
     },
     markNumberQuestion() {
@@ -326,14 +332,14 @@ export default {
 
   mounted() {
     setInterval(() => {
-      this.workingDurationTime++
+      this.workingDurationTime++;
     }, 1000);
   },
   async created() {
     this.smallScreen = window.innerWidth < 600;
     let res = (await subjectService.getById(this.$route.params.id)).data;
     this.subject = res;
-    
+
     if (!res.isHasPassword) {
       this.getQuestions(this.$route.params.id, "", "", "", res);
     } else {
