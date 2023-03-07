@@ -133,7 +133,7 @@
           >
             <div class="flex items-center flex-wrap">
               <h6 style="margin-right: 5px">{{ item.number + 1 }}.</h6>
-              <h6>{{ item.question }}</h6>
+              <h6><span v-html="item.question"></span></h6>
             </div>
             <span
               :class="{
@@ -144,7 +144,7 @@
               v-for="(option, i) in item.options"
               :key="i"
             >
-              {{ option.optionLabel }}
+              <span v-html="option.optionLabel"></span>
             </span>
           </div>
         </h6>

@@ -68,7 +68,7 @@
         {{ checkedCount }} / {{ questions.length }}
       </div>
     </div>
-    <div v-else>
+    <div v-else class="ended-template" ref="endedTemplate">
       <!-- <h4>Yakunlandi</h4> -->
       <div class="flex justify-between items-center">
         <span></span>
@@ -192,6 +192,7 @@
   </div>
 </template>
 <script>
+import Swal from "sweetalert2";
 import { mapActions, mapState } from "pinia";
 import { questionStore } from "../../stores/references/questions";
 import { subjectStore } from "../../stores/references/subject";
@@ -329,11 +330,37 @@ export default {
       }
     },
   },
-
+  beforeRouteLeave(to, from, next) {
+    // if(confirm('Agar sahifadan chiqsangiz test yakunlanib ketadi')) {
+    //   next()
+    // }
+    Swal.fire({
+      title:
+        "<span style='font-size : 18px'>Agar sahidan chiqsangiz test yakunlanadi. Davom etasizmi?</span>",
+      showDenyButton: true,
+      // showCancelButton: true,
+      confirmButtonText: "<span>Ha</span>",
+      denyButtonText: `<span>Yo'q</span>`,
+      currentProgressStep : true
+    }).then(async (result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        let res = await this.endTest();
+        Swal.fire({
+          html: "<span>Test yakunlandi. Natijangizni statistika bo'limidan ko'rishingiz mumkin!</span>",
+        });
+        next();
+      } else if (result.isDenied) {
+      }
+    });
+  },
   mounted() {
     setInterval(() => {
       this.workingDurationTime++;
     }, 1000);
+  },
+  beforeUnmount() {
+    alert('before unmount')
   },
   async created() {
     this.smallScreen = window.innerWidth < 600;

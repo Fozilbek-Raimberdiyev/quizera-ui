@@ -1,5 +1,8 @@
 <template>
-  <div class="header items-center" :style="[smallScreen ? '' : 'margin : 0 24px']">
+  <div
+    class="header items-center"
+    :style="[smallScreen ? '' : 'margin : 0 24px']"
+  >
     <div class="flex items-center">
       <div
         style="margin-right: 10px"
@@ -123,7 +126,10 @@
           <i class="bx bx-bar-chart-alt-2"></i>Statistika
         </router-link>
       </div>
-      <div class="flex" v-if="currentUserRole === 'admin' || currentUserRole === 'teacher'">
+      <div
+        class="flex"
+        v-if="currentUserRole === 'admin' || currentUserRole === 'teacher'"
+      >
         <el-dropdown>
           <span
             style="font-size: 18px"
@@ -179,6 +185,30 @@
           class="bi bi-bell"
         ></i>
       </div> -->
+      <el-dropdown trigger="click" style="margin: 0 5px; font-size: 16px">
+        <span class="el-dropdown-link">
+          <flag style="width: 50px;" :iso="this.$i18n.locale"></flag>
+          <span style="margin-left: -13px;" v-if="$i18n.locale==='Uz'">O'zbek</span>
+          <span style="margin-left: -13px;" v-if="$i18n.locale==='Ru'">Rus</span>
+          <span style="margin-left: -13px;" v-if="$i18n.locale==='Gb'">English</span>
+        </span>
+        <template #dropdown>
+          <el-dropdown-menu style="padding: 10px; font-size: 16px">
+            <el-dropdown-item :class="{activeLang : $i18n.locale==='Gb'}" @click="$i18n.locale='Gb'" style="cursor: pointer;">
+              <flag iso="gb"></flag>
+              <span style="margin-left: 5px;">English</span>
+            </el-dropdown-item>
+            <el-dropdown-item :class="{activeLang : $i18n.locale==='Ru'}" @click="$i18n.locale='Ru'" style="cursor: pointer;">
+              <flag iso="ru"></flag>
+              <span style="margin-left: 5px;">Rus</span>
+            </el-dropdown-item>
+            <el-dropdown-item :class="{activeLang : $i18n.locale==='Uz'}" @click="$i18n.locale='Uz'" style="cursor: pointer;">
+              <flag iso="uz"></flag>
+              <span style="margin-left: 5px;">O'zbek</span>
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
       <div
         class="flex"
         v-if="todos.length"
@@ -191,8 +221,8 @@
           class="bi bi-bell"
         ></i>
         </el-badge> -->
-        <a-badge :count="todos.length" style="margin: 0 0.5rem;">
-          <BellOutlined style="margin: 0 0.5rem; font-size: 1.5rem;" />
+        <a-badge :count="todos.length" style="margin: 0 0.5rem">
+          <BellOutlined style="margin: 0 0.5rem; font-size: 1.5rem" />
         </a-badge>
       </div>
       <div class="flex">
@@ -264,10 +294,9 @@
                     </td>
                     <td style="width: 70px" class="text-right">
                       {{
-                        new Date(
-                          new Date(todo.endDate) - new Date()
-                        ).getDate()
-                      }} kun
+                        new Date(new Date(todo.endDate) - new Date()).getDate()
+                      }}
+                      kun
                     </td>
                   </tr>
                 </tbody>
@@ -295,7 +324,7 @@ import {
   SettingOutlined,
   TeamOutlined,
   UserOutlined,
-  BellOutlined
+  BellOutlined,
 } from "@ant-design/icons-vue";
 import { NotificationStore } from "../stores/notifications.store";
 export default {
@@ -311,7 +340,7 @@ export default {
   components: {
     breadCrumbs,
     mobileMenu,
-    BellOutlined
+    BellOutlined,
   },
   computed: {
     ...mapState(userStore, ["user", "currentUserRole"]),
@@ -424,5 +453,8 @@ tr th,
 tr td {
   max-width: 45% !important;
   overflow: auto !important;
+}
+.activeLang {
+  background: #429eef !important;
 }
 </style>

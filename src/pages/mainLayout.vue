@@ -7,22 +7,22 @@
           class="bx bx-bar-chart-alt-2"
           style="font-size: 1.2rem; margin-right: 5px"
         ></i>
-        <span style="font-size: 2rem">Statistika</span>
+        <span style="font-size: 2rem">{{ $t('pages.dashboard.statistics') }}</span>
       </div>
       <div class="bar" :class="[smallScreen ? 'small-screen' : 'big-screen']">
         <div class="teachers shadow-md">
           <i class="bi bi-briefcase"></i>
-          <span>O'qituvchilar soni</span>
+          <span>{{ $t('pages.dashboard.countTeachers') }}</span>
           <p>35</p>
         </div>
         <div class="students">
           <i class="bi bi-mortarboard"></i>
-          <span>O'quvchilar soni</span>
+          <span>{{ $t('pages.dashboard.countStudents') }}</span>
           <p>75</p>
         </div>
         <div class="opentests">
           <i class="bi bi-question-square"></i>
-          <span>Ochiq testlar soni</span>
+          <span>{{ $t('pages.dashboard.countOpenTests') }}</span>
           <p>100</p>
         </div>
       </div>
@@ -31,7 +31,7 @@
       <!-- <hr style="margin: 1rem 0; color: #e3e5e9;"> -->
       <div class="flex items-center justify-center">
         <i style="font-size: 1.2rem; margin-right: 5px" class="bx bx-chart"></i>
-        <span style="font-size: 2rem">Infografika</span>
+        <span style="font-size: 2rem">{{ $t('pages.dashboard.infographics') }}</span>
       </div>
       <div class="flex justify-center">
         <div style="height: 200px">

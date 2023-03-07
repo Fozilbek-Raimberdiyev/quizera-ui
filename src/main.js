@@ -3,6 +3,8 @@ import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
 
+import { i18n } from './plugins/i18n'
+import vueflagicon from "vue-flag-icon"
  import  {resInterceptor, reqinterceptor} from "./services/api.service"
 
 import "boxicons"
@@ -55,6 +57,8 @@ app.use(Toast)
 app.use(reqinterceptor)
 app.use(resInterceptor)
 app.use(naive)
+app.use(i18n)
+app.use(vueflagicon)
 
 // app.use(LoadingPlugin)
 app.use(Quasar, {

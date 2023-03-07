@@ -30,6 +30,7 @@ const routes = [
       {
         path: "/management",
         name: "Management",
+        redirect : {path : "/management/users"},
         component: {
           render() {
             return h(resolveComponent("router-view"));

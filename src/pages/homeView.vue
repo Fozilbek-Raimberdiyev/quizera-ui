@@ -21,33 +21,37 @@
       <a-menu theme="dark" mode="inline">
         <a-sub-menu v-if="currentUserRole == 'admin'" key="sub1">
           <template #title>
-            <span v-if="!smallScreen"><i class="bx bx-cog"></i>Boshqarish</span>
+            <span v-if="!smallScreen"
+              ><i class="bx bx-cog"></i>{{ $t("sidebar.control") }}</span
+            >
             <!-- <span v-else><i class="bi bi-sliders"></i></span> -->
           </template>
           <a-menu-item key="3"
             ><router-link to="/management/users"
-              ><i class="bx bx-user"></i>Foydalanuvchilar</router-link
+              ><i class="bx bx-user"></i>{{ $t("sidebar.users") }}</router-link
             ></a-menu-item
           >
           <a-menu-item key="4"
             ><router-link to="/management/roles"
-              ><i class="bx bx-group"></i>Rollar</router-link
+              ><i class="bx bx-group"></i>{{ $t("sidebar.roles") }}</router-link
             ></a-menu-item
           >
           <a-menu-item key="5"
             ><router-link to="/management/permissions"
-              ><i class="bx bxs-key"></i>Ruxsatlar</router-link
+              ><i class="bx bxs-key"></i
+              >{{ $t("sidebar.permissions") }}</router-link
             ></a-menu-item
           >
         </a-sub-menu>
         <a-menu-item key="2">
           <router-link v-if="!smallScreen" to="/quiz"
-            ><i class="bx bxs-flag-checkered"></i>Test ishlash</router-link
-          >
+            ><i class="bx bxs-flag-checkered"></i>
+            {{ $t("sidebar.workingTest") }}
+          </router-link>
         </a-menu-item>
         <a-menu-item key="16" v-if="currentUserRole === 'admin'">
           <router-link v-if="!smallScreen" to="/posts"
-            ><i class="bx bx-news"></i>Maqolalar</router-link
+            ><i class="bx bx-news"></i>{{ $t("sidebar.posts") }}</router-link
           >
           <!-- <router-link v-else to="/posts"
             ><i class="bx bx-news"></i
@@ -56,49 +60,51 @@
 
         <a-menu-item key="9" v-if="currentUserRole === 'admin'">
           <router-link v-if="!smallScreen" to="/movies"
-            ><i class="bx bx-movie"></i>Kinolar</router-link
-          >
+            ><i class="bx bx-movie"></i> {{ $t("sidebar.movies") }}
+          </router-link>
           <!-- <router-link v-else to="/movies"
             ><i class="bi bi-film"></i></router-link> -->
         </a-menu-item>
         <a-menu-item key="14">
           <router-link v-if="!smallScreen" to="/todos"
-            ><i class="bx bx-task"></i>Eslatmalar</router-link
+            ><i class="bx bx-task"></i>{{ $t("sidebar.todos") }}</router-link
           >
           <!-- <router-link v-else to="/todos"
             ><i class="bi bi-check2-square"></i
           ></router-link> -->
         </a-menu-item>
         <a-menu-item key="15">
-        <router-link
-          to="/statistic"
-        >
-        <i class='bx bx-bar-chart-alt-2'></i>Statistika
-        </router-link>
-      </a-menu-item>
+          <router-link to="/statistic">
+            <i class="bx bx-bar-chart-alt-2"></i>{{ $t("sidebar.statistics") }}
+          </router-link>
+        </a-menu-item>
         <a-sub-menu
           key="sub2"
           v-if="currentUserRole === 'teacher' || currentUserRole === 'admin'"
         >
           <template #title>
             <span v-if="!smallScreen"
-              ><i class="bx bx-building"></i>Ma'lumotnomalar</span
+              ><i class="bx bx-building"></i
+              >{{ $t("sidebar.references") }}</span
             >
             <!-- <span v-else><i class="bx bx-building"></i></span> -->
           </template>
           <a-menu-item key="10">
             <router-link to="/references/quiz"
-              ><i class="bx bx-question-mark"></i>Savollar</router-link
+              ><i class="bx bx-question-mark"></i
+              >{{ $t("sidebar.questions") }}</router-link
             ></a-menu-item
           >
           <a-menu-item key="11"
             ><router-link to="/references/subject"
-              ><i class="bx bx-folder-plus"></i>Fanlar</router-link
+              ><i class="bx bx-folder-plus"></i
+              >{{ $t("sidebar.subjects") }}</router-link
             ></a-menu-item
           >
           <a-menu-item key="12"
             ><router-link to="/references/subject"
-              ><i class="bi bi-people"></i>Guruhlar</router-link
+              ><i class="bi bi-people"></i
+              >{{ $t("sidebar.groups") }}</router-link
             ></a-menu-item
           >
           <!-- <a-menu-item key="12"
@@ -113,7 +119,10 @@
         smallScreen || fullScreen || bigScreen ? 'small-screen' : 'big-screen',
       ]"
     >
-      <a-layout-header :class="[bigScreen  ? 'big-header' : 'small-header']" style="background: #fff;">
+      <a-layout-header
+        :class="[bigScreen ? 'big-header' : 'small-header']"
+        style="background: #fff"
+      >
         <header-menu
           @getFullscreen="getFullscreen"
           @getBigscreen="getBigscreen"
@@ -123,8 +132,12 @@
       </a-layout-header>
       <a-layout-content :style="[smallScreen ? 'margin: 5px' : 'margin: 16px']">
         <div
-          style="background: #fff;"
-          :style="[smallScreen ? `min-height : 450px; padding:15px;` : `min-height : 600px; padding: 24px;`]"
+          style="background: #fff"
+          :style="[
+            smallScreen
+              ? `min-height : 450px; padding:15px;`
+              : `min-height : 600px; padding: 24px;`,
+          ]"
         >
           <!-- <router-view></router-view> -->
           <div v-show="!loading">
@@ -165,7 +178,7 @@ import headerMenu from "../components/header.vue";
 import { subject } from "@casl/ability";
 import { userStore } from "../stores/management/user.store";
 import { CopyrightCircleOutlined } from "@ant-design/icons-vue";
-import { NotificationStore } from '../stores/notifications.store';
+import { NotificationStore } from "../stores/notifications.store";
 export default {
   components: {
     Sidebar,
@@ -226,7 +239,7 @@ export default {
   mounted() {
     window.addEventListener("resize", this.checkScreenSize());
     this.checkScreenSize();
-    this.getNotifications()
+    this.getNotifications();
   },
   beforeDestroy() {
     window.removeEventListener("resize", this.checkScreenSize());
