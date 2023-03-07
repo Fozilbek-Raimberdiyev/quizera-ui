@@ -162,8 +162,8 @@
                 </router-link>
               </el-dropdown-item>
               <el-dropdown-item
-                @click="currentIndex = 11"
-                :class="{ active: currentIndex === 11 }"
+                @click="currentIndex = 12"
+                :class="{ active: currentIndex === 12 }"
               >
                 <router-link to="/references">
                   <i class="bi bi-people"></i>Guruhlar

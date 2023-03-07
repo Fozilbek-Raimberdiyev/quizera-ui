@@ -101,7 +101,7 @@
               >{{ $t("sidebar.subjects") }}</router-link
             ></a-menu-item
           >
-          <a-menu-item key="12"
+          <a-menu-item key="17"
             ><router-link to="/references/subject"
               ><i class="bi bi-people"></i
               >{{ $t("sidebar.groups") }}</router-link

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div ref="wrapper">
     <label style="text-align: right">
       <el-input
         style="width: 80%; margin-right: 5px"
@@ -20,6 +20,7 @@
           <a-row
             :gutter="[8, 48]"
             class="movie"
+            ref="movies"
             v-for="movie in list"
             :key="movie?.id"
           >
@@ -93,6 +94,7 @@ import { movieStore } from "../../stores/movie.store";
 import { loadingStore } from "../../stores/loading.store";
 import FadeLoader from "vue-spinner/src/FadeLoader.vue";
 export default {
+  name: "Movies",
   data() {
     return {
       Search,
@@ -137,6 +139,24 @@ export default {
       this.page = v;
       this.getPage(v);
     },
+  },
+  mounted() {
+    this.$nextTick(() => {
+      console.log(this.$refs);
+      let ref = {...this.$refs};
+      console.log(ref)
+    });
+    let observer = new IntersectionObserver(
+      (entries, observer) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            console.log(entry);
+            observer.unobserve(entry);
+          }
+        });
+      },
+      { threshold: 1 }
+    );
   },
   created() {
     this.getList();
