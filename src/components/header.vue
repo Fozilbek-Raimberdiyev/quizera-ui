@@ -393,8 +393,6 @@ export default {
   align-items: center;
   justify-content: space-between;
   height: 100%;
-  // background: inherit;
-  // color: #fff;
 }
 .big-screen-size {
   font-size: 18px;

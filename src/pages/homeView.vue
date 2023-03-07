@@ -132,12 +132,8 @@
       </a-layout-header>
       <a-layout-content :style="[smallScreen ? 'margin: 5px' : 'margin: 16px']">
         <div
-          style="background: #fff"
-          :style="[
-            smallScreen
-              ? `min-height : 450px; padding:15px;`
-              : `min-height : 600px; padding: 24px;`,
-          ]"
+          style="background: #fff; min-height: 550px;"
+          :style="[smallScreen ? `padding:15px;` : `padding: 24px;`]"
         >
           <!-- <router-view></router-view> -->
           <div v-show="!loading">
