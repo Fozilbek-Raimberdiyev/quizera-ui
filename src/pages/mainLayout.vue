@@ -1,28 +1,34 @@
 <template>
   <div class="">
     <!-- <hr style="margin-bottom: 1rem; color: #e3e5e9;"> -->
+    <form @submit.prevent="sendFile" action="/profile" method="post" enctype="multipart/form-data">
+      <input type="file" name="file" />
+      <el-button native-type="submit" type="primary">Send</el-button>
+    </form>
     <div style="margin: 1rem 0">
       <div class="text-center">
         <i
           class="bx bx-bar-chart-alt-2"
           style="font-size: 1.2rem; margin-right: 5px"
         ></i>
-        <span style="font-size: 2rem">{{ $t('pages.dashboard.statistics') }}</span>
+        <span style="font-size: 2rem">{{
+          $t("pages.dashboard.statistics")
+        }}</span>
       </div>
       <div class="bar" :class="[smallScreen ? 'small-screen' : 'big-screen']">
         <div class="teachers shadow-md">
           <i class="bi bi-briefcase"></i>
-          <span>{{ $t('pages.dashboard.countTeachers') }}</span>
+          <span>{{ $t("pages.dashboard.countTeachers") }}</span>
           <p>35</p>
         </div>
         <div class="students">
           <i class="bi bi-mortarboard"></i>
-          <span>{{ $t('pages.dashboard.countStudents') }}</span>
+          <span>{{ $t("pages.dashboard.countStudents") }}</span>
           <p>75</p>
         </div>
         <div class="opentests">
           <i class="bi bi-question-square"></i>
-          <span>{{ $t('pages.dashboard.countOpenTests') }}</span>
+          <span>{{ $t("pages.dashboard.countOpenTests") }}</span>
           <p>100</p>
         </div>
       </div>
@@ -31,7 +37,9 @@
       <!-- <hr style="margin: 1rem 0; color: #e3e5e9;"> -->
       <div class="flex items-center justify-center">
         <i style="font-size: 1.2rem; margin-right: 5px" class="bx bx-chart"></i>
-        <span style="font-size: 2rem">{{ $t('pages.dashboard.infographics') }}</span>
+        <span style="font-size: 2rem">{{
+          $t("pages.dashboard.infographics")
+        }}</span>
       </div>
       <div class="flex justify-center">
         <div style="height: 200px">
@@ -42,6 +50,7 @@
   </div>
 </template>
 <script>
+import axios from 'axios';
 import BarChart from "../components/charts/BarChart.vue";
 export default {
   components: {
@@ -49,12 +58,23 @@ export default {
   },
   data() {
     return {
-      smallScreen : false,
+      smallScreen: false,
+    };
+  },
+  methods : {
+   async sendFile(e) {
+      console.log(e.srcElement[0].files[0])
+      let audio = e.srcElement[0].files[0]
+      let formData = new FormData()
+      formData.append("audio",audio, audio.name );
+      let res =await axios.post("http://localhost:5000/api/upload",formData, {headers : {
+        "Content-Type" : "multipart/form-data"
+      }})
     }
   },
   mounted() {
     this.smallScreen = window.innerWidth < 600;
-  }
+  },
 };
 </script>
 <style scoped>

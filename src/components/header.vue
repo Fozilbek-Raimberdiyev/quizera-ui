@@ -187,24 +187,42 @@
       </div> -->
       <el-dropdown trigger="click" style="margin: 0 5px; font-size: 16px">
         <span class="el-dropdown-link">
-          <flag style="width: 50px;" :iso="this.$i18n.locale"></flag>
-          <span style="margin-left: -13px;" v-if="$i18n.locale==='Uz'">O'zbek</span>
-          <span style="margin-left: -13px;" v-if="$i18n.locale==='Ru'">Rus</span>
-          <span style="margin-left: -13px;" v-if="$i18n.locale==='Gb'">English</span>
+          <flag style="width: 50px" :iso="this.$i18n.locale"></flag>
+          <span style="margin-left: -13px" v-if="$i18n.locale === 'Uz'"
+            >O'zbek</span
+          >
+          <span style="margin-left: -13px" v-if="$i18n.locale === 'Ru'"
+            >Rus</span
+          >
+          <span style="margin-left: -13px" v-if="$i18n.locale === 'Gb'"
+            >English</span
+          >
         </span>
         <template #dropdown>
           <el-dropdown-menu style="padding: 10px; font-size: 16px">
-            <el-dropdown-item :class="{activeLang : $i18n.locale==='Gb'}" @click="$i18n.locale='Gb'" style="cursor: pointer;">
+            <el-dropdown-item
+              :class="{ activeLang: $i18n.locale === 'Gb' }"
+              @click="$i18n.locale = 'Gb'"
+              style="cursor: pointer"
+            >
               <flag iso="gb"></flag>
-              <span style="margin-left: 5px;">English</span>
+              <span style="margin-left: 5px">English</span>
             </el-dropdown-item>
-            <el-dropdown-item :class="{activeLang : $i18n.locale==='Ru'}" @click="$i18n.locale='Ru'" style="cursor: pointer;">
+            <el-dropdown-item
+              :class="{ activeLang: $i18n.locale === 'Ru' }"
+              @click="$i18n.locale = 'Ru'"
+              style="cursor: pointer"
+            >
               <flag iso="ru"></flag>
-              <span style="margin-left: 5px;">Rus</span>
+              <span style="margin-left: 5px">Rus</span>
             </el-dropdown-item>
-            <el-dropdown-item :class="{activeLang : $i18n.locale==='Uz'}" @click="$i18n.locale='Uz'" style="cursor: pointer;">
+            <el-dropdown-item
+              :class="{ activeLang: $i18n.locale === 'Uz' }"
+              @click="$i18n.locale = 'Uz'"
+              style="cursor: pointer"
+            >
               <flag iso="uz"></flag>
-              <span style="margin-left: 5px;">O'zbek</span>
+              <span style="margin-left: 5px">O'zbek</span>
             </el-dropdown-item>
           </el-dropdown-menu>
         </template>
@@ -228,7 +246,11 @@
       <div class="flex">
         <el-dropdown placement="bottom-start" trigger="click">
           <el-button class="cursor-pointer" style="padding: 10px 0" type="info">
-            <i class="bx bx-user"></i>
+            <!-- <i class="bx bx-user"></i> -->
+            <img
+              :src="`https://fozil.onrender.com/${user.pathImage}`"
+              alt="image"
+            />
             <span style="margin-left: 5px">{{
               user?.firstName + " " + user?.lastName
             }}</span>
