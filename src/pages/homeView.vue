@@ -270,8 +270,13 @@ i {
 .small-header {
   margin: 0;
 }
+.ant-layout-header {
+  height: 64px !important;
+  padding: 10px 0;
+}
 
 .ant-layout-header.small-header {
-  padding: 0 20px !important;
+  padding: 5px 20px !important;
+  max-height: 45px !important;
 }
 </style>

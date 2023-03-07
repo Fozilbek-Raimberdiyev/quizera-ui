@@ -5,77 +5,22 @@
         type="primary"
         class="cursor-pointer"
         @click="$router.push('/management/users/add')"
-        >Add user</el-button
+        >{{ $t('pages.management.addUser') }}</el-button
       >
       <!-- {{ $ability }} -->
     </div>
-    <!-- <div v-if="users.length">
-      <table class="responsive-table striped">
-        <thead>
-          <th>№</th>
-          <th>First name</th>
-          <th>Last name</th>
-          <th>Role</th>
-          <th>Actions</th>
-        </thead>
-        <tbody>
-          <tr v-for="(user, index) in users" :key="index">
-            <td>{{ index + 1 }}</td>
-            <td>{{ user.firstName }}</td>
-            <td>{{ user.lastName }}</td>
-            <td>{{ user.role }}</td>
-            <td>
-              <div>
-                <el-button
-                  type="text"
-                  style="cursor: pointer"
-                  ><i class="bx bxs-edit"></i
-                ></el-button>
-                <el-button
-                  style="cursor: pointer"
-                  @click="dialogVisible = true"
-                  type="text"
-                  ><i class="bi bi-trash"></i
-                ></el-button>
-                <el-dialog
-                  v-model="dialogVisible"
-                  title="Tips"
-                  width="30%"
-                  :before-close="handleClose"
-                >
-                  <span>Do you want delete this user?</span>
-                  <template #footer>
-                    <span class="dialog-footer">
-                      <el-button
-                        @click="dialogVisible = false"
-                        >Cancel</el-button
-                      >
-                      <el-button
-                        type="primary"
-                      >
-                        Confirm
-                      </el-button>
-                    </span>
-                  </template>
-                </el-dialog>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div> -->
     <div class="q-pa-md" style="padding: 0">
       <q-markup-table :flat="smallScreen ? true : false" v-if="users.length">
         <thead>
           <tr>
             <th class="text-left">#</th>
-            <th class="text-right">Ismi</th>
-            <th class="text-right">Familiyasi</th>
-            <th class="text-right">Telefon raqami</th>
-            <th class="text-right">Email</th>
-            <th class="text-right">Roli</th>
-            <th class="text-right">Ro'yhatdan o'tgan sanasi</th>
-            <th class="text-right">Harakatlar</th>
+            <th class="text-right">{{ $t('pages.management.name') }}</th>
+            <th class="text-right">{{ $t('pages.management.lastName') }}</th>
+            <th class="text-right">{{ $t('pages.management.phoneNumber') }}</th>
+            <th class="text-right">{{ $t('pages.management.email') }}</th>
+            <th class="text-right">{{ $t('pages.management.role') }}</th>
+            <th class="text-right">{{ $t('pages.management.registerDate') }}</th>
+            <th class="text-right">{{ $t('sidebar.actions') }}</th>
           </tr>
         </thead>
         <tbody v-for="(user, index) in users" :key="index">
@@ -139,11 +84,11 @@ export default {
     dateParser,
      open(id) {
   ElMessageBox.confirm(
-    'Ushbu foydalanuvchini haqiqatdan o\'chirmoqchimisiz?',
-    'Ogohlantirish',
+    this.$t('pages.management.confirmDelete'),
+    this.$t('pages.management.warning'),
     {
-      confirmButtonText: 'Davom etish',
-      cancelButtonText: 'Bekor qilish',
+      confirmButtonText: this.$t('sidebar.yes'),
+      cancelButtonText: this.$t('sidebar.no'),
       type: 'warning',
     }
   )
@@ -152,7 +97,7 @@ export default {
     this.getAllUsers()
     })
     .catch(() => {
-      useToast().info("Bekor qilindi")
+      useToast().info(this.$t('sidebar.cancelled'))
     })
 }
   },

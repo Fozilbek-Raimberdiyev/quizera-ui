@@ -16,12 +16,13 @@ export default {
       editDatas: "Edit data",
       logout: "Logout",
       back: "Back",
-      actions: "Axtions",
+      actions: "Actions",
       login : "Login",
       yes : "Yes",
       no : "No",
       create : "Create",
-      pickEndDate : "Pick end date"
+      pickEndDate : "Pick end date",
+      cancelled : "Cancelled"
     },
     validations : {
       enterOptions : "An option is required",
@@ -78,6 +79,8 @@ export default {
         email: "Email",
         role: "Role",
         registerDate: "Date of registration",
+        warning : "Ogohlantirish",
+        confirmDelete : "Ushbu foydalanuvchini haqiqatdan o'chirmoqchimisiz?"
       },
       quiz: {
         tests: "Test trials",

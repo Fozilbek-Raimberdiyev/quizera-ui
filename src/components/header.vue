@@ -16,7 +16,7 @@
         ></i>
         <el-drawer
           style="background: #001529"
-          :size="smallScreen ? '75%' : '25%'"
+          :size="smallScreen ? '80%' : '25%'"
           :show-close="false"
           direction="ltr"
           v-model="isshow"
@@ -174,7 +174,7 @@
         </el-dropdown>
       </div>
     </div>
-    <div class="flex items-center">
+    <div class="flex items-center justify-between">
       <!-- <div
         class="notifications flex items-start"
         v-if="list"
@@ -227,7 +227,7 @@
       </div>
       <div class="flex">
         <el-dropdown placement="bottom-start" trigger="click">
-          <el-button class="cursor-pointer" style="padding: 10px" type="info">
+          <el-button class="cursor-pointer" style="padding: 10px 0" type="info">
             <i class="bx bx-user"></i>
             <span style="margin-left: 5px">{{
               user?.firstName + " " + user?.lastName
@@ -392,6 +392,8 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  height: 100%;
+  // background: inherit;
   // color: #fff;
 }
 .big-screen-size {
@@ -427,23 +429,6 @@ i {
 .notifications {
   cursor: pointer;
 }
-// table,
-// table thead,
-// table tr,
-// table tbody,
-// table td,
-// table th {
-//   margin: 0 !important;
-//   padding: 0 !important;
-//   line-height: 15px !important;
-//   max-height: 100px !important;
-//   border: 1px solid #e3e5e9;
-//   padding: 5px 15px !important;
-//   border-radius: 10px !important;
-//   border-collapse: collapse !important;
-//   font-style: italic;
-//   margin: 5px 0 !important;
-// }
 table {
   background: teal !important;
   box-shadow: none;

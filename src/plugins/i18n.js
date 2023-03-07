@@ -4,10 +4,10 @@ import ru from "./languages/ru";
 import en from "./languages/en";
 export const i18n = createI18n({
   locale: "Uz",
-  fallbackLocale: "Ru",
+  fallbackLocale: "Uz",
   messages: {
     Uz: uz,
     Ru: ru,
-    En: en,
+    Gb: en,
   },
 });
