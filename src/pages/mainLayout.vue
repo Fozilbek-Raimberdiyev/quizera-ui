@@ -1,10 +1,6 @@
 <template>
   <div class="">
     <!-- <hr style="margin-bottom: 1rem; color: #e3e5e9;"> -->
-    <form @submit.prevent="sendFile" action="/profile" method="post" enctype="multipart/form-data">
-      <input type="file" name="file" />
-      <el-button native-type="submit" type="primary">Send</el-button>
-    </form>
     <div style="margin: 1rem 0">
       <div class="text-center">
         <i
@@ -50,7 +46,7 @@
   </div>
 </template>
 <script>
-import axios from 'axios';
+import axios from "axios";
 import BarChart from "../components/charts/BarChart.vue";
 export default {
   components: {
@@ -61,16 +57,17 @@ export default {
       smallScreen: false,
     };
   },
-  methods : {
-   async sendFile(e) {
-      console.log(e.srcElement[0].files[0])
-      let audio = e.srcElement[0].files[0]
-      let formData = new FormData()
-      formData.append("audio",audio, audio.name );
-      let res =await axios.post("http://localhost:5000/api/upload",formData, {headers : {
-        "Content-Type" : "multipart/form-data"
-      }})
-    }
+  methods: {
+    async sendFile(e) {
+      let audio = e.srcElement[0].files[0];
+      let formData = new FormData();
+      formData.append("audio", audio, audio.name);
+      let res = await axios.post("http://localhost:5000/api/upload", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+    },
   },
   mounted() {
     this.smallScreen = window.innerWidth < 600;

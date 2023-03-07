@@ -3,6 +3,7 @@
     class="header items-center"
     :style="[smallScreen ? '' : 'margin : 0 24px']"
   >
+  <pre>{{ user }}</pre>
     <div class="flex items-center">
       <div
         style="margin-right: 10px"
