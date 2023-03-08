@@ -248,7 +248,7 @@
           <el-button class="cursor-pointer" style="padding: 10px 0" type="info">
             <!-- <i class="bx bx-user"></i> -->
             <img
-              style="width: 64px; object-fit: cover"
+              style="width: 55px; object-fit: contain; border-radius: 10%; height: 100%;"
               :src="user.pathImage"
               alt="image"
             />

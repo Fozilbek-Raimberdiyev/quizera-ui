@@ -55,6 +55,10 @@ export const userStore = defineStore("userStore", {
     },
     getByEmail() {
       return 
+    },
+    async updateUser(body) {
+      let res = await auth.updateUser(body);
+      this.user = res.data.user
     }
   },
 });

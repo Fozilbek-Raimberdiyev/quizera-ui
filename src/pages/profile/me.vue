@@ -6,14 +6,12 @@
       class="flex justify-between items-center"
     >
       <div>
-        <!-- <label for="file">Rasm yuklang</label>
-        <input style="display: block" type="file" placeholder="Select file" /> -->
-
-        <input @change="change" alt="profile image" type="file" id="image-input" /><img
-          v-if="!clickedUpload"
-          src="http://localhost:3000/public/uploads/images.jfif"
-          alt=""
-        />
+        <input
+          @change="change"
+          alt="profile image"
+          type="file"
+          id="image-input"
+        /><img v-if="!clickedUpload" :src="user.pathImage" />
         <div ref="imagePreview" id="image-preview"></div>
       </div>
       <div>
@@ -51,7 +49,7 @@
   </div>
 </template>
 <script>
-import { mapState } from "pinia";
+import { mapActions, mapState } from "pinia";
 import { userStore } from "../../stores/management/user.store";
 import { url } from "@vuelidate/validators";
 import auth from "../../services/auth";
@@ -74,6 +72,7 @@ export default {
     ...mapState(userStore, ["user"]),
   },
   methods: {
+    ...mapActions(userStore, ["updateUser"]),
     getDatas() {
       let user = { ...this.user };
       (this.form.firstName = user.firstName),
@@ -88,12 +87,12 @@ export default {
       let formData = new FormData();
       for (let key in form) {
         if (key === "file") {
-          formData.append("file", e.srcElement[6].files[0]);
+          formData.append("file", e.srcElement[0].files[0]);
         } else {
           formData.append(key, form[key]);
         }
       }
-      let res = await auth.updateUser(formData);
+      this.updateUser(formData);
     },
     change(e) {
       this.clickedUpload = true;
