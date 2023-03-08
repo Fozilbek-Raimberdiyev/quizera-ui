@@ -79,7 +79,8 @@ export default {
       (this.form.firstName = user.firstName),
         (this.form.lastName = user.lastName),
         (this.form.birdthData = user.birdthData),
-        (this.form.email = user.email);
+        (this.form.phoneNumber = user.phoneNumber);
+      this.form.email = user.email;
       this.form.role = user.role;
       this.form._id = user._id;
     },
@@ -91,13 +92,19 @@ export default {
         if (key === "file") {
           if (
             (file.type === "image/png" ||
-            file.type === "image/jpeg" ||
-            file.type === "image/jpg") && (file.size / 1048576 <= 5)
+              file.type === "image/jpeg" ||
+              file.type === "image/jpg") &&
+            file.size / 1048576 <= 5
           ) {
             formData.append("file", e.srcElement[0].files[0]);
           } else {
-            ElNotification({ message: "Ruxsat etilmagan fayl turi tanlandi yoki 5mb dan katta fayl hajmi. Tanlangan fayl hajmi "+file.size/1048576 + "mb" });
-            form.pathImage = this.user.pathImage
+            ElNotification({
+              message:
+                "Ruxsat etilmagan fayl turi tanlandi yoki 5mb dan katta fayl hajmi. Tanlangan fayl hajmi " +
+                file.size / 1048576 +
+                "mb",
+            });
+            form.pathImage = this.user.pathImage;
           }
         } else {
           formData.append(key, form[key]);
