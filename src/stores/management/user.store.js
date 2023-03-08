@@ -58,7 +58,8 @@ export const userStore = defineStore("userStore", {
     },
     async updateUser(body) {
       let res = await auth.updateUser(body);
-      this.user = res.data.user
+      localStorage.setItem("user", JSON.stringify(res.data.user));
+      this.user = res.data.user;
     }
   },
 });
