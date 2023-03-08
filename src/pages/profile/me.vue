@@ -102,8 +102,11 @@ export default {
       reader.addEventListener("load", () => {
         const image = new Image();
         image.src = reader.result;
-        image.style.width = "200px";
-        image.style.height = "130px";
+        image.style.width = "200px"
+        image.style.height = "200px"
+        image.style.borderRadius = "50%"
+        image.style.objectFit = "cover"
+        image.style.margin = "20px 0"
         preview.innerHTML = "";
         preview.appendChild(image);
       });
@@ -129,7 +132,7 @@ button {
 form {
   width: 400px;
 }
-
+/* 
 #image-preview {
   max-width: 100px;
   max-height: 100px;
@@ -139,5 +142,12 @@ form {
 #image-preview img {
   max-width: 100%;
   max-height: 100%;
+} */
+img {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 20px 0;
 }
 </style>

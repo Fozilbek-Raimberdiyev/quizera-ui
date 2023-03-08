@@ -121,7 +121,7 @@
     >
       <a-layout-header
         :class="[bigScreen ? 'big-header' : 'small-header']"
-        style="background: #fff"
+        style="background: #fff;"
       >
         <header-menu
           @getFullscreen="getFullscreen"

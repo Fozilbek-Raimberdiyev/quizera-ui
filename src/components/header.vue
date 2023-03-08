@@ -243,19 +243,27 @@
           <BellOutlined style="margin: 0 0.5rem; font-size: 1.5rem" />
         </a-badge>
       </div>
-      <div class="flex">
+      <div class="flex items-center">
+        <img v-if="user.pathImage"
+          style="
+            width: 35px;
+            object-fit: cover;
+            border-radius: 50%;
+            height: 35px;
+          "
+          :src="user.pathImage"
+          alt="img"
+        />
+        <i v-else class='bx bxs-user-circle'></i>
         <el-dropdown placement="bottom-start" trigger="click">
-          <el-button class="cursor-pointer" style="padding: 10px 0" type="info">
-            <!-- <i class="bx bx-user"></i> -->
-            <img
-              style="width: 55px; object-fit: contain; border-radius: 10%; height: 100%;"
-              :src="user.pathImage"
-              alt="image"
-            />
+          <!-- <el-button class="cursor-pointer" style="padding: 10px 0" type="info">
             <span style="margin-left: 5px">{{
               user?.firstName + " " + user?.lastName
             }}</span>
-          </el-button>
+          </el-button> -->
+          <span style="margin-left: 5px">{{
+            user?.firstName + " " + user?.lastName
+          }}</span>
           <template #dropdown>
             <el-dropdown-menu>
               <el-dropdown-item
