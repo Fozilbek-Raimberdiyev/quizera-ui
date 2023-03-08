@@ -1,6 +1,21 @@
 <template>
   <div>
-    <form @submit.prevent="submit" class="flex justify-between items-center">
+    <form
+      @submit.prevent="submit"
+      style="display: flex !important"
+      class="flex justify-between items-center"
+    >
+      <div>
+        <!-- <label for="file">Rasm yuklang</label>
+        <input style="display: block" type="file" placeholder="Select file" /> -->
+
+        <input @change="change" alt="profile image" type="file" id="image-input" /><img
+          v-if="!clickedUpload"
+          src="http://localhost:3000/public/uploads/images.jfif"
+          alt=""
+        />
+        <div ref="imagePreview" id="image-preview"></div>
+      </div>
       <div>
         <label class="block font-extrabold">First name</label>
         <el-input
@@ -32,10 +47,6 @@
           >Save changes</el-button
         >
       </div>
-      <div>
-        <label for="file">Rasm yuklang</label>
-        <input style="display: block;" type="file" placeholder="Select file" />
-      </div>
     </form>
   </div>
 </template>
@@ -46,6 +57,7 @@ import { url } from "@vuelidate/validators";
 import auth from "../../services/auth";
 export default {
   data: () => ({
+    clickedUpload: false,
     form: {
       firstName: "",
       lastName: "",
@@ -55,6 +67,7 @@ export default {
       role: "",
       file: url,
       _id: "",
+      pathImage: null,
     },
   }),
   computed: {
@@ -68,7 +81,7 @@ export default {
         (this.form.birdthData = user.birdthData),
         (this.form.email = user.email);
       this.form.role = user.role;
-      this.form._id = user._id
+      this.form._id = user._id;
     },
     async submit(e) {
       let form = { ...this.form };
@@ -81,6 +94,24 @@ export default {
         }
       }
       let res = await auth.updateUser(formData);
+    },
+    change(e) {
+      this.clickedUpload = true;
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      const preview = this.$refs.imagePreview;
+      reader.addEventListener("load", () => {
+        const image = new Image();
+        image.src = reader.result;
+        image.style.width = "200px";
+        image.style.height = "130px";
+        preview.innerHTML = "";
+        preview.appendChild(image);
+      });
+
+      if (file) {
+        reader.readAsDataURL(file);
+      }
     },
   },
   mounted() {
@@ -98,5 +129,16 @@ button {
 
 form {
   width: 400px;
+}
+
+#image-preview {
+  max-width: 100px;
+  max-height: 100px;
+  margin: 20px auto;
+  object-fit: cover;
+}
+#image-preview img {
+  max-width: 100%;
+  max-height: 100%;
 }
 </style>

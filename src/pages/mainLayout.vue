@@ -1,8 +1,6 @@
 <template>
   <div class="">
     <!-- <hr style="margin-bottom: 1rem; color: #e3e5e9;"> -->
-    <pre>{{ user.pathImage }}</pre>
-    <img :src="user.pathImage" alt="user image" />
     <div style="margin: 1rem 0">
       <div class="text-center">
         <i

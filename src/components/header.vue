@@ -247,7 +247,11 @@
         <el-dropdown placement="bottom-start" trigger="click">
           <el-button class="cursor-pointer" style="padding: 10px 0" type="info">
             <!-- <i class="bx bx-user"></i> -->
-            <!-- <img :src="`http://localhost:3000/${user.pathImage}`" alt="image" /> -->
+            <img
+              style="width: 64px; object-fit: cover"
+              :src="user.pathImage"
+              alt="image"
+            />
             <span style="margin-left: 5px">{{
               user?.firstName + " " + user?.lastName
             }}</span>
