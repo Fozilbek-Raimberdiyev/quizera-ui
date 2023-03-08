@@ -188,13 +188,13 @@
       <el-dropdown trigger="click" style="margin: 0 5px; font-size: 16px">
         <span class="el-dropdown-link">
           <flag style="width: 50px" :iso="this.$i18n.locale"></flag>
-          <span style="margin-left: -13px" v-if="$i18n.locale === 'Uz'"
+          <span style="margin-left: -13px" v-if="$i18n.locale === 'Uz' && !smallScreen"
             >O'zbek</span
           >
-          <span style="margin-left: -13px" v-if="$i18n.locale === 'Ru'"
+          <span style="margin-left: -13px" v-if="$i18n.locale === 'Ru' && !smallScreen"
             >Rus</span
           >
-          <span style="margin-left: -13px" v-if="$i18n.locale === 'Gb'"
+          <span style="margin-left: -13px" v-if="$i18n.locale === 'Gb' && !smallScreen"
             >English</span
           >
         </span>
@@ -252,7 +252,7 @@
             height: 35px;
           "
           :src="user.pathImage"
-          alt="img"
+          alt="img" 
         />
         <i v-else class='bx bxs-user-circle'></i>
         <el-dropdown placement="bottom-start" trigger="click">

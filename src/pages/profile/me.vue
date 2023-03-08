@@ -87,7 +87,6 @@ export default {
       let form = { ...this.form };
       let formData = new FormData();
       let file = e.srcElement[0].files[0];
-      console.log(file);
       for (let key in form) {
         if (key === "file") {
           if (
@@ -97,12 +96,14 @@ export default {
           ) {
             formData.append("file", e.srcElement[0].files[0]);
           } else {
-            ElNotification({ message: "Ruxsat etilmagan fayl turi tanlandi "+file.size/1048576 + "mb" });
+            ElNotification({ message: "Ruxsat etilmagan fayl turi tanlandi yoki 5mb dan katta fayl hajmi. Tanlangan fayl hajmi "+file.size/1048576 + "mb" });
+            form.pathImage = this.user.pathImage
           }
         } else {
           formData.append(key, form[key]);
         }
       }
+      console.log(formData)
       // this.updateUser(formData);
     },
     change(e) {
