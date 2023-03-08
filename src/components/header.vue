@@ -366,6 +366,7 @@ export default {
       currentIndex: "",
       bigScreen: false,
       drawer: false,
+      smallScreen : false
     };
   },
   components: {
@@ -386,10 +387,6 @@ export default {
   },
   props: {
     isOpen: {
-      type: Boolean,
-      default: false,
-    },
-    smallScreen: {
       type: Boolean,
       default: false,
     },
@@ -415,6 +412,7 @@ export default {
     },
   },
   created() {
+    this.smallScreen = window.innerWidth < 600
     this.bigScreen = window.innerWidth > 1400;
     this.$emit("getBigscreen", this.bigScreen);
   },
