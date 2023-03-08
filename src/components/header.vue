@@ -188,13 +188,19 @@
       <el-dropdown trigger="click" style="margin: 0 5px; font-size: 16px">
         <span class="el-dropdown-link">
           <flag style="width: 50px" :iso="this.$i18n.locale"></flag>
-          <span style="margin-left: -13px" v-if="$i18n.locale === 'Uz' && !smallScreen"
+          <span
+            style="margin-left: -13px"
+            v-if="$i18n.locale === 'Uz' && !smallScreen"
             >O'zbek</span
           >
-          <span style="margin-left: -13px" v-if="$i18n.locale === 'Ru' && !smallScreen"
+          <span
+            style="margin-left: -13px"
+            v-if="$i18n.locale === 'Ru' && !smallScreen"
             >Rus</span
           >
-          <span style="margin-left: -13px" v-if="$i18n.locale === 'Gb' && !smallScreen"
+          <span
+            style="margin-left: -13px"
+            v-if="$i18n.locale === 'Gb' && !smallScreen"
             >English</span
           >
         </span>
@@ -244,7 +250,9 @@
         </a-badge>
       </div>
       <div class="flex items-center">
-        <img v-if="user.pathImage"
+        <n-skeleton v-if="loadingImage && user.pathImage" circle size="medium" />
+        <img
+          v-if="user.pathImage && !loadingImage"
           style="
             width: 35px;
             object-fit: cover;
@@ -252,9 +260,8 @@
             height: 35px;
           "
           :src="user.pathImage"
-          alt="img" 
         />
-        <i v-else class='bx bxs-user-circle'></i>
+        <i v-if="!loadingImage && !user.pathImage" class="bx bxs-user-circle"></i>
         <el-dropdown placement="bottom-start" trigger="click">
           <!-- <el-button class="cursor-pointer" style="padding: 10px 0" type="info">
             <span style="margin-left: 5px">{{
@@ -358,6 +365,7 @@ import {
   BellOutlined,
 } from "@ant-design/icons-vue";
 import { NotificationStore } from "../stores/notifications.store";
+import axios from 'axios';
 export default {
   data() {
     return {
@@ -366,7 +374,8 @@ export default {
       currentIndex: "",
       bigScreen: false,
       drawer: false,
-      smallScreen : false
+      smallScreen: false,
+      loadingImage : false
     };
   },
   components: {
@@ -411,10 +420,17 @@ export default {
       this.$emit("getFullscreen", this.fullScreen);
     },
   },
-  created() {
-    this.smallScreen = window.innerWidth < 600
+  async created() {
+    this.smallScreen = window.innerWidth < 600;
     this.bigScreen = window.innerWidth > 1400;
     this.$emit("getBigscreen", this.bigScreen);
+    try{
+      this.loadingImage = true
+      let res = await axios.get(this.user.pathImage);
+      this.loadingImage = false
+    } finally {
+      this.loadingImage  = false
+    }
   },
 };
 </script>

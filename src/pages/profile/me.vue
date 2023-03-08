@@ -11,7 +11,10 @@
           alt="profile image"
           type="file"
           id="image-input"
-        /><img v-if="!clickedUpload" :src="user.pathImage" />
+        />
+        
+        <img v-if="!clickedUpload" :src="user.pathImage" />
+        <n-skeleton v-else height="200px" style="width: 200px;" circle />
         <div ref="imagePreview" id="image-preview"></div>
       </div>
       <div>
