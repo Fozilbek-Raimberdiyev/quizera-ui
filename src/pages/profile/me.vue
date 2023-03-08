@@ -53,6 +53,7 @@ import { mapActions, mapState } from "pinia";
 import { userStore } from "../../stores/management/user.store";
 import { url } from "@vuelidate/validators";
 import auth from "../../services/auth";
+import { ElAlert, ElNotification } from "element-plus";
 export default {
   data: () => ({
     clickedUpload: false,
@@ -85,14 +86,24 @@ export default {
     async submit(e) {
       let form = { ...this.form };
       let formData = new FormData();
+      let file = e.srcElement[0].files[0];
+      console.log(file);
       for (let key in form) {
         if (key === "file") {
-          formData.append("file", e.srcElement[0].files[0]);
+          if (
+            (file.type === "image/png" ||
+            file.type === "image/jpeg" ||
+            file.type === "image/jpg") && (file.size / 1048576 <= 5)
+          ) {
+            formData.append("file", e.srcElement[0].files[0]);
+          } else {
+            ElNotification({ message: "Ruxsat etilmagan fayl turi tanlandi "+file.size/1048576 + "mb" });
+          }
         } else {
           formData.append(key, form[key]);
         }
       }
-      this.updateUser(formData);
+      // this.updateUser(formData);
     },
     change(e) {
       this.clickedUpload = true;
@@ -102,11 +113,11 @@ export default {
       reader.addEventListener("load", () => {
         const image = new Image();
         image.src = reader.result;
-        image.style.width = "200px"
-        image.style.height = "200px"
-        image.style.borderRadius = "50%"
-        image.style.objectFit = "cover"
-        image.style.margin = "20px 0"
+        image.style.width = "200px";
+        image.style.height = "200px";
+        image.style.borderRadius = "50%";
+        image.style.objectFit = "cover";
+        image.style.margin = "20px 0";
         preview.innerHTML = "";
         preview.appendChild(image);
       });
