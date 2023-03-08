@@ -103,8 +103,8 @@ export default {
           formData.append(key, form[key]);
         }
       }
-      console.log(formData)
-      // this.updateUser(formData);
+      // console.log(formData)
+      this.updateUser(formData);
     },
     change(e) {
       this.clickedUpload = true;
