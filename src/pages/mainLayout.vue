@@ -1,6 +1,8 @@
 <template>
   <div class="">
     <!-- <hr style="margin-bottom: 1rem; color: #e3e5e9;"> -->
+    <pre>{{ user.pathImage }}</pre>
+    <img :src="user.pathImage" alt="user image" />
     <div style="margin: 1rem 0">
       <div class="text-center">
         <i
@@ -48,6 +50,8 @@
 <script>
 import axios from "axios";
 import BarChart from "../components/charts/BarChart.vue";
+import { mapState } from "pinia";
+import { userStore } from "../stores/management/user.store";
 export default {
   components: {
     BarChart,
@@ -56,6 +60,9 @@ export default {
     return {
       smallScreen: false,
     };
+  },
+  computed: {
+    ...mapState(userStore, ["user"]),
   },
   methods: {
     async sendFile(e) {

@@ -3,7 +3,6 @@
     class="header items-center"
     :style="[smallScreen ? '' : 'margin : 0 24px']"
   >
-  <pre>{{ user }}</pre>
     <div class="flex items-center">
       <div
         style="margin-right: 10px"
@@ -248,10 +247,7 @@
         <el-dropdown placement="bottom-start" trigger="click">
           <el-button class="cursor-pointer" style="padding: 10px 0" type="info">
             <!-- <i class="bx bx-user"></i> -->
-            <img
-              :src="`https://fozil.onrender.com/${user.pathImage}`"
-              alt="image"
-            />
+            <!-- <img :src="`http://localhost:3000/${user.pathImage}`" alt="image" /> -->
             <span style="margin-left: 5px">{{
               user?.firstName + " " + user?.lastName
             }}</span>
@@ -371,6 +367,9 @@ export default {
     ...mapStores(authStore),
     menuOptionsC() {
       return this.menuOptions;
+    },
+    mainPath() {
+      return import.meta.MAIN_PATH;
     },
   },
   props: {
