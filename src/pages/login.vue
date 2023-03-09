@@ -11,167 +11,92 @@
           href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap"
           rel="stylesheet"
         />
-        <h1>Login</h1>
+        <h1>Kirish</h1>
         <form @submit.prevent="login(form)">
           <div class="txt_field">
             <input v-model="form.email" type="text" required />
-            <label>Username</label>
+            <label>Elektron pochta</label>
             <span></span>
           </div>
           <div class="txt_field">
             <input v-model="form.password" type="password" required />
-            <label>Password</label>
+            <label>Parol</label>
             <span></span>
           </div>
 
-          <div class="pass">Forgot Password?</div>
-          <input type="submit" value="Login" />
-          <div class="signup_link">Not a member? <a href="">Signup</a></div>
+          <div class="pass">Parolni unutdingizmi?</div>
+          <!-- <input type="submit" value="Kirish" /> -->
+          <el-button
+            class="submit"
+            :loading="loading"
+            native-type="submit"
+            type="primary"
+            >Kirish</el-button
+          >
+          <div class="signup_link">
+            Akkauntingiz yo'qmi?
+            <a href.prevent="#" @click="isRegister = true">Ro'yhatdan o'tish</a>
+          </div>
         </form>
       </div>
-      <!-- <form
-        v-if="!isRegister"
-        :style="[smallScreen ? 'width: 100%;' : 'width : 65%']"
-        class="shadow"
-        @submit.prevent="login(form)"
-      >
-        <div :class="[smallScreen ? 'mt-5' : 'form']">
-          <div class="flex items-center justify-center">
-            <p style="font-size: 1.5rem" class="text-center">Tizimga kirish</p>
-            <i
-              style="font-size: 1.5rem"
-              class="bi bi-box-arrow-in-right self-start"
-            ></i>
+      <div class="center" v-else>
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap"
+          rel="stylesheet"
+        />
+        <h1>Ro'yhatdan o'tish</h1>
+        <form @submit.prevent="createUser(rForm)">
+          <div class="txt_field">
+            <input required v-model="rForm.firstName" type="text" />
+            <label>Ismingiz</label>
+            <span></span>
           </div>
-          <el-input
-            :prefix-icon="Avatar"
-            size="large"
-            required
-            v-model="form.email"
-            placeholder="Please input your email..."
-          />
-          <el-input
-            style="margin: 1rem 0"
-            size="large"
-            required
-            type="password"
-            v-model="form.password"
-            show-password
-            placeholder="Please input your password"
-            :prefix-icon="Key"
-          />
-          <div class="flex justify-center">
-            <el-button
-              native-type="submit"
-              :loading="loading"
-              type="primary"
-              style="cursor: pointer"
-              >Login</el-button
-            >
+          <div class="txt_field">
+            <input v-model="rForm.lastName" type="text" required />
+            <label>Familiyangiz</label>
+            <span></span>
           </div>
-          <div class="sign-up flex items-center justify-between">
-            <p>
-              Akkountingiz yo'qmi?
-              <span
-                @click="isRegister = true"
-                class="register cursor-pointer"
-                style="color: #409eef"
-                >Ro'yhatdan o'tish</span
-              >
-            </p>
-          </div>
-        </div>
-      </form> -->
-      <form
-        v-else
-        @submit.prevent="submit"
-        :style="[smallScreen ? 'width: 100%;' : 'width : 65%']"
-      >
-        <!-- <label>Firstname</label> -->
-        <div :class="[smallScreen ? 'mt-5' : 'form']">
-          <div class="flex items-center justify-center">
-            <p style="font-size: 1.5rem" class="text-center">
-              Ro'yhatdan o'tish
-            </p>
-            <i
-              style="font-size: 1.5rem"
-              class="bi bi-box-arrow-in-right self-start"
-            ></i>
-          </div>
-          <el-input
-            size="large"
-            required
-            v-model="rForm.firstName"
-            placeholder="Please input firstname"
-            :prefix-icon="Avatar"
-          />
-          <!-- <label>Lastname</label> -->
-          <el-input
-            :prefix-icon="User"
-            required
-            size="large"
-            style="margin-top: 10px"
-            v-model="rForm.lastName"
-            placeholder="Please input lastname"
-          />
-          <div class="birdthData">
-            <!-- <label class="block">Birdth data</label> -->
+          <div class="txt_field">
             <el-date-picker
+              placeholder="Tu'gilgan kuningizmi kiriting"
               size="large"
               style="margin-top: 10px"
-              placeholder="Enter the birthdata"
               v-model="rForm.birdthData"
-            ></el-date-picker>
+              required
+            />
+            <!-- <label>Tug'ilgan vaqtingiz</label> -->
+            <span></span>
           </div>
-          <!-- <label style="display: block">Email</label> -->
-          <el-input
-            :prefix-icon="Message"
-            required
-            size="large"
-            style="margin-top: 10px"
-            v-model="rForm.email"
-            placeholder="Please input email"
-          />
-          <!-- <label>Phone number</label> -->
-          <el-input
-            type="number"
-            :prefix-icon="PhoneFilled"
-            :controls="false"
-            min="0"
-            placeholder="Please input  phone number"
-            v-model="rForm.phoneNumber"
-            size="large"
-            style="margin-top: 10px"
-          ></el-input>
-          <!-- <label>Password</label> -->
-          <el-input
-            required
-            :prefix-icon="Key"
-            type="password"
-            v-model="rForm.password"
-            show-password
-            placeholder="Please input password"
-            size="large"
-            style="margin-top: 10px"
-          />
-          <div class="flex justify-center" style="margin-top: 1rem">
-            <el-button :loading="loading" native-type="submit" type="primary"
-              >Register</el-button
-            >
+          <div class="txt_field">
+            <input v-model="rForm.email" type="text" required />
+            <label>Elektron pochta</label>
+            <span></span>
           </div>
-          <div class="sign-up flex items-center justify-between">
-            <p>
-              Akkountingiz bormi?
-              <span
-                @click="isRegister = false"
-                class="register cursor-pointer"
-                style="color: #409eef"
-                >Tizimga kirish</span
-              >
-            </p>
+          <div class="txt_field">
+            <input v-model="rForm.phoneNumber" type="number" required />
+            <label>Telefon raqam</label>
+            <span></span>
           </div>
-        </div>
-      </form>
+          <div class="txt_field">
+            <input v-model="rForm.password" type="password" required />
+            <label>Parol</label>
+            <span></span>
+          </div>
+          <!-- <input type="submit" value="Ro'yhatdan o'tish" /> -->
+          <el-button
+            class="submit"
+            :loading="loading"
+            native-type="submit"
+            type="primary"
+            >Ro'yhatdan o'tish</el-button
+          >
+          <div class="signup_link">
+            Akkauntingiz bormi?
+            <a href.prevent="#" @click="isRegister = false">Kirish</a>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 </template>
@@ -254,7 +179,7 @@ body {
 
 .center {
   position: absolute;
-  top: 50%;
+  top: 60%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 400px;
@@ -333,6 +258,7 @@ form .txt_field {
   text-decoration: underline;
 }
 
+.submit,
 input[type="submit"] {
   width: 100%;
   height: 50px;
@@ -347,6 +273,7 @@ input[type="submit"] {
   cursor: pointer;
 }
 
+.submit,
 input[type="submit"]:hover {
   border-color: #2691d9;
   transition: 0.5s;

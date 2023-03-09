@@ -22,7 +22,8 @@ export default {
     no: "Yo'q",
     create: "Yaratish",
     pickEndDate: "Yakunlanish vaqtini kiriting",
-    cancelled : "Bekor qilindi"
+    cancelled : "Bekor qilindi",
+    listeningQuiz : "Eshitish sinovlari"
   },
   validations: {
     enterOptions: "Variant kiritilishi shart",

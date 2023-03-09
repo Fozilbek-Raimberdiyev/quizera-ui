@@ -101,6 +101,12 @@
               >{{ $t("sidebar.subjects") }}</router-link
             ></a-menu-item
           >
+          <a-menu-item key="18"
+            ><router-link to="/references/listening"
+              ><i class="bx bx-folder-plus"></i
+              >{{ $t("sidebar.listeningQuiz") }}</router-link
+            ></a-menu-item
+          >
           <a-menu-item key="17"
             ><router-link to="/references/subject"
               ><i class="bi bi-people"></i

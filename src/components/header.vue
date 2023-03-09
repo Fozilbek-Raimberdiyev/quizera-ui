@@ -185,7 +185,7 @@
           class="bi bi-bell"
         ></i>
       </div> -->
-      <el-dropdown trigger="click" style="margin: 0 5px; font-size: 16px">
+      <el-dropdown trigger="click" style="margin: 0 5px; font-size: 16px;" :style="[smallScreen ? 'margin-right : 1rem' : 'margin-right : 3rem']">
         <span class="el-dropdown-link">
           <flag style="width: 50px" :iso="this.$i18n.locale"></flag>
           <span
@@ -261,7 +261,7 @@
           "
           :src="user.pathImage"
         />
-        <i v-if="!loadingImage && !user.pathImage" class="bx bxs-user-circle"></i>
+        <i v-if="!loadingImage && !user.pathImage" style="font-size: 30px;" class="bx bxs-user-circle"></i>
         <el-dropdown placement="bottom-start" trigger="click">
           <!-- <el-button class="cursor-pointer" style="padding: 10px 0" type="info">
             <span style="margin-left: 5px">{{

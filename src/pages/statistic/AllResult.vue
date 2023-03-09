@@ -28,6 +28,12 @@
     <q-markup-table style="min-height: 160px">
       <thead>
         <tr>
+          <th class="text-left">
+            <i
+              style="display: block; text-align: center; cursor: auto"
+              class="bx bx-image"
+            ></i>
+          </th>
           <th class="text-left">Ism-sharifi</th>
           <th class="text-right">Fan nomi</th>
           <th class="text-right">Test sav-lari soni</th>
@@ -49,6 +55,23 @@
       </thead>
       <tbody v-if="listC.length">
         <tr v-for="(result, index) in listC" :key="index">
+          <td class="text-left">
+            <n-image
+              style="
+                width: 40px;
+                height: 40px;
+                border-radius: 10px;
+                object-fit: cover;
+              "
+              v-if="result.testerImagePath"
+              :src="result.testerImagePath"
+            />
+            <i
+              style="text-align: center; display: block"
+              v-else
+              class="bx bx-user"
+            ></i>
+          </td>
           <td class="text-left">{{ result.fullName }}</td>
           <td class="text-right">{{ result.subjectName }}</td>
           <td class="text-right">{{ result.questionsCount }}</td>

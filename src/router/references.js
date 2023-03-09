@@ -79,5 +79,33 @@ export default {
         },
       ],
     },
+    {
+      path: "listening",
+      component: () => import("../pages/references/listening/List.vue"),
+      name: "Subject",
+      meta: {
+        roles: ["admin", "teacher", "student"],
+      },
+      children: [
+        {
+          path: "add",
+          component: () =>
+            import("../pages/references/listening/AddOrUpdate.vue"),
+          name: "Subject add",
+          meta: {
+            roles: ["admin", "teacher"],
+          },
+        },
+        {
+          path: ":id/update",
+          component: () =>
+            import("../pages/references/listening/AddOrUpdate.vue"),
+          name: "Subject edit",
+          meta: {
+            roles: ["admin", "teacher"],
+          },
+        },
+      ],
+    },
   ],
 };

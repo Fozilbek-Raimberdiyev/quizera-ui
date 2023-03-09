@@ -21,7 +21,8 @@ export default {
       yes : "Yes",
       no : "No",
       create : "Create",
-      pickEndDate : "Pick end date"
+      pickEndDate : "Pick end date",
+      listeningQuiz : "Listening quiz"
     },
     validations : {
       enterOptions : "An option is required",

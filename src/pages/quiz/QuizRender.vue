@@ -331,28 +331,29 @@ export default {
     },
   },
   beforeRouteLeave(to, from, next) {
-    // if(confirm('Agar sahifadan chiqsangiz test yakunlanib ketadi')) {
-    //   next()
-    // }
-    Swal.fire({
-      title:
-        "<span style='font-size : 18px'>Agar sahidan chiqsangiz test yakunlanadi. Davom etasizmi?</span>",
-      showDenyButton: true,
-      // showCancelButton: true,
-      confirmButtonText: "<span>Ha</span>",
-      denyButtonText: `<span>Yo'q</span>`,
-      currentProgressStep : true
-    }).then(async (result) => {
-      /* Read more about isConfirmed, isDenied below */
-      if (result.isConfirmed) {
-        let res = await this.endTest();
-        Swal.fire({
-          html: "<span>Test yakunlandi. Natijangizni statistika bo'limidan ko'rishingiz mumkin!</span>",
-        });
-        next();
-      } else if (result.isDenied) {
-      }
-    });
+    if (!this.isEnded) {
+      Swal.fire({
+        title:
+          "<span style='font-size : 18px'>Agar sahidan chiqsangiz test yakunlanadi. Davom etasizmi?</span>",
+        showDenyButton: true,
+        // showCancelButton: true,
+        confirmButtonText: "<span>Ha</span>",
+        denyButtonText: `<span>Yo'q</span>`,
+        currentProgressStep: true,
+      }).then(async (result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+          let res = await this.endTest();
+          Swal.fire({
+            html: "<span>Test yakunlandi. Natijangizni statistika bo'limidan ko'rishingiz mumkin!</span>",
+          });
+          next();
+        } else if (result.isDenied) {
+        }
+      });
+    } else {
+      next();
+    }
   },
   mounted() {
     setInterval(() => {
@@ -360,7 +361,16 @@ export default {
     }, 1000);
   },
   beforeUnmount() {
-    alert('before unmount')
+    questionStore().$patch({
+      questions: [],
+      answers: [],
+      correctAnswersCount: null,
+      inCorrectAnswersCount: null,
+      isPassed: null,
+      notCheckedQuestionsCount: null,
+      sum: null,
+      total: null,
+    });
   },
   async created() {
     this.smallScreen = window.innerWidth < 600;
