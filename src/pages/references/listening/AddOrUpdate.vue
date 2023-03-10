@@ -1,16 +1,13 @@
 <template>
   <div class="wrapper">
-    <form @submit.prevent="submit">
+    <form ref="formEl" @submit.prevent="submit">
       <div :class="[smallScreen ? 'block' : 'flex  box items-start']">
-        <div>
-          <audio controls>
-            <source src="http://localhost:3000/public/uploads/listening/Nissa%20Sabyan%20-%20Allahumma%20Labbaik%20(dizer.net).mp3" type="audio/mpeg" />
-          </audio>
-        </div>
         <label for="name">
           Sinov nomini kiriting
           <a-input
             v-model:value="form.name"
+            name="name"
+            :value="form.name"
             placeholder="Fan nomini kiriting..."
             style="position: relative"
           >
@@ -28,6 +25,8 @@
         <label class="components-input-demo-presuffix" for="time">
           Sinovga ajratiladigan daqiqani kiriting
           <a-input-number
+          name="time"
+          :value="form.time"
             placeholder="Ajratiladigan vaqtni kiriting(daqiqa hisobida)"
             v-model:value="form.time"
             :controls="false"
@@ -51,6 +50,8 @@
           <n-select
             v-model:value="form.members"
             multiple
+            name="members"
+            :value="form.members"
             filterable
             placeholder="Search users"
             :options="usersList"
@@ -64,7 +65,7 @@
         </label>
         <label>
           Hamma uchun belgilash
-          <el-checkbox v-model="form.isForAll"></el-checkbox>
+          <el-checkbox v-model="form.isForAll" name="isForAll" :value="form.isForAll"></el-checkbox>
         </label>
         <label>
           <b>Audioni tanlang</b>
@@ -106,6 +107,8 @@
             <a-input
               placeholder="Parol kiriting..."
               v-model:value="form.password"
+              name="password"
+              :value="form.password"
               size="middle"
               id="password"
               :disabled="!form.isHasPassword"
@@ -115,6 +118,8 @@
               <el-checkbox
                 style="display: inline-block; margin-top: 0"
                 size="large"
+                name="isHasPassword"
+                :value="form.isHasPassword"
                 v-model="form.isHasPassword"
                 >Parol qo'yish</el-checkbox
               >
@@ -141,93 +146,6 @@
         Kiritish
       </el-button>
     </form>
-
-    <!--modal-->
-    <el-dialog width="80%" @close="closeModal" v-model="dialogTableVisible">
-      <template #header>
-        <h6>Savollarni ball tizimida sonini aniqlash</h6>
-      </template>
-      <div class="flex justify-between items-center">
-        <h6>
-          <span :class="{ error: sumCountGrades > form.quizCount }">{{
-            sumCountGrades
-          }}</span>
-          / {{ form.quizCount }}
-        </h6>
-        <h5 class="point">{{ countPointSubject }}</h5>
-        <el-button
-          type="primary"
-          class="cursor-pointer"
-          @click="saveGradeOption"
-          >Saqlash</el-button
-        >
-      </div>
-      <div class="flex" v-for="(grade, index) in form.grades" :key="index">
-        <div class="left flex">
-          <div>
-            <b>Ball</b>
-            <el-select
-              v-model="grade.grade"
-              class="m-2"
-              placeholder="Select"
-              size="small"
-              @change="currentIndex = index"
-            >
-              <el-option
-                v-for="(grade, i) in grades"
-                :key="i"
-                :label="grade"
-                :value="grade"
-              />
-            </el-select>
-          </div>
-          <div>
-            <b>Soni</b>
-            <el-select
-              v-model="grade.count"
-              class="m-2"
-              placeholder="Select"
-              size="small"
-            >
-              <el-option
-                v-for="(number, i) in numbers"
-                :key="i"
-                :label="number"
-                :value="number"
-              />
-            </el-select>
-          </div>
-          <div
-            v-if="form.grades[index]?.grade && form.grades[index]?.count"
-            class="right self-end"
-            style="margin-left: 5px"
-          >
-            <i
-              @click="deleteGradeOption(index)"
-              style="font-size: 1.2rem; color: #409eef"
-              class="bx bx-trash cursor-pointer"
-            ></i>
-          </div>
-        </div>
-        <span
-          class="self-end"
-          v-if="isClickedSave && (grade.count == null || grade.grade == null)"
-          style="color: red"
-          >To'liq to'ldirish lozim</span
-        >
-      </div>
-      <el-button
-        @click="plusGradeOption"
-        v-if="
-          form?.grades[form.grades.length - 1].count &&
-          form?.grades[form.grades.length - 1].grade
-        "
-        type="primary"
-        style="margin-top: 5px"
-        class="cursor-pointer"
-        ><i class="bx bx-plus" style="margin-right: 5px"></i>Qo'shish</el-button
-      >
-    </el-dialog>
   </div>
 </template>
   <script>
@@ -278,17 +196,9 @@ export default {
         isStarted: false,
         members: [],
         isForAll: false,
-        grades: [
-          {
-            grade: null,
-            count: null,
-          },
-        ],
         password: "",
         isHasPassword: false,
       },
-      grades: [1, 2, 3, 4, 5, 6],
-      numbers: [],
       smallScreen: false,
     };
   },
@@ -315,30 +225,12 @@ export default {
         time: {
           required,
         },
-        quizCount: {
-          required,
-        },
       },
     };
   },
   computed: {
     ...mapState(subjectStore, ["list", "subject"]),
     ...mapState(userStore, ["users", "user"]),
-    sumCountGrades() {
-      let sum = 0;
-      for (let i = 0; i < this.form.grades.length; i++) {
-        sum += this.form.grades[i].count;
-      }
-      return sum;
-    },
-    countPointSubject() {
-      let grades = [...this.form.grades];
-      let sum = 0;
-      for (let element of grades) {
-        sum += +element.grade * +element.count;
-      }
-      return sum;
-    },
   },
   watch: {
     "form.quizCount"(val) {
@@ -373,21 +265,14 @@ export default {
         };
       }
     },
-    async search(val) {
-      // let users = (await auth.getUserByEmail(val)).data;
-      // console.log(users);
-      // this.usersList = users?.map((user) => {
-      //   return { value: user.email, label: user.email };
-      // });
-    },
     "form.isForAll"(value) {
-      // const members = [...this.form.members];
-      // if(value) {
-      //   this.form.members = []
-      // } else {
-      //   this.form.members = [...members];
-      //   console.log(members)
-      // }
+      const members = [...this.form.members];
+      if(value) {
+        this.form.members = []
+      } else {
+        this.form.members = [...members];
+        console.log(members)
+      }
     },
   },
   methods: {
@@ -399,24 +284,16 @@ export default {
     ]),
     ...mapActions(userStore, ["getAllUsers"]),
     async submit(e) {
-      let form = { ...this.form };
-      form.audio = null;
-      let formData = new FormData();
-      for (let key in form) {
-        if (key === "audio") {
-          formData.append("audio", e.srcElement[4].files[0]);
-        } else {
-          formData.append(key, form[key]);
-        }
-      }
-      let res = await $axios.post("/listeningQuiz/add", formData);
-      console.log(formData);
       this.v$.$validate();
       if (!this.$route.params.id) {
         if (!this.v$.$error) {
           let form = { ...this.form };
+          // let res = await $axios.post("/listeningQuiz/add", formData);
           if (!form.isHasPassword) form.password = undefined;
-          form.point = this.countPointSubject;
+          form.textString = undefined;
+          form.finalyTextArray = undefined
+          form.text = form.textArray.map(text => text.label).join(" ")
+          form["authorPathImage"] = this.user.pathImage
           let members = [...form.members];
           members = members.map((member) => {
             return {
@@ -426,7 +303,23 @@ export default {
           });
           form.members = members;
           form.authorId = this.user._id;
-          let res = await this.addSubject(form);
+          let formData = new FormData()
+          formData.append("audio", e.srcElement[4].files[0]);
+          formData.append("form",JSON.stringify(form))
+          // for (let key in form) {
+          //   if (key === "audio") {
+          //     formData.append("audio", e.srcElement[4].files[0]);
+          //   } else {
+          //     formData.append(key, JSON.stringify(form[key]))
+          //   }
+          // }
+
+          // console.log(formData);
+          let res = await $axios.post("/listeningQuiz/add", formData, {
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+          });
           this.$emit("created", res);
           this.$router.push("/references/listening");
           this.getList(10, 5, true);
