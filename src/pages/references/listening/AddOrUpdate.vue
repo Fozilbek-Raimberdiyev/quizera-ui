@@ -147,8 +147,8 @@
             id=""
             accept="audio"
           />
-          <div>
-            <span v-if="fileSelected">Fayl tanlangan</span>
+          <div v-if="fileSelected && $route.params.id">
+            <span>Fayl tanlangan</span>
             <audio controls>
               <source :src="form.audioPath" type="audio/mpeg" />
             </audio>
@@ -283,13 +283,15 @@ export default {
       }
     },
     "form.isForAll"(value) {
-      if(this.$route.params.id) {
-        let members = [...this.listeningQuiz?.members] || [...this.form.members];
-      if (value) {
-        this.form.members = [];
-      } else {
-        this.form.members = [...members];
-      }
+      if (this.$route.params.id) {
+        let members = [...this.listeningQuiz?.members] || [
+          ...this.form.members,
+        ];
+        if (value) {
+          this.form.members = [];
+        } else {
+          this.form.members = [...members];
+        }
       }
     },
   },
@@ -331,7 +333,7 @@ export default {
           let formData = new FormData();
           formData.append("audio", e.srcElement[7].files[0]);
           formData.append("form", JSON.stringify(form));
-          let res = await this.addQuiz();
+          let res = await this.addQuiz(formData);
           this.$emit("created", res);
           this.$router.push("/references/listening");
           this.getList(10, 5, true);
@@ -417,7 +419,7 @@ export default {
       this.form.textString = this.form.finalyTextArray.join(" ");
     },
     changeFile(e) {
-      this.form.fileSelected = e.target.files[0] ? true : false;
+      this.fileSelected = e.target.files[0] ? true : false;
     },
   },
   mounted() {
@@ -436,10 +438,12 @@ export default {
     // this.getById(this.$route.params.id)
   },
   updated() {
-    if (this.form.audioPath) {
-      this.fileSelected = true;
-    } else {
-      this.fileSelected = false;
+    if (this.$route.params.id) {
+      if (this.form.audioPath) {
+        this.fileSelected = true;
+      } else {
+        this.fileSelected = false;
+      }
     }
   },
 };
