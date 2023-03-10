@@ -64,9 +64,8 @@ export default {
       lastName: "",
       birdthData: "",
       email: "",
-      phoneNumber: "",
+      phoneNumber: null,
       role: "",
-      file: url,
       _id: "",
       pathImage: null,
     },
@@ -79,6 +78,7 @@ export default {
     getDatas() {
       let user = { ...this.user };
       (this.form.firstName = user.firstName),
+      this.form.pathImage= user.pathImage,
         (this.form.lastName = user.lastName),
         (this.form.birdthData = user.birdthData),
         (this.form.phoneNumber = user.phoneNumber);
@@ -89,10 +89,8 @@ export default {
     async submit(e) {
       let form = { ...this.form };
       let formData = new FormData();
-      let file = e.srcElement[0].files[0];
-      for (let key in form) {
-        if (key === "file") {
-          if (
+      let file = e.srcElement[0].files[0]
+      if (
             (file.type === "image/png" ||
               file.type === "image/jpeg" ||
               file.type === "image/jpg") &&
@@ -106,13 +104,9 @@ export default {
                 file.size / 1048576 +
                 "mb",
             });
-            form.pathImage = this.user.pathImage;
           }
-        } else {
-          formData.append(key, form[key]);
-        }
-      }
-      // console.log(formData)
+      formData.append('form', JSON.stringify(form));
+      console.log(formData)
       this.updateUser(formData);
     },
     change(e) {

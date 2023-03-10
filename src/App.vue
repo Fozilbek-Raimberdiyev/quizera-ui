@@ -7,11 +7,15 @@
       alt="Loading"
     /> -->
     <loading
-      v-model:active="loading"
+      v-model="loading"
       :can-cancel="true"
       :on-cancel="false"
       :is-full-page="true"
     />
+    <!-- <h1 style="width: 500px; margin: a auto" v-if="loading">Loading</h1> -->
+    <q-inner-loading :showing="loading">
+        <q-spinner-gears size="50px" color="primary" />
+      </q-inner-loading>
     <router-view></router-view>
   </div>
   <n-back-top
@@ -30,8 +34,8 @@
         font-size: 18px;
       "
     >
-    <i class='bx bxs-to-top'></i>
-    <!-- <i class='bx bxs-upvote'></i> -->
+      <i class="bx bxs-to-top"></i>
+      <!-- <i class='bx bxs-upvote'></i> -->
     </div>
   </n-back-top>
 </template>

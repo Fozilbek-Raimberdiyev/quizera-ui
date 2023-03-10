@@ -127,7 +127,7 @@
     >
       <a-layout-header
         :class="[bigScreen ? 'big-header' : 'small-header']"
-        style="background: #fff;"
+        style="background: #fff"
       >
         <header-menu
           @getFullscreen="getFullscreen"
@@ -138,7 +138,7 @@
       </a-layout-header>
       <a-layout-content :style="[smallScreen ? 'margin: 5px' : 'margin: 16px']">
         <div
-          style="background: #fff; min-height: 550px;"
+          style="background: #fff; min-height: 550px"
           :style="[smallScreen ? `padding:15px;` : `padding: 24px;`]"
         >
           <!-- <router-view></router-view> -->
@@ -151,12 +151,15 @@
           </div>
           <div class="" v-show="loading">
             <!-- <a-spin /> -->
-            <loading
+            <!-- <loading
               v-model:active="loading"
               :can-cancel="false"
               :on-cancel="false"
               :is-full-page="true"
-            />
+            /> -->
+            <q-inner-loading :showing="loading">
+              <q-spinner-gears size="50px" color="primary" />
+            </q-inner-loading>
           </div>
         </div>
       </a-layout-content>

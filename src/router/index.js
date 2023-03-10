@@ -4,7 +4,6 @@ import { userStore } from "../stores/management/user.store";
 import { h, resolveComponent } from "vue";
 import jwtDecode from "jwt-decode";
 import references from "./references";
-import auth from "../services/auth";
 let token =
   localStorage.getItem("token") ||
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
@@ -30,7 +29,7 @@ const routes = [
       {
         path: "/management",
         name: "Management",
-        redirect : {path : "/management/users"},
+        redirect: { path: "/management/users" },
         component: {
           render() {
             return h(resolveComponent("router-view"));
@@ -172,44 +171,45 @@ const routes = [
               },
             },
             meta: { roles: ["teacher"] },
-            children : [
+            children: [
               {
-                path  : "",
-                name : "",
+                path: "",
+                name: "",
                 component: () => import("../pages/cabinet/Profile.vue"),
               },
               {
-                path : "/groups",
-                name : "Guruhlar",
+                path: "/groups",
+                name: "Guruhlar",
                 component: {
                   render() {
                     return h(resolveComponent("router-view"));
                   },
                 },
-                children : [
+                children: [
                   {
-                    path : "",
-                    component : () => import("../pages/cabinet/groups/List.vue"),
-                    name : "Guruhlar"
-                  }
-                ]
+                    path: "",
+                    component: () => import("../pages/cabinet/groups/List.vue"),
+                    name: "Guruhlar",
+                  },
+                ],
               },
               {
-                path : "students",
-                name : "O'quvchilar",
+                path: "students",
+                name: "O'quvchilar",
                 component: {
                   render() {
                     return h(resolveComponent("router-view"));
                   },
                 },
-                children : [
+                children: [
                   {
-                    path : "",
-                    component : () => import("../pages/cabinet/groups/students/List.vue")
-                  }
-                ]
-              }
-            ]
+                    path: "",
+                    component: () =>
+                      import("../pages/cabinet/groups/students/List.vue"),
+                  },
+                ],
+              },
+            ],
           },
           {
             path: "groups",
@@ -374,10 +374,11 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
-  // let userRole = userStore().currentUserRole;
+  loadingStore().$patch({ loading: true });
   let userRole = null;
   try {
-    userStore().getCurrentUserRole();
+    await userStore().getCurrentUserRole();
+    loadingStore().$patch({ loading: false });
     userRole = userStore().currentUserRole;
   } catch (e) {
     userRole = "student";
@@ -386,8 +387,6 @@ router.beforeEach(async (to, from, next) => {
   let { exp } = jwtDecode(token) || null;
   let current = Math.floor(Date.now() / 1000);
   let isValid = current <= exp;
-  const isAuth = userStore().isAuth;
-
   if (!isValid && to.name != "login") {
     next("/login");
   } else if (to.name === "register" && from.name === "login") {

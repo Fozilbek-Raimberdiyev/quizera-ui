@@ -3,7 +3,9 @@
     <form ref="formEl" @submit.prevent="submit">
       <div :class="[smallScreen ? 'block' : 'flex  box items-start']">
         <label for="name">
-          Sinov nomini kiriting
+          <span class="title"
+            >Sinov nomini kiriting<i class="bx bxs-star"></i
+          ></span>
           <a-input
             v-model:value="form.name"
             name="name"
@@ -23,10 +25,12 @@
           >
         </label>
         <label class="components-input-demo-presuffix" for="time">
-          Sinovga ajratiladigan daqiqani kiriting
+          <span class="title"
+            >Sinovga ajratiladigan daqiqani kiriting<i class="bx bxs-star"></i
+          ></span>
           <a-input-number
-          name="time"
-          :value="form.time"
+            name="time"
+            :value="form.time"
             placeholder="Ajratiladigan vaqtni kiriting(daqiqa hisobida)"
             v-model:value="form.time"
             :controls="false"
@@ -45,42 +49,55 @@
             >Maydon to'ldirilishi shart...</span
           >
         </label>
-        <label>
-          Sinov ishtirokchilarini tanlang
-          <n-select
-            v-model:value="form.members"
-            multiple
-            name="members"
-            :value="form.members"
-            filterable
-            placeholder="Search users"
-            :options="usersList"
-            :loading="loading"
-            clearable
-            remote
-            :disabled="form.isForAll"
-            :clear-filter-after-select="false"
-            @search="remoteMethod"
-          />
+        <label class="flex items-center justify-between">
+          <div>
+            <span class="title">Sinov ishtirokchilarini tanlang</span>
+            <n-select
+              v-model:value="form.members"
+              multiple
+              name="members"
+              :value="form.members"
+              filterable
+              placeholder="Search users"
+              :options="usersList"
+              :loading="loading"
+              clearable
+              :style="{
+                'width: 225px': !smallScreen,
+                'width : 200px': smallScreen,
+              }"
+              remote
+              :disabled="form.isForAll"
+              :clear-filter-after-select="false"
+              @search="remoteMethod"
+            />
+          </div>
+          <el-checkbox
+            v-model="form.isForAll"
+            name="isForAll"
+            title="Hamma uchun belgilash"
+            :value="form.isForAll"
+          ></el-checkbox>
         </label>
         <label>
-          Hamma uchun belgilash
-          <el-checkbox v-model="form.isForAll" name="isForAll" :value="form.isForAll"></el-checkbox>
-        </label>
-        <label>
-          <b>Audioni tanlang</b>
-          <input type="file" name="audio" id="" accept="audio" />
-        </label>
-        <label>
-          <b>Matnni kiriting</b>
+          <span class="title">Matnni kiriting<i class="bx bxs-star"></i></span>
           <a-textarea
             placeholder="Sinov matnini kiriting"
             :auto-size="{ minRows: 2, maxRows: 50 }"
             @change="changeText"
-          />
+          >
+            <template #prefix>
+              <CheckOutlined v-if="!v$.form.textArray.$error" />
+              <a-tooltip v-else title="Extra information">
+                <info-circle-outlined style="color: red" />
+              </a-tooltip> </template
+          ></a-textarea>
+          <span style="color: red" v-if="v$.form.textArray.$error"
+            >Maydon to'ldirilishi shart...</span
+          >
         </label>
         <label v-if="form.textArray.length && isStartedFill">
-          <b>Matndagi so'zlar ro'yhati</b>
+          <span class="title">Matndagi so'zlar ro'yhati</span>
           <a-tag
             @close="closeTag(index)"
             v-for="(text, index) in form.textArray"
@@ -90,19 +107,14 @@
           >
         </label>
         <label v-if="isStartedFill && form.textString">
-          <b>Sinov matni</b>
+          <b class="title">Sinov matni</b>
           <div style="overflow-x: auto">
             {{ form.textString }}
           </div>
         </label>
-        <!-- <label v-if="form.textArray && isStartedFill">
-          <div v-for="(text, index) in form.textArray" :key="index">
-            <span v-if="text.isVisible">{{ text.label }}</span>
-            <a-input v-else v-model:value="text.value"></a-input>
-          </div>
-        </label> -->
 
         <label for="password">
+          <span class="title">Parolni kiriting</span>
           <div style="display: flex">
             <a-input
               placeholder="Parol kiriting..."
@@ -125,6 +137,25 @@
               >
             </span>
           </div>
+        </label>
+        <label>
+          <span class="title">Audioni tanlang<i class="bx bxs-star"></i></span>
+          <input
+            type="file"
+            name="audio"
+            @change="changeFile"
+            id=""
+            accept="audio"
+          />
+          <div>
+            <span v-if="fileSelected">Fayl tanlangan</span>
+            <audio controls>
+              <source :src="form.audioPath" type="audio/mpeg" />
+            </audio>
+          </div>
+          <span style="color: red; display: block" v-if="!fileSelected"
+            >Fayl tanlanishi shart...</span
+          >
         </label>
       </div>
       <el-button
@@ -163,6 +194,7 @@ import {
   InfoCircleFilled,
   CheckOutlined,
 } from "@ant-design/icons-vue";
+import { listeningQuizStore } from "../../../stores/references/listeningQuiz.store";
 export default {
   components: {
     AsyncMulSelect,
@@ -177,14 +209,13 @@ export default {
       v$: useVuelidate(),
       Select,
       CloseBold,
-      dialogTableVisible: false,
       currentIndex: "",
       isDefined: false,
       isEnterednumber: false,
       isClickedSave: false,
       usersList: [],
       isStartedFill: false,
-      membersFrequency: [],
+      fileSelected: false,
       search: "",
       form: {
         text: "",
@@ -225,32 +256,20 @@ export default {
         time: {
           required,
         },
-        text : {
+        textArray: {
           required,
-          minLength : minLength(50),
-          maxLength : maxLength(1000)
-        }
+        },
       },
     };
   },
   computed: {
-    ...mapState(subjectStore, ["list", "subject"]),
+    ...mapState(listeningQuizStore, ["list", "listeningQuiz"]),
     ...mapState(userStore, ["users", "user"]),
   },
   watch: {
     "form.quizCount"(val) {
       if (val) return (this.isDefined = true);
       this.isDefined = false;
-    },
-    "form.isDifferent"(val) {
-      if (val) {
-        this.toModal();
-        if (this.numbers.length < this.form.quizCount) {
-          for (let i = 1; i < this.form.quizCount?.length; i++) {
-            this.numbers.push(i);
-          }
-        }
-      }
     },
     "$route.params.id"(val) {
       if (val) {
@@ -260,45 +279,45 @@ export default {
           name: "",
           time: "",
           quizCount: "",
-          isDifferent: false,
-          grades: [
-            {
-              grade: null,
-              count: null,
-            },
-          ],
         };
       }
     },
     "form.isForAll"(value) {
-      const members = [...this.form.members];
-      if(value) {
-        this.form.members = []
+      if(this.$route.params.id) {
+        let members = [...this.listeningQuiz?.members] || [...this.form.members];
+      if (value) {
+        this.form.members = [];
       } else {
         this.form.members = [...members];
-        console.log(members)
+      }
       }
     },
   },
   methods: {
-    ...mapActions(subjectStore, [
-      "addSubject",
-      "updateSubject",
+    ...mapActions(listeningQuizStore, [
+      // "addSubject",
+      // "updateSubject",
+      // "getById",
+      // "getList",
+      "addQuiz",
       "getById",
       "getList",
+      "updateQuiz",
+      "updateQuizStatus",
+      "deleteQuiz",
     ]),
     ...mapActions(userStore, ["getAllUsers"]),
     async submit(e) {
+      console.log(e);
       this.v$.$validate();
       if (!this.$route.params.id) {
         if (!this.v$.$error) {
           let form = { ...this.form };
-          // let res = await $axios.post("/listeningQuiz/add", formData);
           if (!form.isHasPassword) form.password = undefined;
           form.textString = undefined;
-          form.finalyTextArray = undefined
-          form.text = form.textArray.map(text => text.label).join(" ")
-          form["authorPathImage"] = this.user.pathImage
+          form.finalyTextArray = undefined;
+          form.text = form.textArray.map((text) => text.label).join(" ");
+          form["authorPathImage"] = this.user.pathImage;
           let members = [...form.members];
           members = members.map((member) => {
             return {
@@ -307,24 +326,12 @@ export default {
             };
           });
           form.members = members;
+          form.fileSelected = undefined;
           form.authorId = this.user._id;
-          let formData = new FormData()
-          formData.append("audio", e.srcElement[4].files[0]);
-          formData.append("form",JSON.stringify(form))
-          // for (let key in form) {
-          //   if (key === "audio") {
-          //     formData.append("audio", e.srcElement[4].files[0]);
-          //   } else {
-          //     formData.append(key, JSON.stringify(form[key]))
-          //   }
-          // }
-
-          // console.log(formData);
-          let res = await $axios.post("/listeningQuiz/add", formData, {
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded",
-            },
-          });
+          let formData = new FormData();
+          formData.append("audio", e.srcElement[7].files[0]);
+          formData.append("form", JSON.stringify(form));
+          let res = await this.addQuiz();
           this.$emit("created", res);
           this.$router.push("/references/listening");
           this.getList(10, 5, true);
@@ -332,6 +339,13 @@ export default {
       } else {
         if (!this.v$.$error) {
           let form = { ...this.form };
+          let quizID = form._id;
+          form._id = undefined;
+          if (!form.isHasPassword) form.password = undefined;
+          form.textString = undefined;
+          form.finalyTextArray = undefined;
+          form.text = form.textArray.map((text) => text.label).join(" ");
+          form["authorPathImage"] = this.user.pathImage;
           let members = [...form.members];
           members = members.map((member) => {
             return {
@@ -340,84 +354,27 @@ export default {
             };
           });
           form.members = members;
-          form._id = undefined;
+          form.fileSelected = undefined;
+          form.authorId = this.user._id;
           form.__v = undefined;
-          if (!form.isHasPassword) {
-            form.password = undefined;
-          }
-          form.point = this.countPointSubject;
-          let res = await this.updateSubject(form, this.$route.params.id);
+
+          let formData = new FormData();
+          formData.append("audio", e.srcElement[7].files[0]);
+          formData.append("form", JSON.stringify(form));
+          let res = await this.updateQuiz(formData, quizID);
           this.$router.push("/references/listening");
-          this.getList(10, 5, true);
+          this.getList(10, 1, true);
         }
-      }
-    },
-    toModal() {
-      // this.form.quizCount
-      if (this.numbers.length < this.form.quizCount) {
-        for (let i = 1; i < +this.form.quizCount; i++) {
-          this.numbers.push(i);
-        }
-      }
-      this.dialogTableVisible = true;
-    },
-    plusGradeOption() {
-      if (
-        this.form.grades[this.form.grades.length - 1].count &&
-        this.form.grades[this.form.grades.length - 1].grade
-      ) {
-        this.form.grades.push({ grade: null, count: null });
-      }
-    },
-    deleteGradeOption(index) {
-      if (this.form.grades.length > 1) {
-        let temp = [...this.form.grades];
-        temp[index] = { grade: null, count: null };
-        temp = temp.filter((grade) => grade.grade && grade.count);
-        this.form.grades = temp;
-      } else {
-        let temp = [...this.form.grades];
-        temp[index] = { grade: null, count: null };
-        this.form.grades = temp;
-      }
-    },
-    saveGradeOption() {
-      if (this.sumCountGrades > this.form.quizCount) {
-        return useToast().warning(
-          "Test miqdoridan ballar bo'yicha biriktirilgan savollar soni oshib ketdi!"
-        );
-      }
-      this.isClickedSave = true;
-      let error = [...this.form.grades].map((grade) => {
-        if (!grade.count || !grade.grade) {
-          return "error";
-        }
-      });
-      if (!error.some((error) => error === "error")) {
-        this.dialogTableVisible = false;
-      }
-    },
-    closeModal() {
-      if (!this.form.grades.some((grade) => grade.count && grade.grade)) {
-        this.form.isDifferent = false;
-        this.form.grades = [{ grade: null, count: null }];
       }
     },
     async setFormData(val) {
       await this.getById(val);
-      let form = { ...this.subject };
-      form;
+      let form = { ...this.listeningQuiz };
       form.members = form.members.map((member) => {
         return member.value;
       });
-      // form.grades = [{grade : null, count : null}];
-      form.isDifferent ? form.isDifferent : (form.isDifferent = false);
       this.form = form;
-      // this.form = res;
     },
-    // async watch(query) {
-    //   this.search = query;
-    // },
     remoteMethod(query) {
       if (query) {
         this.usersList = this.users.filter((user) => {
@@ -450,7 +407,7 @@ export default {
     },
     closeTag(index) {
       this.form.textArray[index].isVisible = false;
-      this.form.textArray.filter((text, index) => {
+      this.form.textString = this.form.textArray.filter((text, index) => {
         if (text.isVisible) {
           this.form.finalyTextArray[index] = text.label;
         } else {
@@ -459,12 +416,15 @@ export default {
       });
       this.form.textString = this.form.finalyTextArray.join(" ");
     },
+    changeFile(e) {
+      this.form.fileSelected = e.target.files[0] ? true : false;
+    },
   },
   mounted() {
     this.v$.$validate();
   },
   beforeRouteLeave() {
-    subjectStore().$patch({ list: [], total: null });
+    listeningQuizStore().$patch({ list: [], total: null });
   },
   created() {
     this.getAllUsers();
@@ -474,6 +434,13 @@ export default {
     this.smallScreen = window.innerWidth < 600;
 
     // this.getById(this.$route.params.id)
+  },
+  updated() {
+    if (this.form.audioPath) {
+      this.fileSelected = true;
+    } else {
+      this.fileSelected = false;
+    }
   },
 };
 </script>
@@ -502,5 +469,16 @@ b {
 }
 .box > label {
   flex-basis: 30%;
+}
+.title {
+  // font-size: 17px;
+  display: block;
+  // font-weight: 600;
+}
+.bxs-star {
+  display: inline-block;
+  color: red;
+  font-size: 10px;
+  margin-left: 2px;
 }
 </style>

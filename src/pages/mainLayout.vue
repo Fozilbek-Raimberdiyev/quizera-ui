@@ -50,6 +50,7 @@ import axios from "axios";
 import BarChart from "../components/charts/BarChart.vue";
 import { mapState } from "pinia";
 import { userStore } from "../stores/management/user.store";
+import { listeningQuizStore } from '../stores/references/listeningQuiz.store';
 export default {
   components: {
     BarChart,
@@ -76,6 +77,7 @@ export default {
   },
   mounted() {
     this.smallScreen = window.innerWidth < 600;
+    listeningQuizStore().getList(10,1,false)
   },
 };
 </script>
