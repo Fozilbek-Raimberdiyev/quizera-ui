@@ -152,7 +152,7 @@
 import { mapActions, mapState } from "pinia";
 import { subjectStore } from "../../../stores/references/subject";
 import { useVuelidate } from "@vuelidate/core";
-import { email, required } from "@vuelidate/validators";
+import { email, maxLength, minLength, required } from "@vuelidate/validators";
 import { useToast } from "vue-toastification";
 import { userStore } from "../../../stores/management/user.store";
 import AsyncMulSelect from "../../../components/form/AsyncMulSelect.vue";
@@ -225,6 +225,11 @@ export default {
         time: {
           required,
         },
+        text : {
+          required,
+          minLength : minLength(50),
+          maxLength : maxLength(1000)
+        }
       },
     };
   },
