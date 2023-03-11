@@ -5,6 +5,7 @@ import todosService from "../services/todos.service";
 export const todoStore = defineStore("todoStore", {
   state: () => ({
     list: [],
+    loading : false,
     total: "",
     params: {
       page: 1,
@@ -13,9 +14,11 @@ export const todoStore = defineStore("todoStore", {
   }),
   actions: {
     async getList(page, limit) {
+      this.loading = true
       let res = (this.list = (await todosService.getList(this.params)).data);
       this.list = res.todos;
       this.total = res.total;
+      this.loading = false
     },
     addTodo (data) {
       return todosService.addTodo(data)

@@ -1,9 +1,11 @@
 import { $axios } from "./auth";
 export default {
-  getResult(query) {
+  getResult(query, page,limit) {
     return $axios.get("/results", {
       params: {
         query,
+        page,
+        limit
       },
     });
   },

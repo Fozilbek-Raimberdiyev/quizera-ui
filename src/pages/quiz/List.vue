@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div class="wrapper" style="position: relative;">
     <div v-if="list.length">
       <div
         :class="[smallScreen ? 'block' : 'flex items-center justify-between']"
@@ -155,6 +155,7 @@
             v-model:current-page="page"
           />
         </div>
+
         <div v-else>
           <n-empty
             size="huge"
@@ -164,10 +165,12 @@
         </div>
       </div>
     </div>
+    <div v-else-if="loading" style="position: absolute; left: 50%; top: 40vh; width: 25px;">
+      <!-- <a-spin style="position: absolute; top: 50%; left: 50%;"></a-spin> -->
+      <img style="width: 100%;" src="../../assets/gif/iphone-spinner.gif" alt="Loading...">
+    </div>
     <div v-else>
-      <div style="display: flex; justify-content: center; height: 400px">
-        <FadeLoader color="#409eef" class="self-center"></FadeLoader>
-      </div>
+      <n-empty size="huge" description="Test sinovlari topilmadi..." style="position: absolute; left: 50%; margin-top: 40vh;"></n-empty>
     </div>
 
     <el-dialog
@@ -246,7 +249,6 @@ export default {
       search: "",
       page: 1,
       limit: 5,
-      loading: false,
       smallScreen: false,
       InputSearch,
       subjectPassword: "",
@@ -256,7 +258,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(subjectStore, ["list", "total"]),
+    ...mapState(subjectStore, ["list", "total", "loading"]),
     ...mapState(userStore, ["currentUserRole"]),
     searchSubject() {
       return this.list.filter((subject) =>
@@ -312,9 +314,7 @@ export default {
     subjectStore().$patch({ list: [], total: null });
   },
   mounted() {
-    this.loading = true;
     this.getList(this.limit, this.page, false);
-    this.loading = false;
     this.smallScreen = window.innerWidth < 600;
   },
 };

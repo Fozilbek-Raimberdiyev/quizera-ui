@@ -1,22 +1,9 @@
  <template>
   <div class="back">
-    <!-- <img
-      class="loading"
-      v-if="!isMounted"
-      src="./assets/gif/spinner.gif"
-      alt="Loading"
-    /> -->
-    <loading
-      v-model="loading"
-      :can-cancel="true"
-      :on-cancel="false"
-      :is-full-page="true"
-    />
-    <!-- <h1 style="width: 500px; margin: a auto" v-if="loading">Loading</h1> -->
-    <q-inner-loading :showing="loading">
+    <q-inner-loading v-if="!isMounted" :showing="!isMounted">
         <q-spinner-gears size="50px" color="primary" />
       </q-inner-loading>
-    <router-view></router-view>
+    <router-view v-else></router-view>
   </div>
   <n-back-top
     :bottom="100"
@@ -48,7 +35,7 @@ import "vue-loading-overlay/dist/css/index.css";
 export default {
   data() {
     return {
-      stateMounted: false,
+      isMounted: false,
       loader: null,
       isLoaded: false,
     };
@@ -57,21 +44,14 @@ export default {
     ...mapActions(loadingStore, ["setLoader", "startLoading", "hideLoading"]),
   },
   computed: {
-    ...mapState(loadingStore, ["isMounted", "loading"]),
-    ...mapStores(loadingStore),
-    setLoader() {
-      if (this.isMounted) {
-        return (this.stateMounted = false);
-      } else {
-        return (this.stateMounted = true);
-      }
-    },
+    ...mapState(loadingStore, ["loading"]),
   },
   watch: {},
-  mounted() {
+  async mounted() {
     setTimeout(() => {
-      this.loadingStore.$patch({ isMounted: true });
+      (this.isMounted = true)
     }, 1000);
+    
   },
   created() {},
 };

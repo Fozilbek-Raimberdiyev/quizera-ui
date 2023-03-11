@@ -339,7 +339,7 @@ export default {
     },
   },
   beforeRouteLeave(to, from, next) {
-    if (!this.isEnded) {
+    if (!this.isEnded && this.questions.length) {
       Swal.fire({
         title:
           "<span style='font-size : 18px'>Agar sahidan chiqsangiz test yakunlanadi. Davom etasizmi?</span>",

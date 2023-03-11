@@ -131,6 +131,18 @@
           <td class="text-right">{{ result.comments }}</td>
         </tr>
       </tbody>
+      <tbody v-else-if="loading" style="position: relative">
+        <tr
+          style="position: absolute; padding: 10px 0; width: 25px"
+          :style="[bigScreen ? 'left : 50%' : 'left : 40%']"
+        >
+          <img
+            style="width: 100%"
+            src="../../assets/gif/iphone-spinner.gif"
+            alt="Loading..."
+          />
+        </tr>
+      </tbody>
       <tbody v-else style="position: relative">
         <tr
           style="position: absolute; padding: 10px 0"
@@ -140,6 +152,16 @@
         </tr>
       </tbody>
     </q-markup-table>
+    <el-pagination
+      v-if="list.length"
+      small
+      background
+      style="margin-top: 1rem"
+      layout="prev, pager, next"
+      :total="total"
+      :page-size="limit"
+      v-model:current-page="page"
+    />
     <el-dialog v-model="isShow">
       <div v-if="items.length">
         <h4 v-if="titleCode === 0">To'g'ri belgilangan savollar</h4>
@@ -191,6 +213,8 @@ export default {
       query: "mySubjects",
       isShow: false,
       items: [],
+      page: 1,
+      limit: 10,
       titleCode: null,
       bigScreen: false,
       smallScreeen: false,
@@ -201,7 +225,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(resultStore, ["list"]),
+    ...mapState(resultStore, ["list", "loading", "total"]),
     ...mapState(subjectStore, { subjects: "list" }),
     listC() {
       if (this.currentStatus === "All") {
@@ -234,6 +258,9 @@ export default {
         };
       });
       this.subjectOption = this.subjectOptions[0].value;
+    },
+    page(val) {
+      this.getList(this.query, val, this.limit);
     },
   },
   methods: {
@@ -283,7 +310,7 @@ export default {
   created() {
     this.smallScreeen = window.innerWidth < 600;
     this.bigScreen = window.innerWidth > 1400;
-    this.getList(this.query);
+    this.getList(this.query, this.page, this.limit);
     this.getSubjects(null, null, true);
   },
 };

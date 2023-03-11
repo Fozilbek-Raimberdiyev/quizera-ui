@@ -143,27 +143,35 @@
           <input
             type="file"
             name="audio"
+            accept="audio/mpeg, audio/wav, audio/ogg, audio/midi, audio/webm"
             @change="changeFile"
             id=""
-            accept="audio"
           />
           <div v-if="fileSelected && $route.params.id">
             <span>Fayl tanlangan</span>
-            <!-- <audio controls>
-              <source :src="form.audioPath" type="audio/mpeg" />
-            </audio> -->
             <vue-plyr>
               <audio controls crossorigin playsinline>
-                <source
-                  :src="form.audioPath"
-                  type="audio/mpeg"
-                />
+                <source :src="form.audioPath" type="audio/mpeg" />
               </audio>
             </vue-plyr>
           </div>
           <span style="color: red; display: block" v-if="!fileSelected"
             >Fayl tanlanishi shart...</span
           >
+          <a-modal
+            v-model:visible="isNoAccesFileSelected"
+            title="Ruxsat etilgan audiolar"
+            @ok="isNoAccesFileSelected = false"
+          >
+            <span>Ushbu audio turlaridan birini tanlang</span>
+            <ul class="lists">
+              <li><img src="../../../assets/image/mp3.png" alt="" /> mp3</li>
+              <li><img src="../../../assets/image/wav.png" alt="" /> wav</li>
+              <li><img src="../../../assets/image/ogg.png" alt="" /> ogg</li>
+              <li><img src="../../../assets/image/midi.png" alt="" /> midi</li>
+              <li><img src="../../../assets/image/webm.png" alt="" /> webm</li>
+            </ul>
+          </a-modal>
         </label>
       </div>
       <el-button
@@ -218,6 +226,8 @@ export default {
       Select,
       CloseBold,
       currentIndex: "",
+      isNoAccesFileSelected: false,
+      isIncorrectFile: false,
       isDefined: false,
       isEnterednumber: false,
       isClickedSave: false,
@@ -318,7 +328,10 @@ export default {
     ]),
     ...mapActions(userStore, ["getAllUsers"]),
     async submit(e) {
-      console.log(e);
+      if (this.isIncorrectFile) {
+        this.isNoAccesFileSelected = true;
+        return 0;
+      }
       this.v$.$validate();
       if (!this.$route.params.id) {
         if (!this.v$.$error) {
@@ -427,6 +440,19 @@ export default {
       this.form.textString = this.form.finalyTextArray.join(" ");
     },
     changeFile(e) {
+      let types = [
+        "audio/mpeg",
+        "audio/wav",
+        "audio/ogg",
+        "audio/midi",
+        "audio/webm",
+      ];
+      if (!types.some((type) => type === e.target.files[0].type)) {
+        this.isNoAccesFileSelected = true;
+        this.isIncorrectFile = true;
+      } else {
+        this.isIncorrectFile = false;
+      }
       this.fileSelected = e.target.files[0] ? true : false;
     },
   },
@@ -492,5 +518,16 @@ b {
   color: red;
   font-size: 10px;
   margin-left: 2px;
+}
+.lists {
+  margin: 0;
+  padding: 0 5px;
+}
+.lists img {
+  width: 22px;
+}
+.lists li {
+  list-style: none;
+  margin: 0;
 }
 </style>

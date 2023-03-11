@@ -141,25 +141,17 @@
           style="background: #fff; min-height: 550px"
           :style="[smallScreen ? `padding:15px;` : `padding: 24px;`]"
         >
-          <!-- <router-view></router-view> -->
-          <div v-show="!loading">
-            <router-view v-slot="{ Component }">
+          <div>
+            <div class="load" style="position: absolute; left: 50%; top: 50%;" v-if="loading">
+              <img v-if="$i18n.locale==='Gb'" src="../assets/gif/loading-Gb.gif" alt="Loading..." />
+              <img v-if="$i18n.locale==='Ru'" src="../assets/gif/loading-Ru.gif" alt="Погрузка..." />
+              <img v-if="$i18n.locale==='Uz'" src="../assets/gif/loading-Uz.gif" alt="Yuklanmoqda..." />
+            </div>
+            <router-view v-else v-slot="{ Component }">
               <transition name="el-fade-linear">
                 <component :is="Component" />
               </transition>
             </router-view>
-          </div>
-          <div class="" v-show="loading">
-            <!-- <a-spin /> -->
-            <!-- <loading
-              v-model:active="loading"
-              :can-cancel="false"
-              :on-cancel="false"
-              :is-full-page="true"
-            /> -->
-            <q-inner-loading :showing="loading">
-              <q-spinner-gears size="50px" color="primary" />
-            </q-inner-loading>
           </div>
         </div>
       </a-layout-content>
@@ -283,5 +275,8 @@ i {
 .ant-layout-header.small-header {
   padding: 5px 20px !important;
   max-height: 45px !important;
+}
+.load img {
+  width: 100px;
 }
 </style>

@@ -184,16 +184,6 @@
       </div>
     </div>
     <div class="flex items-center justify-between">
-      <!-- <div
-        class="notifications flex items-start"
-        v-if="list"
-        @click="drawer = true"
-      >
-        <i
-          style="margin-top: -25px !important; font-size: 22px"
-          class="bi bi-bell"
-        ></i>
-      </div> -->
       <el-dropdown
         trigger="click"
         style="margin: 0 5px; font-size: 16px"
@@ -252,12 +242,6 @@
         @click="drawer = true"
         style="cursor: pointer"
       >
-        <!-- <el-badge :value="todos.length" :max="99" class="item">
-          <i
-          style="font-size: 22px"
-          class="bi bi-bell"
-        ></i>
-        </el-badge> -->
         <a-badge :count="todos.length" style="margin: 0 0.5rem">
           <BellOutlined style="margin: 0 0.5rem; font-size: 1.5rem" />
         </a-badge>
@@ -284,11 +268,6 @@
           class="bx bxs-user-circle"
         ></i>
         <el-dropdown placement="bottom-start" trigger="click">
-          <!-- <el-button class="cursor-pointer" style="padding: 10px 0" type="info">
-            <span style="margin-left: 5px">{{
-              user?.firstName + " " + user?.lastName
-            }}</span>
-          </el-button> -->
           <span style="margin-left: 5px">{{
             user?.firstName + " " + user?.lastName
           }}</span>
@@ -426,7 +405,6 @@ import { authStore } from "../stores/counter";
 import mobileMenu from "./mobileMenu.vue";
 import { NIcon } from "naive-ui";
 import { h } from "vue";
-import { RouterLink } from "vue-router";
 import {
   DashboardOutlined,
   FlagOutlined,
@@ -501,7 +479,9 @@ export default {
     this.$emit("getBigscreen", this.bigScreen);
     try {
       this.loadingImage = true;
-      let res = await axios.get(this.user.pathImage);
+      if (this.user.pathImage) {
+        let res = await axios.get(this.user.pathImage);
+      }
       this.loadingImage = false;
     } finally {
       this.loadingImage = false;

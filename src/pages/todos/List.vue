@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="position: relative;">
     <div class="flex justify-between items-center">
       <div class="tabs" v-if="list.length">
         <span
@@ -132,7 +132,10 @@
                       ok-text="Ha"
                       :disabled="todo.isMaked || todo.isLated"
                       cancel-text="Yo'q"
-                      :style="{ 'cursor : auto; background : red': todo.isMaked || todo.isLated }"
+                      :style="{
+                        'cursor : auto; background : red':
+                          todo.isMaked || todo.isLated,
+                      }"
                       @confirm="
                         updateStatusById(todo._id, { status: todo.isMaked })
                       "
@@ -201,10 +204,11 @@
         </div>
       </div>
     </div>
+    <div v-else-if="loading" style="position: absolute; left: 50%; top: 40vh; width: 25px;">
+      <img style="width: 100%;" src="../../assets/gif/iphone-spinner.gif" alt="Loading...">
+    </div>
     <div v-else>
-      <div style="display: flex; justify-content: center; height: 400px">
-        <FadeLoader color="#409eef" class="self-center"></FadeLoader>
-      </div>
+      <n-empty style="margin: auto; margin-top: 30vh;" size="huge" description="Topshiriqlar topilmadi"></n-empty>
     </div>
   </div>
 </template>
@@ -229,7 +233,7 @@ export default {
     isChanged: false,
   }),
   computed: {
-    ...mapState(todoStore, ["list", "total", "params"]),
+    ...mapState(todoStore, ["list", "total", "params", "loading"]),
     listC() {
       if (this.status === "all") {
         return this.list;

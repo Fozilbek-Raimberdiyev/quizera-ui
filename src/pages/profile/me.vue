@@ -11,9 +11,21 @@
           alt="profile image"
           type="file"
           id="image-input"
+          accept="image/png, image/jpeg"
         />
-        
-        <img v-if="!clickedUpload" :src="user.pathImage" />
+        <a-modal
+            v-model:visible="isNoAccesFileSelected"
+            title="Ruxsat etilgan audiolar"
+            @ok="isNoAccesFileSelected = false"
+          >
+            <span>Ushbu audio turlaridan birini tanlang</span>
+            <ul class="lists">
+              <li><img src="../../assets/image/png.png" alt="png" /> png</li>
+              <li><img src="../../assets/image/jpg.png" alt="jpg" /> jpg</li>
+              <li><img src="../../assets/image/jpeg.png" alt="jpeg" /> jpeg</li>
+            </ul>
+          </a-modal>
+        <img class="userImg" v-if="!clickedUpload" :src="user.pathImage" />
         <div ref="imagePreview" id="image-preview"></div>
       </div>
       <div>
@@ -59,6 +71,9 @@ import { ElAlert, ElNotification } from "element-plus";
 export default {
   data: () => ({
     clickedUpload: false,
+    isFileSelected : false,
+    isNoAccesFileSelected : false,
+    isIncorrectFileType : false,
     form: {
       firstName: "",
       lastName: "",
@@ -87,6 +102,10 @@ export default {
       this.form._id = user._id;
     },
     async submit(e) {
+      if(this.isIncorrectFileType) {
+        this.isNoAccesFileSelected = true;
+        return 0
+      }
       let form = { ...this.form };
       let formData = new FormData();
       let file = e.srcElement[0].files[0]
@@ -110,6 +129,12 @@ export default {
       this.updateUser(formData);
     },
     change(e) {
+      this.isFileSelected = true
+      let types = ['image/jpeg', 'image/png']
+      if(!types.some(type => type===e.target.files[0])) {
+        this.isIncorrectFileType = true;
+        this.isNoAccesFileSelected = true
+      }
       this.clickedUpload = true;
       const file = e.target.files[0];
       const reader = new FileReader();
@@ -158,11 +183,22 @@ form {
   max-width: 100%;
   max-height: 100%;
 } */
-img {
+.userImg {
   width: 200px;
   height: 200px;
   border-radius: 50%;
   object-fit: cover;
   margin: 20px 0;
+}
+.lists {
+  margin: 0;
+  padding: 0 5px;
+}
+.lists li  img {
+  width: 22px;
+}
+.lists li {
+  list-style: none;
+  margin: 0;
 }
 </style>

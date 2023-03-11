@@ -1,9 +1,5 @@
 <template>
   <div class="">
-    <pre>{{
-      new Date(new Date().getTime() +(5 * 60 * 60 * 1000)).toLocaleString("uz-Uz", { timeZone: "UTC", hour12: false, day : "2-digit", month :"long", year : "numeric", hourCycle : "h24", hour : "numeric", minute : "numeric" })
-    }}</pre>
-    <pre>{{  }}</pre>
     <!-- <hr style="margin-bottom: 1rem; color: #e3e5e9;"> -->
     <div style="margin: 1rem 0">
       <div class="text-center">

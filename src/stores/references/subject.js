@@ -7,13 +7,16 @@ export const subjectStore = defineStore("subject", {
     list: [],
     subject: {},
     total: "",
+    loading : false
   }),
   getters: {},
   actions: {
     async getList(limit, page, isForReference) {
+      this.loading =  true
       let res = await subjectService.getSubjects(limit, page, isForReference);
       this.list = res.data.subjects;
       this.total = res.data.total;
+      this.loading = false
     },
     addSubject(body) {
       return subjectService.addSubject(body);
