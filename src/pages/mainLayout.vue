@@ -1,5 +1,9 @@
 <template>
   <div class="">
+    <pre>{{
+      new Date(new Date().getTime() +(5 * 60 * 60 * 1000)).toLocaleString("uz-Uz", { timeZone: "UTC", hour12: false, day : "2-digit", month :"long", year : "numeric", hourCycle : "h24", hour : "numeric", minute : "numeric" })
+    }}</pre>
+    <pre>{{  }}</pre>
     <!-- <hr style="margin-bottom: 1rem; color: #e3e5e9;"> -->
     <div style="margin: 1rem 0">
       <div class="text-center">
@@ -50,7 +54,7 @@ import axios from "axios";
 import BarChart from "../components/charts/BarChart.vue";
 import { mapState } from "pinia";
 import { userStore } from "../stores/management/user.store";
-import { listeningQuizStore } from '../stores/references/listeningQuiz.store';
+import { listeningQuizStore } from "../stores/references/listeningQuiz.store";
 export default {
   components: {
     BarChart,
@@ -77,7 +81,7 @@ export default {
   },
   mounted() {
     this.smallScreen = window.innerWidth < 600;
-    listeningQuizStore().getList(10,1,false)
+    listeningQuizStore().getList(10, 1, false);
   },
 };
 </script>

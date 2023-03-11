@@ -25,10 +25,12 @@
             >Maydon to'ldirlishi shart!</span
           >
           <span class="error" v-if="v$.form.name.minLength.$invalid"
-            >{{  v$.form.name.minLength.$params.min}} ta harf yoki belgidan kam bo'lmasligi kerak!</span
+            >{{ v$.form.name.minLength.$params.min }} ta harf yoki belgidan kam
+            bo'lmasligi kerak!</span
           >
           <span class="error" v-if="v$.form.name.maxLength.$invalid"
-            >{{ v$.form.name.maxLength.$params.max }} ta harf yoki belgidan ko'p bo'lmasligi kerak!</span
+            >{{ v$.form.name.maxLength.$params.max }} ta harf yoki belgidan ko'p
+            bo'lmasligi kerak!</span
           >
         </div>
         <div>
@@ -81,7 +83,7 @@
 </template>
   <script>
 import { useVuelidate } from "@vuelidate/core";
-import { required,minLength, maxLength } from "@vuelidate/validators";
+import { required, minLength, maxLength } from "@vuelidate/validators";
 import { mapActions, mapState } from "pinia";
 import axios from "axios";
 import { todoStore } from "../../stores/todos.store";
@@ -94,19 +96,32 @@ export default {
       name: "",
       description: "",
       endDate: "",
-      isMaked : false
+      isMaked: false,
       // password: "",
       // rules : []
     },
   }),
-  props : ["size", "large","small", "default", "type", "primart", "info", "succes", "text", "native-type", "submit", "cancel"],
+  props: [
+    "size",
+    "large",
+    "small",
+    "default",
+    "type",
+    "primart",
+    "info",
+    "succes",
+    "text",
+    "native-type",
+    "submit",
+    "cancel",
+  ],
   validations() {
     return {
       form: {
         name: {
           required,
-          minLength : minLength(4),
-          maxLength : maxLength(35)
+          minLength: minLength(4),
+          maxLength: maxLength(35),
         },
         description: {
           required,
@@ -123,13 +138,17 @@ export default {
     ...mapActions(todoStore, ["getById", "updateById", "addTodo"]),
     async submit() {
       this.v$.$validate();
+      let form = { ...this.form };
+      console.log(new Date(new Date(this.form.endDate).setUTCMinutes(300)))
+      // form.endDate = this.form.endDate.getTimeZoneOffset()
+      return
       if (!this.v$.$error) {
         if (!this.$route.params.id) {
-          let res = await this.addTodo(this.form)
+          let res = await this.addTodo(form);
           this.$router.push("/todos");
         } else {
           let id = this.form._id;
-          await this.updateById(id, this.form);
+          await this.updateById(id, form);
           this.$router.push("/todos");
         }
       } else {

@@ -139,7 +139,7 @@
                 currentIndex === 9 ||
                 currentIndex === 10 ||
                 currentIndex === 11 ||
-                currentIndex === 18
+                currentIndex === 18,
             }"
           >
             <i class="bx bx-building"></i>Ma'lumotnomalar
@@ -194,7 +194,11 @@
           class="bi bi-bell"
         ></i>
       </div> -->
-      <el-dropdown trigger="click" style="margin: 0 5px; font-size: 16px;" :style="[smallScreen ? 'margin-right : 1rem' : 'margin-right : 3rem']">
+      <el-dropdown
+        trigger="click"
+        style="margin: 0 5px; font-size: 16px"
+        :style="[smallScreen ? 'margin-right : 1rem' : 'margin-right : 3rem']"
+      >
         <span class="el-dropdown-link">
           <flag style="width: 50px" :iso="this.$i18n.locale"></flag>
           <span
@@ -259,7 +263,11 @@
         </a-badge>
       </div>
       <div class="flex items-center">
-        <n-skeleton v-if="loadingImage && user.pathImage" circle size="medium" />
+        <n-skeleton
+          v-if="loadingImage && user.pathImage"
+          circle
+          size="medium"
+        />
         <img
           v-if="user.pathImage && !loadingImage"
           style="
@@ -270,7 +278,11 @@
           "
           :src="user.pathImage"
         />
-        <i v-if="!loadingImage && !user.pathImage" style="font-size: 30px;" class="bx bxs-user-circle"></i>
+        <i
+          v-if="!loadingImage && !user.pathImage"
+          style="font-size: 30px"
+          class="bx bxs-user-circle"
+        ></i>
         <el-dropdown placement="bottom-start" trigger="click">
           <!-- <el-button class="cursor-pointer" style="padding: 10px 0" type="info">
             <span style="margin-left: 5px">{{
@@ -341,9 +353,60 @@
                     </td>
                     <td style="width: 70px" class="text-right">
                       {{
-                        new Date(new Date(todo.endDate) - new Date()).getDate()
+                        getDate(
+                          new Date(todo.endDate) - new Date()
+                        ).getUTCFullYear() - 1970
+                          ? getDate(
+                              new Date(todo.endDate) - new Date()
+                            ).getUTCFullYear() -
+                            1970 +
+                            " yil"
+                          : ""
                       }}
-                      kun
+                      {{
+                        getDate(
+                          new Date(todo.endDate) - new Date()
+                        ).getMonth() - 0
+                          ? getDate(
+                              new Date(todo.endDate) - new Date()
+                            ).getMonth() -
+                            0 +
+                            " oy"
+                          : ""
+                      }}
+                      {{
+                        getDate(new Date(todo.endDate) - new Date()).getDate() -
+                        1
+                          ? getDate(
+                              new Date(todo.endDate) - new Date()
+                            ).getDate() -
+                            1 +
+                            " kun"
+                          : ""
+                      }}
+                      {{
+                        getDate(
+                          new Date(todo.endDate) - new Date()
+                        ).getHours() -
+                        new Date(
+                          new Date(todo.endDate) - new Date()
+                        ).getTimezoneOffset() /
+                          -60
+                          ? getDate(
+                              new Date(todo.endDate) - new Date()
+                            ).getHours() -
+                            new Date(
+                              new Date(todo.endDate) - new Date()
+                            ).getTimezoneOffset() /
+                              -60 +
+                            " soat"
+                          : ""
+                      }}
+                      {{
+                        getDate(
+                          new Date(todo.endDate) - new Date()
+                        ).getMinutes() + " daqiqa"
+                      }}
                     </td>
                   </tr>
                 </tbody>
@@ -374,7 +437,7 @@ import {
   BellOutlined,
 } from "@ant-design/icons-vue";
 import { NotificationStore } from "../stores/notifications.store";
-import axios from 'axios';
+import axios from "axios";
 export default {
   data() {
     return {
@@ -384,7 +447,7 @@ export default {
       bigScreen: false,
       drawer: false,
       smallScreen: false,
-      loadingImage : false
+      loadingImage: false,
     };
   },
   components: {
@@ -428,17 +491,20 @@ export default {
       this.fullScreen = !this.fullScreen;
       this.$emit("getFullscreen", this.fullScreen);
     },
+    getDate(date) {
+      return new Date(date);
+    },
   },
   async created() {
     this.smallScreen = window.innerWidth < 600;
     this.bigScreen = window.innerWidth > 1400;
     this.$emit("getBigscreen", this.bigScreen);
-    try{
-      this.loadingImage = true
+    try {
+      this.loadingImage = true;
       let res = await axios.get(this.user.pathImage);
-      this.loadingImage = false
+      this.loadingImage = false;
     } finally {
-      this.loadingImage  = false
+      this.loadingImage = false;
     }
   },
 };
