@@ -138,7 +138,7 @@
       </a-layout-header>
       <a-layout-content :style="[smallScreen ? 'margin: 5px' : 'margin: 16px']">
         <div
-          style="background: #fff; min-height: 550px"
+          style="background: #fff; min-height: 100vh"
           :style="[smallScreen ? `padding:15px;` : `padding: 24px;`]"
         >
           <div>
