@@ -23,6 +23,14 @@
           <span class="button">Yakunlash</span>
         </a-popconfirm>
       </div>
+      <vue-plyr>
+        <audio controls crossorigin playsinline>
+          <source
+            :src="subject.audioPath"
+            type="audio/mpeg"
+          />
+        </audio>
+      </vue-plyr>
       <div></div>
       <div class="tabs">
         <span

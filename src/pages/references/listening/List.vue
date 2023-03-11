@@ -106,7 +106,6 @@ export default {
       this.$router.push("/references/listening");
     },
     async deleteQuiz(id) {
-      alert("recursion");
       let res = await this.deleteQuizP(id);
       this.$router.push("/references/listening");
     },

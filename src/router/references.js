@@ -36,7 +36,7 @@ export default {
         {
           path: "add",
           component: () => import("../pages/references/quiz/AddOrUpdate.vue"),
-          name: "Quiz add",
+          name: "Question add",
           meta: {
             roles: ["admin", "teacher"],
           },
@@ -82,7 +82,7 @@ export default {
     {
       path: "listening",
       component: () => import("../pages/references/listening/List.vue"),
-      name: "Subject",
+      name: "Listening",
       meta: {
         roles: ["admin", "teacher", "student"],
       },
@@ -91,7 +91,7 @@ export default {
           path: "add",
           component: () =>
             import("../pages/references/listening/AddOrUpdate.vue"),
-          name: "Subject add",
+          name: "Quiz add",
           meta: {
             roles: ["admin", "teacher"],
           },
@@ -100,7 +100,7 @@ export default {
           path: ":id/update",
           component: () =>
             import("../pages/references/listening/AddOrUpdate.vue"),
-          name: "Subject edit",
+          name: "Quiz edit",
           meta: {
             roles: ["admin", "teacher"],
           },

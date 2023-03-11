@@ -149,9 +149,17 @@
           />
           <div v-if="fileSelected && $route.params.id">
             <span>Fayl tanlangan</span>
-            <audio controls>
+            <!-- <audio controls>
               <source :src="form.audioPath" type="audio/mpeg" />
-            </audio>
+            </audio> -->
+            <vue-plyr>
+              <audio controls crossorigin playsinline>
+                <source
+                  :src="form.audioPath"
+                  type="audio/mpeg"
+                />
+              </audio>
+            </vue-plyr>
           </div>
           <span style="color: red; display: block" v-if="!fileSelected"
             >Fayl tanlanishi shart...</span

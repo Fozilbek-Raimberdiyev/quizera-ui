@@ -113,6 +113,18 @@
             </span>
           </div>
         </label>
+        <label>
+          <span style="display: block" class="title">Fayl tanlang</span>
+          <input type="file" name="file" @change="changeFile" />
+          <div v-if="$route.params.id && form.audioPath">
+            <span>Fayl tanlangan</span>
+            <vue-plyr>
+              <audio controls crossorigin playsinline>
+                <source :src="form.audioPath" type="audio/mpeg" />
+              </audio>
+            </vue-plyr>
+          </div>
+        </label>
       </div>
       <el-button
         v-if="$route.params.id"
@@ -370,13 +382,13 @@ export default {
       // });
     },
     "form.isForAll"(value) {
-      // const members = [...this.form.members];
-      // if(value) {
-      //   this.form.members = []
-      // } else {
-      //   this.form.members = [...members];
-      //   console.log(members)
-      // }
+      const members = [...this.form.members];
+      if(value) {
+        this.form.members = []
+      } else {
+        this.form.members = [...members];
+        console.log(members)
+      }
     },
   },
   methods: {
@@ -387,7 +399,8 @@ export default {
       "getList",
     ]),
     ...mapActions(userStore, ["getAllUsers"]),
-    async submit() {
+    async submit(e) {
+      console.log(e);
       this.v$.$validate();
       if (!this.$route.params.id) {
         if (!this.v$.$error) {
@@ -403,7 +416,10 @@ export default {
           });
           form.members = members;
           form.authorId = this.user._id;
-          let res = await this.addSubject(form);
+          let formData = new FormData();
+          formData.append("audio", e.srcElement[8].files[0]);
+          formData.append("form", JSON.stringify(form));
+          let res = await this.addSubject(formData);
           this.$emit("created", res);
           this.$router.push("/references/subject");
           this.getList(10, 5, true);
@@ -453,11 +469,11 @@ export default {
         let temp = [...this.form.grades];
         temp[index] = { grade: null, count: null };
         temp = temp.filter((grade) => grade.grade && grade.count);
-        this.form.grades = temp
+        this.form.grades = temp;
       } else {
         let temp = [...this.form.grades];
         temp[index] = { grade: null, count: null };
-        this.form.grades = temp
+        this.form.grades = temp;
       }
     },
     saveGradeOption() {

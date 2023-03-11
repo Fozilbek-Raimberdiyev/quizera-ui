@@ -138,7 +138,8 @@
               active:
                 currentIndex === 9 ||
                 currentIndex === 10 ||
-                currentIndex === 11,
+                currentIndex === 11 ||
+                currentIndex === 18
             }"
           >
             <i class="bx bx-building"></i>Ma'lumotnomalar
@@ -159,6 +160,14 @@
               >
                 <router-link to="/references/subject">
                   <i class="bx bx-folder-plus"></i>Fanlar
+                </router-link>
+              </el-dropdown-item>
+              <el-dropdown-item
+                @click="currentIndex = 18"
+                :class="{ active: currentIndex === 18 }"
+              >
+                <router-link to="/references/listening">
+                  <i class="bx bx-folder-plus"></i>Eshitish sinovlari
                 </router-link>
               </el-dropdown-item>
               <el-dropdown-item

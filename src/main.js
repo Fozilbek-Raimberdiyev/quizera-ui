@@ -45,6 +45,9 @@ import 'sweetalert2/dist/sweetalert2.min.css';
 import { loadingStore } from './stores/loading.store'
 
 
+import VuePlyr from 'vue-plyr'
+import 'vue-plyr/dist/vue-plyr.css'
+
 export const app = createApp(App)
 
 // The usual app stuff goes here.
@@ -59,6 +62,7 @@ app.use(resInterceptor)
 app.use(naive)
 app.use(i18n)
 app.use(vueflagicon)
+app.use(VuePlyr)
 
 // app.use(LoadingPlugin)
 app.use(Quasar, {

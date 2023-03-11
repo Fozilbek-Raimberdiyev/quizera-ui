@@ -87,12 +87,17 @@
           ><router-link to="/references/subject"
             ><i class="bx bx-folder-plus"></i>Fanlar</router-link
           ></a-menu-item
+        ><a-menu-item key="18"
+          ><router-link to="/references/listening"
+            ><i class="bi bi-people"></i>Eshitish sinovlari</router-link
+          ></a-menu-item
         >
         <a-menu-item key="11"
           ><router-link to="/references/subject"
-            ><i class="bi bi-people"></i>Guruhlar</router-link
+            ><i class="bx bx-folder-plus"></i>Fanlar</router-link
           ></a-menu-item
         >
+
         <!-- <a-menu-item key="12"
             ><router-link to="">Item1</router-link></a-menu-item
           > -->
