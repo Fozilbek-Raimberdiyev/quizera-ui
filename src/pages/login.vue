@@ -162,6 +162,7 @@ export default {
   },
   created() {
     this.smallScreen = window.innerWidth < 600;
+    this.loading = false
   },
 };
 </script>
