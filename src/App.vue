@@ -1,6 +1,6 @@
  <template>
   <div class="back">
-    <q-inner-loading v-if="!isMounted" :showing="!isMounted">
+    <q-inner-loading v-if="loading" :showing="loading">
         <q-spinner-gears size="50px" color="primary" />
       </q-inner-loading>
     <router-view v-else></router-view>
@@ -48,10 +48,10 @@ export default {
   },
   watch: {},
   async mounted() {
-    setTimeout(() => {
-      (this.isMounted = true)
-    }, 1000);
-    
+    // setTimeout(() => {
+    //   (this.isMounted = true)
+    // }, 100);
+    this.isMounted = true
   },
   created() {},
 };

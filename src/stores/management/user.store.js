@@ -50,6 +50,7 @@ export const userStore = defineStore("userStore", {
       }
     },
     async getCurrentUserRole() {
+      performance.mark('user')
     let res = await auth.getCurrentUser();
     this.currentUserRole = res.data;
     },

@@ -389,12 +389,11 @@ router.beforeEach(async (to, from, next) => {
   let isValid = current <= exp;
   if (!isValid && to.name != "login") {
     next("/login");
-  } else if (to.name === "register" && from.name === "login") {
-    next("/register");
   } else {
     if (!requiredRoles?.some((role) => role === userRole) && to.path != "/") {
       next("/");
     } else {
+      // performance.mark('next')`
       next();
     }
   }
