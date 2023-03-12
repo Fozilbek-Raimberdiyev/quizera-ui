@@ -160,9 +160,11 @@ export default {
       let res = await this.createUser(this.rForm);
     },
   },
+  mounted() {
+    // loadingStore().$patch({loading : false})
+  },
   created() {
     this.smallScreen = window.innerWidth < 600;
-    this.loading = false
   },
 };
 </script>

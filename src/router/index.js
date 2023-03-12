@@ -383,6 +383,9 @@ router.beforeEach(async (to, from, next) => {
   } catch (e) {
     userRole = "student";
   }
+  finally{
+    loadingStore().$patch({loading : false})
+  }
   const requiredRoles = to.meta.roles;
   let { exp } = jwtDecode(token) || null;
   let current = Math.floor(Date.now() / 1000);
