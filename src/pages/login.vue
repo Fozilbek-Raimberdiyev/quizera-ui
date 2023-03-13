@@ -150,8 +150,8 @@ export default {
     };
   },
   computed: {
-    ...mapState(userStore, ["user"]),
-    ...mapState(loadingStore, ["loading"]),
+    ...mapState(userStore, ["user", "loading"]),
+    // ...mapState(loadingStore, ["loading"]),
   },
   watch: {},
   methods: {
@@ -161,7 +161,7 @@ export default {
     },
   },
   mounted() {
-    // loadingStore().$patch({loading : false})
+    // loadingStore().$patch({loading : false})   
   },
   created() {
     this.smallScreen = window.innerWidth < 600;

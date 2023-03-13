@@ -8,7 +8,8 @@ export const userStore = defineStore("userStore", {
     user: JSON.parse(localStorage.getItem("user")) || {},
     token: localStorage.getItem("token") || null,
     users : [],
-    currentUserRole : "student"
+    currentUserRole : "student",
+    loading : false
   }),
   getters: {
     isAuth() {
@@ -26,6 +27,7 @@ export const userStore = defineStore("userStore", {
     },
     async createUser(form) {
       try {
+        this.loading = true
         let res = await auth.register(form);
         this.user = res.data.user;
         let token = res.data.token;
@@ -35,9 +37,13 @@ export const userStore = defineStore("userStore", {
       } catch (e) {
         // useToast().error(e.response.data.message);
       }
+      finally {
+        this.loading = false
+      }
     },
     async login(form) {
       try {
+        this.loading = true
         let res = await auth.login(form);
         this.user = res.data.user;
         let token = res.data.token;
@@ -47,6 +53,9 @@ export const userStore = defineStore("userStore", {
       } catch (e) {
         console.log(e)
         // useToast().error(e.response.data.message);
+      }
+      finally {
+        this.loading = false
       }
     },
     async getCurrentUserRole() {
