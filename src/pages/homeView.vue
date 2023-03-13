@@ -49,9 +49,9 @@
             {{ $t("sidebar.workingTest") }}
           </router-link>
         </a-menu-item>
-        <a-menu-item key="16" v-if="currentUserRole === 'admin'">
-          <router-link v-if="!smallScreen" to="/posts"
-            ><i class="bx bx-news"></i>{{ $t("sidebar.posts") }}</router-link
+        <a-menu-item key="16">
+          <router-link v-if="!smallScreen" to="/listeningQuizzes"
+            ><i class="bx bx-news"></i>{{ $t("sidebar.lQuizzes") }}</router-link
           >
           <!-- <router-link v-else to="/posts"
             ><i class="bx bx-news"></i

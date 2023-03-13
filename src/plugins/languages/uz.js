@@ -5,7 +5,7 @@ export default {
     roles: "Rollar",
     permissions: "Ruxsatlar",
     workingTest: "Test ishlash",
-    posts: "Maqolalar",
+    lQuizzes: "Eshitish sinovlari",
     movies: "Kinolar",
     todos: "Topshiriqlar",
     statistics: "Statistika",

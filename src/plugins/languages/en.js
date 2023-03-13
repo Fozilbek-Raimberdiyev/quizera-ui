@@ -5,7 +5,7 @@ export default {
       roles: "Roles",
       permissions: "Permissions",
       workingTest: "Solve test",
-      posts: "Posts",
+      lQuizzes: "Eshitish sinovlari",
       movies: "Movies",
       todos: "Tasks",
       statistics: "Statistics",

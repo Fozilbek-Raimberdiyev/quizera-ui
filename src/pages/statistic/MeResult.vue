@@ -1,5 +1,5 @@
 <template>
-  <div class="q-pa-md">
+  <div class="q-pa-md wrapper" :class="{loading : loading}">
     <div class="tabs flex items-center tabs">
       <span
         @click="currentStatus = 'Passed'"
@@ -311,5 +311,8 @@ i {
   padding: 5px 10px;
   border-radius: 5px;
   color: #fff;
+}
+.wrapper.loading {
+  opacity: 0.3;
 }
 </style>

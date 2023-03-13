@@ -250,12 +250,29 @@ const routes = [
         ],
       },
       {
-        path: "/posts",
-        component: () => import("../pages/posts.vue"),
-        name: "posts",
+        path: "/listeningQuizzes",
+        component: {
+          render() {
+            return h(resolveComponent("router-view"));
+          },
+        },
+        name: "Quizzes",
         meta: {
+          public: false,
           roles: ["admin", "teacher", "student"],
         },
+        children: [
+          {
+            path: "",
+            component: () => import("../pages/listeningQuiz/List.vue"),
+            name: "",
+          },
+          {
+            path: ":id",
+            component: () => import("../pages/listeningQuiz/QuizRender.vue"),
+            name: "",
+          },
+        ],
       },
       {
         path: "/movies",
@@ -374,17 +391,15 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
+  loadingStore().$patch({ loading: true });
   let userRole = null;
   try {
-    loadingStore().$patch({ loading: true });
     await userStore().getCurrentUserRole();
     loadingStore().$patch({ loading: false });
     userRole = userStore().currentUserRole;
   } catch (e) {
     userRole = "student";
-  }
-  finally{
-    loadingStore().$patch({loading : false})
+  } finally {
   }
   const requiredRoles = to.meta.roles;
   let { exp } = jwtDecode(token) || null;
@@ -397,6 +412,7 @@ router.beforeEach(async (to, from, next) => {
       next("/");
     } else {
       // performance.mark('next')`
+      loadingStore().$patch({ loading: false });
       next();
     }
   }
