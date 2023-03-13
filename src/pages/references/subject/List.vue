@@ -111,7 +111,12 @@ export default {
   return  subjectStore().$patch({list : []})
   },
   mounted() {
-    this.getList(10, 5, true);
+    let params = {
+      isForReference : true,
+      page : 1,
+      limit : 10
+    }
+    this.getList(params);
   },
 };
 </script>

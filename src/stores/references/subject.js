@@ -11,9 +11,9 @@ export const subjectStore = defineStore("subject", {
   }),
   getters: {},
   actions: {
-    async getList(limit, page, isForReference) {
+    async getList(params) {
       this.loading =  true
-      let res = await subjectService.getSubjects(limit, page, isForReference);
+      let res = await subjectService.getSubjects(params);
       this.list = res.data.subjects;
       this.total = res.data.total;
       this.loading = false

@@ -391,15 +391,16 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
-  loadingStore().$patch({ loading: true });
   let userRole = null;
   try {
-    await userStore().getCurrentUserRole();
+    loadingStore().$patch({ loading: true });
+    userStore().getCurrentUserRole();
     loadingStore().$patch({ loading: false });
     userRole = userStore().currentUserRole;
   } catch (e) {
     userRole = "student";
   } finally {
+    loadingStore().$patch({ loading: false });
   }
   const requiredRoles = to.meta.roles;
   let { exp } = jwtDecode(token) || null;
@@ -412,7 +413,6 @@ router.beforeEach(async (to, from, next) => {
       next("/");
     } else {
       // performance.mark('next')`
-      loadingStore().$patch({ loading: false });
       next();
     }
   }

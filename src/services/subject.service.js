@@ -1,8 +1,8 @@
 import { $axios } from "./auth";
 
 export default {
-  getSubjects(limit, page, isForReference) {
-    return $axios.get("/subjects", { params: { limit, page, isForReference } });
+  getSubjects(params) {
+    return $axios.get("/subjects", { params });
   },
   addSubject(body) {
     return $axios.post("/subjects/add", body, {
