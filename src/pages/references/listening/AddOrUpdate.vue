@@ -1,5 +1,6 @@
 <template>
   <div class="wrapper">
+    <!-- <pre>{{ form }}</pre> -->
     <form ref="formEl" @submit.prevent="submit">
       <div :class="[smallScreen ? 'block' : 'flex  box items-start']">
         <label for="name">
@@ -83,17 +84,26 @@
           <span class="title">Matnni kiriting<i class="bx bxs-star"></i></span>
           <a-textarea
             placeholder="Sinov matnini kiriting"
-            :auto-size="{ minRows: 2, maxRows: 50 }"
+            :auto-size="{ minRows: 2, maxRows: 40 }"
             @change="changeText"
+            v-model:value="form.text"
+            show-count
+            :maxlength="5000"
           >
             <template #prefix>
-              <CheckOutlined v-if="!v$.form.textArray.$error" />
+              <CheckOutlined v-if="!v$.form.text.$anyDirty" />
               <a-tooltip v-else title="Extra information">
                 <info-circle-outlined style="color: red" />
               </a-tooltip> </template
           ></a-textarea>
-          <span style="color: red" v-if="v$.form.textArray.$error"
+          <span style="color: red" v-if="v$.form.text.required.$invalid"
             >Maydon to'ldirilishi shart...</span
+          >
+          <span style="color: red" v-if="v$.form.text.maxLength.$invalid"
+            >{{ v$.form.text.minLength.$params.max }} tadan ortiq belgi kiritsh mumkin emas...</span
+          >
+          <span style="color: red" v-if="v$.form.text.minLength.$invalid"
+            > {{ v$.form.text.minLength.$params.min }} tadan kam belgi kiritish mumkin emas</span
           >
         </label>
         <label v-if="form.textArray.length && isStartedFill">
@@ -107,7 +117,7 @@
           >
         </label>
         <label v-if="isStartedFill && form.textString">
-          <b class="title">Sinov matni</b>
+          <span class="title">Sinov matni</span>
           <div style="overflow-x: auto">
             {{ form.textString }}
           </div>
@@ -277,6 +287,11 @@ export default {
         textArray: {
           required,
         },
+        text: {
+          required,
+          maxLength: maxLength(5000),
+          minLength: minLength(500),
+        },
       },
     };
   },
@@ -332,6 +347,7 @@ export default {
         this.isNoAccesFileSelected = true;
         return 0;
       }
+      this.form.authorFullName = this.user.firstName + " " + this.user.lastName;
       this.v$.$validate();
       if (!this.$route.params.id) {
         if (!this.v$.$error) {
@@ -397,6 +413,15 @@ export default {
         return member.value;
       });
       this.form = form;
+      let textArray = []
+      this.form.textString = [...this.form.textArray].filter((text, index) => {
+        if (text.isVisible) {
+          textArray[index] = text.label;
+        } else {
+          textArray[index] = "________";
+        }
+      });
+      this.form.textString = textArray.join(" ");
     },
     remoteMethod(query) {
       if (query) {
@@ -457,7 +482,10 @@ export default {
     },
   },
   mounted() {
-    this.v$.$validate();
+    // this.v$.$validate();
+    if(this.$route.params.id) {
+      this.isStartedFill = true
+    }
   },
   beforeRouteLeave() {
     listeningQuizStore().$patch({ list: [], total: null });
@@ -491,9 +519,11 @@ input:active {
   padding-bottom: 1rem;
   margin-bottom: 1rem;
 }
-label {
+form label {
   flex-basis: 25%;
   margin: 0.5rem 1rem;
+  max-height: 500px;
+  overflow-y: auto;
   // min-height: 60px;
 }
 b {

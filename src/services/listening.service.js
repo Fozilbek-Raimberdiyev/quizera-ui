@@ -29,4 +29,10 @@ export default {
   updateQuizStatus(body) {
     return $axios.put("/listeningQuiz/statusUpdate", body);
   },
+  checkQuiz(textArray) {
+    return $axios.post('/listeningQuiz/check', textArray)
+  },
+  checkPasswordQuiz(quiz, password) {
+    return $axios.post("/listeningQuiz/checkPassword", { quiz, password });
+  }
 };

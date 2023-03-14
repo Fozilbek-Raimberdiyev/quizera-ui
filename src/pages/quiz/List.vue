@@ -202,6 +202,7 @@
           v-model:value="subjectPassword"
           type="password"
           show-password
+          @keyup.enter="checkPasswordSubject"
         ></a-input>
         <el-button
           class="cursor-pointer"

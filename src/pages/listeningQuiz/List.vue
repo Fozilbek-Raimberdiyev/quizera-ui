@@ -202,6 +202,7 @@
           v-model:value="subjectPassword"
           type="password"
           show-password
+          @keyup.enter="checkPasswordSubject"
         ></a-input>
         <el-button
           class="cursor-pointer"
@@ -239,6 +240,7 @@ import auth from "../../services/auth";
 import subjectService from "../../services/subject.service";
 import { useToast } from "vue-toastification";
 import { listeningQuizStore } from "../../stores/references/listeningQuiz.store";
+import listeningService from '../../services/listening.service';
 
 export default {
   components: {
@@ -265,8 +267,9 @@ export default {
       InputSearch,
       subjectPassword: "",
       isShow: false,
-      subject: {},
+      quiz: {},
       subjectService,
+      listeningService
     };
   },
   computed: {
@@ -302,28 +305,28 @@ export default {
   methods: {
     ...mapActions(listeningQuizStore, ["getList"]),
     dateParser,
-    checkingPasswordStatus(subject) {
-      this.subject = subject;
-      if (subject.isHasPassword) {
+    checkingPasswordStatus(quiz) {
+      this.quiz = quiz;
+      if (quiz.isHasPassword) {
         this.isShow = true;
       } else {
-        this.$router.push(`/listeningQuizzes/${subject._id}`);
+        this.$router.push(`/listeningQuizzes/${quiz._id}`);
       }
     },
     async checkPasswordSubject() {
       try {
-        let res = await subjectService.checkPasswordSubject(
-          this.subject,
+        let res = await listeningService.checkPasswordQuiz(
+          this.quiz,
           this.subjectPassword
         );
-        this.$router.push(`/quiz/${this.subject._id}`);
+        this.$router.push(`/listeningQuizzes/${this.quiz._id}`);
       } catch (e) {
         console.log(e);
       }
     },
   },
   beforeRouteLeave() {
-    subjectStore().$patch({ list: [], total: null });
+    listeningQuizStore().$patch({ list: [], total: null });
   },
   mounted() {
     this.getList(this.limit, this.page, false);

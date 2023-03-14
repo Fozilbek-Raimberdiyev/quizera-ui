@@ -186,6 +186,7 @@
           placeholder="Parolni kiriting..."
           v-model:value="subjectPassword"
           type="password"
+          @keyup.enter="checkPasswordSubject"
           show-password
         ></a-input>
         <el-button

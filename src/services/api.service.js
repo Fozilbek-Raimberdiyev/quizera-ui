@@ -5,13 +5,18 @@ import auth from "./auth";
 
 export const reqinterceptor = $axios.interceptors.request.use(
   function (config) {
-    // config.url != "/auth/user" ? loadingStore().$patch({ loading: true }) : ""; 
-    document.body.style.opacity = '0.2'
+    // config.url != "/auth/user" ? loadingStore().$patch({ loading: true }) : "";
+    if (!config.url.includes("uploads")) {
+      document.body.style.opacity = "0.2";
+      // document.body.style.pointerEvents = "none";
+    }
+
+    //
     return config;
   },
   function (error) {
     alert(error);
-    document.body.style.opacity = '1'
+    document.body.style.opacity = "1";
     return Promise.reject(error);
   }
 );
@@ -19,7 +24,7 @@ export const reqinterceptor = $axios.interceptors.request.use(
 export const resInterceptor = $axios.interceptors.response.use(
   function (response) {
     // loadingStore().$patch({ loading: false });
-    document.body.style.opacity = '1'
+    document.body.style.opacity = "1";
     response.data.message
       ? ElNotification({
           title: response?.message || response.data.message,
@@ -32,7 +37,7 @@ export const resInterceptor = $axios.interceptors.response.use(
   },
   function (error) {
     // loadingStore().$patch({ loading: false });
-    document.body.style.opacity = '1'
+    document.body.style.opacity = "1";
     error
       ? ElNotification({
           title: error?.response?.data.message || error?.message,
