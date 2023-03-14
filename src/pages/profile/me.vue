@@ -125,13 +125,12 @@ export default {
             });
           }
       formData.append('form', JSON.stringify(form));
-      console.log(formData)
       this.updateUser(formData);
     },
     change(e) {
       this.isFileSelected = true
-      let types = ['image/jpeg', 'image/png']
-      if(!types.some(type => type===e.target.files[0])) {
+      let types = ['image/jpeg', 'image/png', 'image/jpg']
+      if(!types.some(type => type===e.target.files[0].type)) {
         this.isIncorrectFileType = true;
         this.isNoAccesFileSelected = true
       }
