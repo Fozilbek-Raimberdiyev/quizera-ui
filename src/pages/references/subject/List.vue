@@ -11,25 +11,31 @@
       <a-list item-layout="horizontal" :data-source="list">
         <template #renderItem="{ item }">
           <a-list-item>
-            <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+              "
+            >
               <span style="margin-right: 1rem">{{ item.name }}</span>
               <div class="flex items-center justify-between">
-                  <span
-                    @click="
-                      updateSubjectStatus({ subjectID: item._id, status: true })
-                    "
-                    v-if="!item.isStarted"
-                    class="start"
-                    ><i class="bx bx-play"></i>Start</span
-                  >
-                  <span
-                    @click="
-                      updateSubjectStatus({ subjectID: item._id, status: false })
-                    "
-                    v-else
-                    class="finish"
-                    ><i class="bx bx-stop"></i>Stop</span
-                  >
+                <span
+                  @click="
+                    updateSubjectStatus({ subjectID: item._id, status: true })
+                  "
+                  v-if="!item.isStarted"
+                  class="start"
+                  ><i class="bx bx-play"></i>Start</span
+                >
+                <span
+                  @click="
+                    updateSubjectStatus({ subjectID: item._id, status: false })
+                  "
+                  v-else
+                  class="finish"
+                  ><i class="bx bx-stop"></i>Stop</span
+                >
                 <el-button
                   style="margin-right: 0.5rem"
                   class="cursor-pointer"
@@ -64,6 +70,15 @@
         ><i class="bx bx-plus" style="margin-right: 5px"></i>Qo'shish</el-button
       >
     </div>
+    <el-pagination
+      small
+      background
+      style="margin-top: 1rem"
+      layout="prev, pager, next"
+      :total="total"
+      :page-size="limit"
+      v-model:current-page="page"
+    />
   </div>
 </template>
 <script>
@@ -77,11 +92,23 @@ export default {
       number: 0,
       isInAdd: false,
       subjectService,
+      page: 1,
+      limit : 5
       // stat  : false
     };
   },
   computed: {
-    ...mapState(subjectStore, ["list"]),
+    ...mapState(subjectStore, ["list", "total"]),
+  },
+  watch: {
+    page(val) {
+      let params = {
+        isForReference: true,
+        page: val,
+        limit: 5,
+      };
+      this.getList(params);
+    },
   },
   methods: {
     ...mapActions(subjectStore, [
@@ -108,14 +135,14 @@ export default {
     },
   },
   beforeRouteLeave() {
-  return  subjectStore().$patch({list : []})
+    return subjectStore().$patch({ list: [] });
   },
   mounted() {
     let params = {
-      isForReference : true,
-      page : 1,
-      limit : 10
-    }
+      isForReference: true,
+      page: 1,
+      limit: 5,
+    };
     this.getList(params);
   },
 };

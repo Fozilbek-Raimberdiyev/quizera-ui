@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper" style="position: relative;">
+  <div class="wrapper" style="position: relative">
     <div v-if="list.length">
       <div
         :class="[smallScreen ? 'block' : 'flex items-center justify-between']"
@@ -165,12 +165,23 @@
         </div>
       </div>
     </div>
-    <div v-else-if="loading" style="position: absolute; left: 50%; top: 40vh; width: 25px;">
+    <div
+      v-else-if="loading"
+      style="position: absolute; left: 50%; top: 40vh; width: 25px"
+    >
       <!-- <a-spin style="position: absolute; top: 50%; left: 50%;"></a-spin> -->
-      <img style="width: 100%;" src="../../assets/gif/iphone-spinner.gif" alt="Loading...">
+      <img
+        style="width: 100%"
+        src="../../assets/gif/iphone-spinner.gif"
+        alt="Loading..."
+      />
     </div>
     <div v-else>
-      <n-empty size="huge" description="Test sinovlari topilmadi..." style="position: absolute; left: 50%; margin-top: 40vh;"></n-empty>
+      <n-empty
+        size="huge"
+        description="Test sinovlari topilmadi..."
+        style="position: absolute; left: 50%; margin-top: 40vh"
+      ></n-empty>
     </div>
 
     <el-dialog
@@ -284,7 +295,12 @@ export default {
   ],
   watch: {
     page(val) {
-      this.getList(this.limit, val);
+      let params = {
+        isForReference: false,
+        page: val,
+        limit: 5,
+      };
+      this.getList(params);
     },
   },
   methods: {
@@ -314,7 +330,12 @@ export default {
     subjectStore().$patch({ list: [], total: null });
   },
   mounted() {
-    this.getList(this.limit, this.page, false);
+    let params = {
+      isForReference: false,
+      page: 1,
+      limit: 5,
+    };
+    this.getList(params);
     this.smallScreen = window.innerWidth < 600;
   },
 };
