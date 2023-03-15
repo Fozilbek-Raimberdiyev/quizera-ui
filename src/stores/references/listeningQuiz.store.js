@@ -5,7 +5,8 @@ export const listeningQuizStore = defineStore("listening", {
     list: [],
     listeningQuiz: {},
     total: null,
-    loading : false
+    loading : false,
+    fromPath : ""
   }),
   getters: {},
   actions: {

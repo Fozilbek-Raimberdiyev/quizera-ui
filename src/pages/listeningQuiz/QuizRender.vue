@@ -24,13 +24,24 @@
           :on-finish="onFinish"
           :duration="listeningQuiz.time * 60 * 1000"
         ></n-countdown>
-        <a-button
+        <!-- <a-button
           :disabled="!isUploadedTrack"
           style="margin-left: 5px"
           @click="checkQuiz(listeningQuiz.textArray)"
           type="primary"
           >Yakunlash</a-button
+        > -->
+        <a-popconfirm
+          title="Haqiqatdan yakunlamoqchimisiz?"
+          ok-text="Ha"
+          :disabled="!isUploadedTrack"
+          cancel-text="Yo'q"
+          @confirm="checkQuiz(listeningQuiz.textArray)"
+          @cancel="cancel"
+          class="cursor-pointer"
         >
+          <a-button style="margin-left: 5px" type="primary">Yakunlash</a-button>
+        </a-popconfirm>
       </div>
       <!-- <pre>{{ isSticky }}</pre> -->
     </div>
@@ -98,22 +109,30 @@
     <div v-else>
       <!-- <h4>Yakunlandi</h4> -->
       <div>
-        Sizning matningiz
+        <h5>Sizning matningiz</h5>
         <span v-for="(text, index) in result" :key="index">
           <span
-            style="font-size: 20px; margin: 0 5px"
+            style="font-size: 20px; margin: 0 5px; width: 100%; overflow: auto"
             :class="{
               true: text.isCorrectFilled,
               error: !text.isVisible && !text.isCorrectFilled,
             }"
-            >{{ text.value || text.label }}</span
+            ><span style="display: inline-block">
+              {{ text.value || text.label }}
+            </span></span
           >
         </span>
       </div>
+      <hr>
       <div>
         <h5>Asl matn</h5>
         <span v-for="(text, index) in result" :key="index">
-          <span style="font-size: 20px; margin: 0 5px">{{ text.label }}</span>
+          <span
+            style="font-size: 20px; margin: 0 5px; width: 100%; overflow: auto"
+            ><span style="display: inline-block">
+              {{ text.label }}
+            </span></span
+          >
         </span>
       </div>
       <!-- <pre>{{ result }}</pre> -->
@@ -156,7 +175,7 @@ import { listeningQuizStore } from "../../stores/references/listeningQuiz.store"
 import listeningService from "../../services/listening.service";
 import questionsService from "../../services/questions.service";
 import axios from "axios";
-import { useToast } from 'vue-toastification';
+import { useToast } from "vue-toastification";
 export default {
   data() {
     return {
@@ -188,70 +207,56 @@ export default {
     onFinish() {
       setTimeout(() => {
         this.isEnded = true;
+        listeningQuizStore().$patch({listeningQuiz : {}})
         this.checkQuiz();
       }, 1000);
     },
     async checkPasswordQuiz() {
       try {
-      let quiz =   await listeningService.getById(this.$route.params.id)
-        let res = await listeningService.checkPasswordQuiz(
-          quiz.data,
-          this.quizPassword
-        );
-        this.getById(this.$route.params.id);
-        this.isShow =false
-        useToast().success('Muvaffaqqiyatli')
-      } catch (e) {}
+        let quiz = await listeningService.getById(this.$route.params.id);
+        if (this.quizPassword) {
+          let res = await listeningService.checkPasswordQuiz(
+            quiz.data,
+            this.quizPassword
+          );
+          this.getById(this.$route.params.id);
+          this.isShow = false;
+        } else {
+          useToast().info("Parolni kiriting...");
+        }
+
+        // useToast().success("Muvaffaqqiyatli");
+      } catch (e) {
+        // useToast().error("Parol xato kiritildi");
+      }
     },
   },
-  created() {
-    // console.log(this.listeningQuiz)
-    // await axios(this.listeningQuiz.audioPath)
-    // let observer = new IntersectionObserver()
+  beforeUnmount() {
+    listeningQuizStore().$patch({ listeningQuiz: {}, total: null });
+  },
+  beforeRouteEnter(to, from) {
+    listeningQuizStore().$patch({ fromPath: from.fullPath });
+    console.log(listeningQuizStore().fromPath, "beforeRoute");
+  },
+  async mounted() {
+    console.log(this.$route.matched);
+    let res = await listeningService.getById(this.$route.params.id);
+    this.isUploadedTrack = true;
+    if (
+      res.data.isHasPassword &&
+      this.$route.matched[2].path === "/listeningQuizzes"
+    ) {
+      this.getById(this.$route.params.id);
+    } else {
+      this.isShow = true;
+    }
     window.addEventListener("scroll", (e) => {
-      // this.isSticky = window.innerHeight;
-      // console.log(top, this.isSticky)
       if (top.pageYOffset > 145) {
         this.isSticky = true;
       } else {
         this.isSticky = false;
       }
-      // console.log(innerHeight)
     });
-  },
-  // async beforeRouteEnter(to, from) {
-  //   let res = await listeningService.getById(to.params.id);
-  //   if (from.fullPath != "/listeningQuizzes" && res.data.isHasPassword) {
-  //     const { value: password } = await Swal.fire({
-  //       title: "Enter your password",
-  //       input: "password",
-  //       inputLabel: "Password",
-  //       inputPlaceholder: "Enter your password",
-  //       inputAttributes: {
-  //         maxlength: 10,
-  //         autocapitalize: "off",
-  //         autocorrect: "off",
-  //       },
-  //     });
-
-  //     if (password) {
-  //       Swal.fire(`Entered password: ${password}`);
-  //     }
-  //   }
-  // },
-  async mounted() {
-    let res = await listeningService.getById(this.$route.params.id);
-    fetch(res.data.audioPath).then((audio) => {
-      this.isUploadedTrack = true;
-    });
-    if (
-      res.data.isHasPassword &&
-      this.$route.matched[2].path != "/listeningQuizzes"
-    ) {
-      this.isShow = true;
-    } else {
-      this.getById(this.$route.params.id);
-    }
   },
 };
 </script>
