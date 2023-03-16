@@ -6,7 +6,7 @@ import auth from "./auth";
 export const reqinterceptor = $axios.interceptors.request.use(
   function (config) {
     // config.url != "/auth/user" ? loadingStore().$patch({ loading: true }) : "";
-    if (!config.url.includes("uploads")) {
+    if (config.url.indexOf("uploads") > -1) {
       document.body.style.opacity = "0.2";
       // document.body.style.pointerEvents = "none";
     }
@@ -24,7 +24,6 @@ export const reqinterceptor = $axios.interceptors.request.use(
 export const resInterceptor = $axios.interceptors.response.use(
   function (response) {
     // loadingStore().$patch({ loading: false });
-    document.body.style.opacity = "1";
     response.data.message
       ? ElNotification({
           title: response?.message || response.data.message,
