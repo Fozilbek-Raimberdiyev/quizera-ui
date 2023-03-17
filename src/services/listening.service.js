@@ -32,7 +32,7 @@ export default {
   checkQuiz(textArray) {
     return $axios.post('/listeningQuiz/check', textArray)
   },
-  checkPasswordQuiz(quiz, password) {
-    return $axios.post("/listeningQuiz/checkPassword", { quiz, password });
+  checkPasswordQuiz(quizID, password) {
+    return $axios.post("/listeningQuiz/checkPassword", { quizID, password });
   }
 };

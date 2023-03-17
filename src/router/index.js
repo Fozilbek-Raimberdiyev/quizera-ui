@@ -391,7 +391,7 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
-  let userRole = null;
+  let userRole =  null
   try {
     loadingStore().$patch({ loading: true });
     userStore().getCurrentUserRole();

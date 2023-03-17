@@ -18,7 +18,7 @@
         style="color: #fff; font-size: 18px; padding: 10px 25px"
       >
         <a-menu-item key="20">
-          <router-link @click="$emit('select')" to="/"> Portfolio</router-link>
+          <router-link @click="$emit('select')" to="/"> Quizera.uz</router-link>
         </a-menu-item>
       </div>
       <a-sub-menu v-if="currentUserRole == 'admin'" key="sub1">

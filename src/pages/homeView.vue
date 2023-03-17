@@ -15,7 +15,7 @@
       "
     >
       <div class="logo" style="color: #fff; font-size: 18px; padding: 25px">
-        <router-link v-if="!smallScreen" to="/"> Portfolio</router-link>
+        <router-link v-if="!smallScreen" to="/"> Quizera.uz</router-link>
         <!-- <router-link v-else to="/"> <i class='bx bx-briefcase'></i></router-link> -->
       </div>
       <a-menu theme="dark" mode="inline">
@@ -147,10 +147,13 @@
               <img v-if="$i18n.locale==='Ru'" src="../assets/gif/loading-Ru.gif" alt="Погрузка..." />
               <img v-if="$i18n.locale==='Uz'" src="../assets/gif/loading-Uz.gif" alt="Yuklanmoqda..." />
             </div>
-            <router-view v-else v-slot="{ Component }">
-              <transition name="el-fade-linear">
+            <!-- <router-view v-else v-slot="{ Component }">
+              <transition class="animate__animated animate__animated animate__fadeInLeft">
                 <component :is="Component" />
               </transition>
+            </router-view> -->
+            <router-view class="animate__animated animate__fadeIn">
+
             </router-view>
           </div>
         </div>
@@ -244,6 +247,7 @@ export default {
 };
 </script>
 <style scoped>
+@import url('https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css');
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css");
 .example {
   display: flex;
