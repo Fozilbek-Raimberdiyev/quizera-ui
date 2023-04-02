@@ -1,7 +1,6 @@
 <template>
   <div>
     <h1>
-      <pre>{{ isEnded }}</pre>
     </h1>
     <!-- <pre>{{ listeningQuiz }}</pre> -->
     <div v-if="Object.values(listeningQuiz).length" style="position: relative">

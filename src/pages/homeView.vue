@@ -152,8 +152,7 @@
                 <component :is="Component" />
               </transition>
             </router-view> -->
-            <router-view class="animate__animated animate__fadeIn">
-
+            <router-view class="animate__animated animate__fadeIn main">
             </router-view>
           </div>
         </div>
@@ -179,6 +178,7 @@ import { subject } from "@casl/ability";
 import { userStore } from "../stores/management/user.store";
 import { CopyrightCircleOutlined } from "@ant-design/icons-vue";
 import { NotificationStore } from "../stores/notifications.store";
+import gsap from "gsap"
 export default {
   components: {
     Sidebar,
@@ -240,6 +240,13 @@ export default {
     window.addEventListener("resize", this.checkScreenSize());
     this.checkScreenSize();
     this.getNotifications();
+    gsap.from('.main', {
+      duration : 1,
+      x : 0,
+      y : 0,
+      opacity : 1,
+      ease : Fade
+    })
   },
   beforeDestroy() {
     window.removeEventListener("resize", this.checkScreenSize());
