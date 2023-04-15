@@ -76,7 +76,7 @@ export default {
     subjectStore().$patch({list : [], total : null})
   },
   mounted() {
-    this.getList(this.limit, this.page);
+    this.getList({limit : this.limit, page : this.page});
   },
 };
 </script>

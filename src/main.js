@@ -7,6 +7,8 @@ import { i18n } from './plugins/i18n'
 import vueflagicon from "vue-flag-icon"
  import  {resInterceptor, reqinterceptor} from "./services/api.service"
 
+import "@/assets/css/tailwind.css"
+
 import "boxicons"
 
 import ElementPlus from 'element-plus'

@@ -1,5 +1,5 @@
  <template>
-  <div class="back">
+  <div class="back bg-slate-700">
     <!-- <h1 style="position: absolute; top: 50%; left: 50%; z-index: 99;"><pre>{{ loading }}</pre></h1> -->
     <q-inner-loading v-if="loading" :showing="loading">
         <q-spinner-gears size="50px" color="primary" />

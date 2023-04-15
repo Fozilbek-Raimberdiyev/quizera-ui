@@ -19,6 +19,7 @@
             id="firstName"
             @input="v$.$touch()"
           ></a-input>
+          <CInput></CInput>
           <span class="error" v-if="v$.form.firstName.$error"
             >Maydon to'ldirlishi shart!</span
           >
@@ -120,8 +121,10 @@ import { roleStore } from "../../../stores/management/role.store";
 import { mapActions, mapState } from "pinia";
 import { userStore } from "../../../stores/management/user.store";
 import auth from "../../../services/auth";
+import CInput from "../../../components/form/CInput.vue";
 export default {
   // setup: () => ({ v$: useVuelidate() }),
+  components: {CInput},
   data: () => ({
     v$: useVuelidate(),
     auth,

@@ -240,13 +240,6 @@ export default {
     window.addEventListener("resize", this.checkScreenSize());
     this.checkScreenSize();
     this.getNotifications();
-    gsap.from('.main', {
-      duration : 1,
-      x : 0,
-      y : 0,
-      opacity : 1,
-      ease : Fade
-    })
   },
   beforeDestroy() {
     window.removeEventListener("resize", this.checkScreenSize());
@@ -254,7 +247,6 @@ export default {
 };
 </script>
 <style scoped>
-@import url('https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css');
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css");
 .example {
   display: flex;
