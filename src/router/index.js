@@ -275,34 +275,6 @@ const routes = [
         ],
       },
       {
-        path: "/movies",
-        // component : () => import("../pages/movies/List.vue"),
-        component: {
-          render() {
-            return h(resolveComponent("router-view"));
-          },
-        },
-        meta: {
-          roles: ["admin", "teacher", "student"],
-        },
-        name: "Movies",
-        children: [
-          {
-            path: "",
-            component: () => import("../pages/movies/List.vue"),
-            name: "",
-          },
-          {
-            path: ":id",
-            component: () => import("../pages/movies/MovieSingle.vue"),
-            name: "Informatsiya",
-            meta: {
-              info: true,
-            },
-          },
-        ],
-      },
-      {
         path: "todos",
         name: "Todos",
         component: {

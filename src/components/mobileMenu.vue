@@ -50,13 +50,6 @@
         <i class="bx bx-news"></i>
         <router-link to="/listeningQuizzes">Eshitish sinovlari</router-link>
       </a-menu-item>
-
-      <a-menu-item key="9" v-if="currentUserRole === 'admin'">
-        <i class="bx bx-movie"></i>
-        <router-link to="/movies">Kinolar</router-link>
-        <!-- <router-link v-else to="/movies"
-            ><i class="bi bi-film"></i></router-link> -->
-      </a-menu-item>
       <a-menu-item>
         <i class="bx bx-task"></i>
         <router-link to="/todos">Eslatmalar</router-link>

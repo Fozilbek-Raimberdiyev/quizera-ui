@@ -45,7 +45,7 @@
           <template #dropdown>
             <el-dropdown-menu>
               <el-dropdown-item
-                @click="currentIndex = 2"
+                @click="setIndex(2)"
                 :class="{ active: currentIndex === 2 || currentIndex === 1 }"
               >
                 <router-link to="/management/users"
@@ -53,7 +53,7 @@
                 >
               </el-dropdown-item>
               <el-dropdown-item
-                @click="currentIndex = 3"
+                @click="setIndex(3)"
                 :class="{ active: currentIndex === 3 || currentIndex === 1 }"
               >
                 <router-link to="/management/roles">
@@ -61,7 +61,7 @@
                 </router-link>
               </el-dropdown-item>
               <el-dropdown-item
-                @click="currentIndex = 4"
+                @click="setindex(4)"
                 :class="{ active: currentIndex === 4 || currentIndex === 1 }"
               >
                 <router-link to="/management/permissions">
@@ -74,44 +74,17 @@
       </div>
       <div class="single">
         <router-link
-          to="/cabinet"
-          @click="currentIndex = 13"
-          :class="{ active: currentIndex === 13 }"
-        >
-          <i class="bi bi-person-workspace"></i>Shaxsiy kabinet
-        </router-link>
-      </div>
-      <div class="single">
-        <router-link
           to="/quiz"
-          @click="currentIndex = 5"
+          @click="setIndex(5)"
           :class="{ active: currentIndex === 5 }"
         >
           <i class="bx bxs-flag-checkered"></i>Test ishlash
         </router-link>
       </div>
-      <div class="single" v-if="currentUserRole === 'admin'">
-        <router-link
-          to="/posts"
-          @click="currentIndex = 6"
-          :class="{ active: currentIndex === 6 }"
-        >
-          <i class="bx bx-news"></i>Maqolalar
-        </router-link>
-      </div>
-      <div class="single" v-if="currentUserRole === 'admin'">
-        <router-link
-          to="/movies"
-          @click="currentIndex = 7"
-          :class="{ active: currentIndex === 7 }"
-        >
-          <i class="bx bx-movie"></i>Kinolar
-        </router-link>
-      </div>
       <div class="single">
         <router-link
           to="/todos"
-          @click="currentIndex = 8"
+          @click="setIndex(8)"
           :class="{ active: currentIndex === 8 }"
         >
           <i class="bx bx-task"></i>Eslatmalar
@@ -120,7 +93,7 @@
       <div class="single">
         <router-link
           to="/statistic"
-          @click="currentIndex = 12"
+          @click="setIndex(12)"
           :class="{ active: currentIndex === 12 }"
         >
           <i class="bx bx-bar-chart-alt-2"></i>Statistika
@@ -147,7 +120,7 @@
           <template #dropdown>
             <el-dropdown-menu>
               <el-dropdown-item
-                @click="currentIndex = 9"
+                @click="setIndex(9)"
                 :class="{ active: currentIndex === 9 }"
               >
                 <router-link to="/references/quiz">
@@ -155,7 +128,7 @@
                 </router-link>
               </el-dropdown-item>
               <el-dropdown-item
-                @click="currentIndex = 10"
+                @click="setIndex(10)"
                 :class="{ active: currentIndex === 10 }"
               >
                 <router-link to="/references/subject">
@@ -163,19 +136,12 @@
                 </router-link>
               </el-dropdown-item>
               <el-dropdown-item
-                @click="currentIndex = 18"
+                @click="setIndex(18)"
                 :class="{ active: currentIndex === 18 }"
               >
+                <pre>{{ currentIndex }}</pre>
                 <router-link to="/references/listening">
                   <i class="bx bx-folder-plus"></i>Eshitish sinovlari
-                </router-link>
-              </el-dropdown-item>
-              <el-dropdown-item
-                @click="currentIndex = 12"
-                :class="{ active: currentIndex === 12 }"
-              >
-                <router-link to="/references">
-                  <i class="bi bi-people"></i>Guruhlar
                 </router-link>
               </el-dropdown-item>
             </el-dropdown-menu>
@@ -459,10 +425,7 @@ export default {
     },
     logOut() {
       localStorage.removeItem("user");
-      localStorage.setItem(
-        "token",
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
-      );
+      localStorage.removeItem("token");
       this.$router.push("/login");
     },
     emitFullscreen() {
@@ -472,20 +435,18 @@ export default {
     getDate(date) {
       return new Date(date);
     },
+    setIndex(index) {
+      this.currentIndex = index;
+      sessionStorage.setItem("currentIndexMenu", index);
+    },
   },
   async created() {
     this.smallScreen = window.innerWidth < 600;
     this.bigScreen = window.innerWidth > 1400;
     this.$emit("getBigscreen", this.bigScreen);
-    try {
-      this.loadingImage = true;
-      if (this.user.pathImage) {
-        let res = await axios.get(this.user.pathImage);
-      }
-      this.loadingImage = false;
-    } finally {
-      this.loadingImage = false;
-    }
+  },
+  mounted() {
+    this.currentIndex = sessionStorage.getItem("currentIndexMenu");
   },
 };
 </script>

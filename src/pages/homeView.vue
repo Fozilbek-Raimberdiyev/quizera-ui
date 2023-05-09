@@ -53,25 +53,11 @@
           <router-link v-if="!smallScreen" to="/listeningQuizzes"
             ><i class="bx bx-news"></i>{{ $t("sidebar.lQuizzes") }}</router-link
           >
-          <!-- <router-link v-else to="/posts"
-            ><i class="bx bx-news"></i
-          ></router-link> -->
-        </a-menu-item>
-
-        <a-menu-item key="9" v-if="currentUserRole === 'admin'">
-          <router-link v-if="!smallScreen" to="/movies"
-            ><i class="bx bx-movie"></i> {{ $t("sidebar.movies") }}
-          </router-link>
-          <!-- <router-link v-else to="/movies"
-            ><i class="bi bi-film"></i></router-link> -->
         </a-menu-item>
         <a-menu-item key="14">
           <router-link v-if="!smallScreen" to="/todos"
             ><i class="bx bx-task"></i>{{ $t("sidebar.todos") }}</router-link
           >
-          <!-- <router-link v-else to="/todos"
-            ><i class="bi bi-check2-square"></i
-          ></router-link> -->
         </a-menu-item>
         <a-menu-item key="15">
           <router-link to="/statistic">
@@ -87,7 +73,6 @@
               ><i class="bx bx-building"></i
               >{{ $t("sidebar.references") }}</span
             >
-            <!-- <span v-else><i class="bx bx-building"></i></span> -->
           </template>
           <a-menu-item key="10">
             <router-link to="/references/quiz"
