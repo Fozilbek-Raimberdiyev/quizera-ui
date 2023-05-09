@@ -225,7 +225,7 @@
             border-radius: 50%;
             height: 35px;
           "
-          :src="user.pathImage"
+          :src="user?.pathImage"
         />
         <i
           v-if="!loadingImage && !user.pathImage"
