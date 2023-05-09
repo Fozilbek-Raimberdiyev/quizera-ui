@@ -139,7 +139,6 @@
                 @click="setIndex(18)"
                 :class="{ active: currentIndex === 18 }"
               >
-                <pre>{{ currentIndex }}</pre>
                 <router-link to="/references/listening">
                   <i class="bx bx-folder-plus"></i>Eshitish sinovlari
                 </router-link>

@@ -57,11 +57,16 @@
           <h5>{{ listeningQuiz.name }}</h5>
         </div>
         <div class="center">
-          <vue-plyr>
+          <!-- <vue-plyr>
             <audio controls crossorigin playsinline>
               <source :src="listeningQuiz.audioPath" type="audio/mpeg" />
             </audio>
-          </vue-plyr>
+          </vue-plyr> -->
+          <vue-plyr>
+              <audio controls crossorigin playsinline>
+                <source :src="listeningQuiz.audioPath" type="audio/mpeg" />
+              </audio>
+            </vue-plyr>
         </div>
         <div class="right flex items-center">
           <!-- <n-countdown
