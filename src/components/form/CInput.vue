@@ -59,7 +59,7 @@ let props = defineProps({
     </div>
     <div v-if="props.type==='password'" class="absolute right-[14px] top-[14px]">
       <img
-        src="@/assets/image/eye.svg"
+        src="@/assets/image/eye.png"
         class="cursor-pointer"
         @click="togglePassword"
       />
