@@ -225,7 +225,7 @@
             border-radius: 50%;
             height: 35px;
           "
-          :src="user?.pathImage"
+          :src="user.pathImage"
         />
         <i
           v-if="!loadingImage && !user.pathImage"
@@ -436,16 +436,23 @@ export default {
     },
     setIndex(index) {
       this.currentIndex = index;
-      sessionStorage.setItem("currentIndexMenu", index);
-    },
+      sessionStorage.setItem("currentIndexMenu", index)
+    }
   },
-  async created() {
+  async created() { 
+    this.currentIndex = sessionStorage.getItem("currentIndexMenu");
     this.smallScreen = window.innerWidth < 600;
     this.bigScreen = window.innerWidth > 1400;
     this.$emit("getBigscreen", this.bigScreen);
-  },
-  mounted() {
-    this.currentIndex = sessionStorage.getItem("currentIndexMenu");
+    try {
+      this.loadingImage = true;
+      if (this.user.pathImage) {
+        let res = await axios.get(this.user.pathImage);
+      }
+      this.loadingImage = false;
+    } finally {
+      this.loadingImage = false;
+    }
   },
 };
 </script>
