@@ -7,8 +7,7 @@ export const NotificationStore = defineStore("/notifications",{
        async getNotifications() {
             let res = await notificationsService.getNotifications();
             this.list = res.data;
-            this.todos = res.data.todos
-            userStore().user = await res.data.user;
+            this.todos = res.data.todos;
             performance.mark('notification')
         }
     }

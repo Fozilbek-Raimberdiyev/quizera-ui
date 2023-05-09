@@ -3,6 +3,7 @@ import auth from "../../services/auth";
 import router from "../../router";
 import { useToast } from "vue-toastification";
 import { useLoadingBar } from "naive-ui";
+import notificationsService from "../../services/notifications.service";
 export const userStore = defineStore("userStore", {
   state: () => ({
     user: JSON.parse(localStorage.getItem("user")) || {},
@@ -70,6 +71,10 @@ export const userStore = defineStore("userStore", {
       let res = await auth.updateUser(body);
       localStorage.setItem("user", JSON.stringify(res.data.user));
       this.user = res.data.user;
+    },
+    async getUserInfos() {
+      let res = await notificationsService.getNotifications();
+      this.user= res.data.user;
     }
   },
 });

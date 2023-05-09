@@ -200,6 +200,7 @@ export default {
   },
   methods: {
     ...mapActions(NotificationStore, ["getNotifications"]),
+    ...mapActions(userStore, ["getUserInfos"]),
     getState(value) {
       this.isOpen = value;
     },
@@ -225,6 +226,7 @@ export default {
     window.addEventListener("resize", this.checkScreenSize());
     this.checkScreenSize();
     this.getNotifications();
+    this.getUserInfos()
   },
   beforeDestroy() {
     window.removeEventListener("resize", this.checkScreenSize());
