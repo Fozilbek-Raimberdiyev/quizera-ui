@@ -5,7 +5,7 @@
         :class="[smallScreen ? 'block' : 'flex items-center justify-between']"
         class=""
       >
-        <h5>Test sinovlari</h5>
+        <h5 class="text-3xl">Test sinovlari</h5>
         <div>
           <a-input-search
             :style="{ 'width : 100%': smallScreen }"
