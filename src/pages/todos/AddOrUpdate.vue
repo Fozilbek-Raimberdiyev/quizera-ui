@@ -66,7 +66,7 @@
         type="primary"
         native-type="submit"
         class="cursor-pointer"
-        >Create</el-button
+        >Add</el-button
       >
       <el-button
         v-else
@@ -139,9 +139,6 @@ export default {
     async submit() {
       this.v$.$validate();
       let form = { ...this.form };
-      console.log(new Date(new Date(this.form.endDate).setUTCMinutes(300)))
-      // form.endDate = this.form.endDate.getTimeZoneOffset()
-      return
       if (!this.v$.$error) {
         if (!this.$route.params.id) {
           let res = await this.addTodo(form);

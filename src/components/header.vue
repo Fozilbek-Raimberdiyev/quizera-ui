@@ -149,6 +149,55 @@
       </div>
     </div>
     <div class="flex items-center justify-between">
+      <div
+        class="flex"
+        v-if="todos.length"
+        @click="drawer = true"
+        style="cursor: pointer"
+      >
+        <a-badge :count="todos.length" style="margin: 0 0.5rem">
+          <BellOutlined style="margin: 0 0.5rem; font-size: 1.5rem" />
+        </a-badge>
+      </div>
+      <div class="flex items-center">
+        <n-skeleton
+          v-if="loadingImage && user.pathImage"
+          circle
+          size="medium"
+        />
+
+        <el-dropdown placement="bottom-start" trigger="click">
+          <img
+            v-if="user.pathImage && !loadingImage"
+            style="
+              width: 35px;
+              object-fit: cover;
+              border-radius: 50%;
+              height: 35px;
+            "
+            :src="user.pathImage"
+          />
+          <i
+            v-if="!loadingImage && !user.pathImage"
+            style="font-size: 30px"
+            class="bx bxs-user-circle"
+          ></i>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item
+                class="cursor-pointer"
+                @click="$router.push('/profile')"
+                ><i class="bx bxs-edit"></i>Ma'lumotlarni
+                tahrirlash</el-dropdown-item
+              >
+              <el-dropdown-item class="cursor-pointer" @click="logOut"
+                ><i class="bi bi-box-arrow-left"></i>Tizimdan
+                chiqish</el-dropdown-item
+              >
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+      </div>
       <el-dropdown
         trigger="click"
         style="margin: 0 5px; font-size: 16px"
@@ -201,57 +250,6 @@
           </el-dropdown-menu>
         </template>
       </el-dropdown>
-      <div
-        class="flex"
-        v-if="todos.length"
-        @click="drawer = true"
-        style="cursor: pointer"
-      >
-        <a-badge :count="todos.length" style="margin: 0 0.5rem">
-          <BellOutlined style="margin: 0 0.5rem; font-size: 1.5rem" />
-        </a-badge>
-      </div>
-      <div class="flex items-center">
-        <n-skeleton
-          v-if="loadingImage && user.pathImage"
-          circle
-          size="medium"
-        />
-        <img
-          v-if="user.pathImage && !loadingImage"
-          style="
-            width: 35px;
-            object-fit: cover;
-            border-radius: 50%;
-            height: 35px;
-          "
-          :src="user.pathImage"
-        />
-        <i
-          v-if="!loadingImage && !user.pathImage"
-          style="font-size: 30px"
-          class="bx bxs-user-circle"
-        ></i>
-        <el-dropdown placement="bottom-start" trigger="click">
-          <span style="margin-left: 5px">{{
-            user?.firstName + " " + user?.lastName
-          }}</span>
-          <template #dropdown>
-            <el-dropdown-menu>
-              <el-dropdown-item
-                class="cursor-pointer"
-                @click="$router.push('/profile')"
-                ><i class="bx bxs-edit"></i>Ma'lumotlarni
-                tahrirlash</el-dropdown-item
-              >
-              <el-dropdown-item class="cursor-pointer" @click="logOut"
-                ><i class="bi bi-box-arrow-left"></i>Tizimdan
-                chiqish</el-dropdown-item
-              >
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
-      </div>
       <div
         v-if="!smallScreen && !bigScreen"
         @click="emitFullscreen"
@@ -436,10 +434,10 @@ export default {
     },
     setIndex(index) {
       this.currentIndex = index;
-      sessionStorage.setItem("currentIndexMenu", index)
-    }
+      sessionStorage.setItem("currentIndexMenu", index);
+    },
   },
-  async created() { 
+  async created() {
     this.currentIndex = sessionStorage.getItem("currentIndexMenu");
     this.smallScreen = window.innerWidth < 600;
     this.bigScreen = window.innerWidth > 1400;
