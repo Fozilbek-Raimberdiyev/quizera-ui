@@ -7,16 +7,16 @@ export const subjectStore = defineStore("subject", {
     list: [],
     subject: {},
     total: "",
-    loading : false
+    loading: false,
   }),
   getters: {},
   actions: {
     async getList(params) {
-      this.loading =  true
+      this.loading = true;
       let res = await subjectService.getSubjects(params);
       this.list = res.data.subjects;
       this.total = res.data.total;
-      this.loading = false
+      this.loading = false;
     },
     addSubject(body) {
       return subjectService.addSubject(body);
@@ -30,7 +30,7 @@ export const subjectStore = defineStore("subject", {
     },
     async deleteSubjectAndQuestions(id) {
       let res = await subjectService.deleteSubjectAndQuestions(id);
-      this.getList(10,5,true);
+      this.getList(10, 5, true);
       // Toast.fire({
       //   icon: "success",
       //   title: res.data.message,
@@ -39,8 +39,6 @@ export const subjectStore = defineStore("subject", {
     },
     async updateSubjectStatus(body) {
       let res = await subjectService.updateStatusSubject(body);
-      this.list = res.data.subjects;
-      this.total = res.data.total
-    }
+    },
   },
 });

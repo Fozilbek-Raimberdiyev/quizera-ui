@@ -22,7 +22,7 @@
               <div class="flex items-center justify-between">
                 <span
                   @click="
-                    updateSubjectStatus({ subjectID: item._id, status: true })
+                    updateStatus(item)
                   "
                   v-if="!item.isStarted"
                   class="start"
@@ -30,7 +30,7 @@
                 >
                 <span
                   @click="
-                    updateSubjectStatus({ subjectID: item._id, status: false })
+                    updateStatus(item)
                   "
                   v-else
                   class="finish"
@@ -133,6 +133,13 @@ export default {
       let res = await this.deleteSubjectAndQuestions(id);
       this.$router.push("/references/subject");
     },
+    async updateStatus(item) {
+     await this.updateSubjectStatus({ subjectID: item._id, status: true });
+     await this.getList({isForReference: true,
+      page: this.page,
+      limit: 5,});
+
+    }
   },
   beforeRouteLeave() {
     return subjectStore().$patch({ list: [] });
