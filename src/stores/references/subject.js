@@ -30,7 +30,6 @@ export const subjectStore = defineStore("subject", {
     },
     async deleteSubjectAndQuestions(id) {
       let res = await subjectService.deleteSubjectAndQuestions(id);
-      this.getList(10, 5, true);
       // Toast.fire({
       //   icon: "success",
       //   title: res.data.message,

@@ -625,10 +625,11 @@ export default {
     },
   },
   mounted() {
-    this.getList(10, 5, true);
+    // this.getList(10, 5, true);
+    this.getList({limit : 20, page : 1, isForReference : true});
     this.$emit("emit", true);
     if (this.$route.params.id) {
-      this.getQuestionById(this.$route.params.id);
+      this.getQuestionById();
     }
   },
   created() {},

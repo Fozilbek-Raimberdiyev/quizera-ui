@@ -382,13 +382,14 @@ export default {
       // });
     },
     "form.isForAll"(value) {
-      const members = [...this.form.members];
-      if(value) {
-        this.form.members = []
+      try {
+        const members = [...this.form.members];
+      if (value) {
+        this.form.members = [];
       } else {
         this.form.members = [...members];
-        console.log(members)
       }
+      } catch(e) {console.log(e)}
     },
   },
   methods: {
@@ -404,7 +405,8 @@ export default {
       this.v$.$validate();
       if (!this.$route.params.id) {
         if (!this.v$.$error) {
-          let form = { ...this.form };
+          try{
+            let form = { ...this.form };
           if (!form.isHasPassword) form.password = undefined;
           form.point = this.countPointSubject;
           let members = [...form.members];
@@ -422,28 +424,31 @@ export default {
           let res = await this.addSubject(formData);
           this.$emit("created", res);
           this.$router.push("/references/subject");
-          this.getList(10, 5, true);
-        }
+          } catch(e) {console.log(e)}
+        } 
       } else {
         if (!this.v$.$error) {
-          let form = { ...this.form };
-          let members = [...form.members];
-          members = members.map((member) => {
-            return {
-              value: member,
-              label: member,
-            };
-          });
-          form.members = members;
-          form._id = undefined;
-          form.__v = undefined;
-          if (!form.isHasPassword) {
-            form.password = undefined;
+          try {
+            let form = { ...this.form };
+            let members = [...form.members];
+            members = members?.map((member) => {
+              return {
+                value: member,
+                label: member,
+              };
+            });
+            form.members = members;
+            form._id = undefined;
+            form.__v = undefined;
+            if (!form.isHasPassword) {
+              form.password = undefined;
+            }
+            form.point = this.countPointSubject;
+            let res = await this.updateSubject(form, this.$route.params.id);
+            this.$router.push("/references/subject");
+          } catch (e) {
+            console.log(e);
           }
-          form.point = this.countPointSubject;
-          let res = await this.updateSubject(form, this.$route.params.id);
-          this.$router.push("/references/subject");
-          this.getList(10, 5, true);
         }
       }
     },

@@ -331,31 +331,30 @@ export default {
       }
     },
   },
-  beforeRouteLeave(to, from, next) {
-    if (!this.isEnded && this.questions.length) {
-      Swal.fire({
-        title:
-          "<span style='font-size : 18px'>Agar sahidan chiqsangiz test yakunlanadi. Davom etasizmi?</span>",
-        showDenyButton: true,
-        // showCancelButton: true,
-        confirmButtonText: "<span>Ha</span>",
-        denyButtonText: `<span>Yo'q</span>`,
-        currentProgressStep: true,
-      }).then(async (result) => {
-        /* Read more about isConfirmed, isDenied below */
-        if (result.isConfirmed) {
-          let res = await this.endTest();
-          Swal.fire({
-            html: "<span>Test yakunlandi. Natijangizni statistika bo'limidan ko'rishingiz mumkin!</span>",
-          });
-          next();
-        } else if (result.isDenied) {
-        }
-      });
-    } else {
-      next();
-    }
-  },
+  // beforeRouteLeave(to, from, next) {
+  //   if (!this.isEnded && this.questions.length) {
+  //     Swal.fire({
+  //       title:
+  //         "<span style='font-size : 18px'>Agar sahidan chiqsangiz test yakunlanadi. Davom etasizmi?</span>",
+  //       showDenyButton: true,
+  //       // showCancelButton: true,
+  //       confirmButtonText: "<span>Ha</span>",
+  //       denyButtonText: `<span>Yo'q</span>`,
+  //       currentProgressStep: true,
+  //     }).then(async (result) => {
+  //       if (result.isConfirmed) {
+  //         let res = await this.endTest();
+  //         Swal.fire({
+  //           html: "<span>Test yakunlandi. Natijangizni statistika bo'limidan ko'rishingiz mumkin!</span>",
+  //         });
+  //         next();
+  //       } else if (result.isDenied) {
+  //       }
+  //     });
+  //   } else {
+  //     next();
+  //   }
+  // },
   mounted() {
     setInterval(() => {
       this.workingDurationTime++;

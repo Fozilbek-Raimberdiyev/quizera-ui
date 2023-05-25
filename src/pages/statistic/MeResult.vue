@@ -1,5 +1,5 @@
 <template>
-  <div class="q-pa-md wrapper" :class="{loading : loading}">
+  <div class="lg:q-pa-md wrapper" :class="{loading : loading}">
     <div class="tabs flex items-center tabs">
       <span
         @click="currentStatus = 'Passed'"

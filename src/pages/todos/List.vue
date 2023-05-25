@@ -221,6 +221,7 @@ import {
   minusTwoDates,
   subtractDates,
 } from "../utils/date.formatter";
+import {io} from "socket.io-client"
 export default {
   components: {
     FadeLoader,
@@ -231,6 +232,7 @@ export default {
     currentTab: "all",
     smallScreen: false,
     isChanged: false,
+    message : ""
   }),
   computed: {
     ...mapState(todoStore, ["list", "total", "params", "loading"]),
@@ -281,10 +283,9 @@ export default {
       }
       return content;
     },
-  },
-  created() {
-    this.getList();
-    this.smallScreen = window.innerWidth < 600;
+    sendMessage() {
+      io().emit("chat_message", this.message);
+    }
   },
 };
 </script>

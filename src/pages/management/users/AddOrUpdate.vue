@@ -19,7 +19,6 @@
             id="firstName"
             @input="v$.$touch()"
           ></a-input>
-          <CInput></CInput>
           <span class="error" v-if="v$.form.firstName.$error"
             >Maydon to'ldirlishi shart!</span
           >
@@ -45,6 +44,17 @@
             id="email"
           ></a-input>
           <span class="error" v-if="v$.form.email.$error"
+            >Maydon to'ldirlishi shart!</span
+          >
+        </div>
+        <div>
+          <label for="email"><b>Tug'ilgan kun</b></label>
+          <el-date-picker
+              placeholder="Tu'gilgan kuningizmi kiriting"
+              size="middle"
+              v-model="form.birthData"
+            />
+          <span class="error" v-if="v$.form.birthData.$error"
             >Maydon to'ldirlishi shart!</span
           >
         </div>
@@ -80,11 +90,11 @@
             >Maydon to'ldirlishi shart!</span
           >
         </div>
-        <!-- <div>
+        <div>
           <label for="firstName"><b>Password</b></label>
           <el-input
             placeholder="Enter the password"
-            size="large"
+            size="middle"
             type="password"
             show-password
             v-model="form.password"
@@ -93,12 +103,12 @@
           <span class="error" v-if="v$.form.password.$error"
             >Maydon to'ldirlishi shart!</span
           >
-        </div> -->
+        </div>
       </div>
       <el-button
         v-if="!$route.params.id"
         size="default"
-        class="btn"
+        class="mt-2 min-w-[100px] cursor-pointer"
         type="primary"
         native-type="submit"
         >Create</el-button
@@ -108,7 +118,7 @@
         size="default"
         type="primary"
         native-type="submit"
-        class="btn"
+        class="mt-2 min-w-[100px] cursor-pointer"
         >Update</el-button
       >
     </form>
@@ -134,6 +144,7 @@ export default {
       role: null,
       password: "",
       rules: [],
+      birthData : ''
     },
     roles: [
       { label: "admin", value: "admin" },
@@ -176,6 +187,9 @@ export default {
         email: {
           required,
         },
+        birthData: {
+          required
+        }
       },
     };
   },
@@ -188,6 +202,7 @@ export default {
     async submit() {
       this.v$.$validate();
       if (!this.$route.params.id) {
+        console.log(this.v$)
         if (!this.v$.$error) {
           let body = { ...this.form };
           body.role = this.form.role.name;
@@ -223,8 +238,11 @@ form {
 .form {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: start;
   align-items: center;
+}
+.form > div {
+  margin-right: 1rem;
 }
 .form > div > input,
 .form > div > label,

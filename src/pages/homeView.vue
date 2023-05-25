@@ -151,8 +151,10 @@
         </div>
       </a-layout-content>
       <a-layout-footer style="text-align: center">
-        <CopyrightCircleOutlined></CopyrightCircleOutlined> Fozilbek
-        Raimberdiyev 2023-yil
+       <div class="flex items-center justify-center">
+        <CopyrightCircleOutlined></CopyrightCircleOutlined> <span class="ml-2">Fozilbek
+        Raimberdiyev 2023-yil</span>
+       </div>
       </a-layout-footer>
     </a-layout>
   </a-layout>
@@ -169,6 +171,7 @@ import breadCrumbs from "../components/breadCrumbs.vue";
 import headerMenu from "../components/header.vue";
 import { subject } from "@casl/ability";
 import { userStore } from "../stores/management/user.store";
+import {useI18n} from "vue-i18n"
 import { CopyrightCircleOutlined } from "@ant-design/icons-vue";
 import { NotificationStore } from "../stores/notifications.store";
 import gsap from "gsap"
@@ -188,6 +191,7 @@ export default {
       smallScreen: false,
       fullScreen: false,
       bigScreen: false,
+      useI18n
     };
   },
   computed: {

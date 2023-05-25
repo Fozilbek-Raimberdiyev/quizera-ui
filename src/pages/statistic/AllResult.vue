@@ -1,5 +1,5 @@
 <template>
-  <div class="q-pa-md wrapper" :class="{loading : loading}">
+  <div class="lg:q-pa-md wrapper" :class="{loading : loading}">
     <div class="bar flex justify-between items-center">
       <div class="tabs flex items-center tabs">
         <span
@@ -148,7 +148,7 @@
       :page-size="limit"
       v-model:current-page="page"
     />
-    <el-dialog v-model="isShow">
+    <el-dialog v-model="isShow" size="lg">
       <div v-if="items.length">
         <h4 v-if="titleCode === 0">To'g'ri belgilangan savollar</h4>
         <h4 v-if="titleCode === 1">Noto'g'ri belgilangan savollar</h4>

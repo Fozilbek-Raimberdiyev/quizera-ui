@@ -17,8 +17,8 @@
       <div>
         <a-list item-layout="horizontal" :data-source="listC">
           <template #renderItem="{ item }">
-            <a-list-item
-              ><router-link :to="`/references/quiz/${item._id}`">
+            <a-list-item class=""
+              ><router-link class="no-underline" :to="`/references/quiz/${item._id}`">
                 {{ item.name }}</router-link
               >
             </a-list-item>

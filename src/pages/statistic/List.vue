@@ -68,7 +68,7 @@ currentComponent(val) {
   padding: 5px 10px;
   border-radius: 5px;
   color: #fff;
-  margin: 0 5px;
+  margin: 2px 5px;
   cursor: pointer;
 }
 .active {

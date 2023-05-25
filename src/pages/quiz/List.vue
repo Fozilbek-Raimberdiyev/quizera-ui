@@ -40,7 +40,7 @@
                   >
                 </th>
                 <th class="text-left" scope="col">
-                  <span style="margin-top: 1rem" class="flex items-center"
+                  <span style="margin-top: 1rem" class="flex items-center min-w-[150px]"
                     ><BarChartOutlined
                       style="margin-right: 5px; display: inline-block"
                     ></BarChartOutlined
@@ -48,7 +48,7 @@
                   >
                 </th>
                 <th class="text-left" scope="col">
-                  <span style="margin-top: 1rem" class="flex items-center"
+                  <span style="margin-top: 1rem" class="flex items-center  min-w-[180px]"
                     ><hourglass-outlined
                       style="margin-right: 5px"
                     ></hourglass-outlined
@@ -60,7 +60,7 @@
                   scope="col"
                   v-if="currentUserRole === 'admin'"
                 >
-                  <span style="margin-top: 1rem" class="flex items-center"
+                  <span style="margin-top: 1rem" class="flex items-center min-w-[150px]"
                     ><HistoryOutlined
                       style="margin-right: 5px"
                     ></HistoryOutlined
@@ -73,7 +73,7 @@
                   style="vertical-align: middle"
                   v-if="currentUserRole === 'admin'"
                 >
-                  <span style="margin-top: 1rem" class="flex items-center"
+                  <span style="margin-top: 1rem" class="flex items-center min-w-[140px]"
                     ><info-circle-outlined
                       style="margin-right: 5px"
                     ></info-circle-outlined
@@ -91,7 +91,7 @@
                   >
                 </th>
                 <th class="text-left" scope="col">
-                  <span style="margin-top: 1rem" class="flex items-center"
+                  <span style="margin-top: 1rem" class="flex items-center min-w-[130px]"
                     ><interaction-outlined
                       style="margin-right: 5px"
                     ></interaction-outlined

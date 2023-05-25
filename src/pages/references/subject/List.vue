@@ -21,19 +21,12 @@
               <span style="margin-right: 1rem">{{ item.name }}</span>
               <div class="flex items-center justify-between">
                 <span
-                  @click="
-                    updateStatus(item)
-                  "
+                  @click="updateStatus(item)"
                   v-if="!item.isStarted"
                   class="start"
                   ><i class="bx bx-play"></i>Start</span
                 >
-                <span
-                  @click="
-                    updateStatus(item)
-                  "
-                  v-else
-                  class="finish"
+                <span @click="updateStatus(item)" v-else class="finish"
                   ><i class="bx bx-stop"></i>Stop</span
                 >
                 <el-button
@@ -93,7 +86,7 @@ export default {
       isInAdd: false,
       subjectService,
       page: 1,
-      limit : 5
+      limit: 5,
       // stat  : false
     };
   },
@@ -118,7 +111,12 @@ export default {
     ]),
     getStat(val) {
       if (val) {
-        this.getList();
+        let params = {
+          isForReference: true,
+          page: 1,
+          limit: 5,
+        };
+        this.getList(params);
       }
     },
     toAddOrUpdate() {
@@ -131,15 +129,18 @@ export default {
     },
     async deleteSubject(id) {
       let res = await this.deleteSubjectAndQuestions(id);
-      this.$router.push("/references/subject");
+      // this.$router.push("/references/subject");
+      let params = {
+        isForReference: true,
+        page: 1,
+        limit: 5,
+      };
+      this.getList(params);
     },
     async updateStatus(item) {
-     await this.updateSubjectStatus({ subjectID: item._id, status: true });
-     await this.getList({isForReference: true,
-      page: this.page,
-      limit: 5,});
-
-    }
+      await this.updateSubjectStatus({ subjectID: item._id, status: true });
+      await this.getList({ isForReference: true, page: this.page, limit: 5 });
+    },
   },
   beforeRouteLeave() {
     return subjectStore().$patch({ list: [] });
