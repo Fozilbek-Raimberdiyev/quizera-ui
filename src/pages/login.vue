@@ -24,7 +24,7 @@
             <span></span>
           </div>
 
-          <div class="pass">Parolni unutdingizmi?</div>
+          <div class="pass hidden">Parolni unutdingizmi?</div>
           <!-- <input type="submit" value="Kirish" /> -->
           <el-button
             class="submit"
@@ -35,7 +35,7 @@
           >
           <div class="signup_link">
             Akkauntingiz yo'qmi?
-            <a href.prevent="#" @click="isRegister = true">Ro'yhatdan o'tish</a>
+            <a href.prevent="#" @click="setData()">Ro'yhatdan o'tish</a>
           </div>
         </form>
       </div>
@@ -61,7 +61,7 @@
             <el-date-picker
               placeholder="Tu'gilgan kuningizmi kiriting"
               size="large"
-              style="margin-top: 10px"
+              style="margin-top: 10px; border: none; box-shadow: none"
               v-model="rForm.birdthData"
               required
             />
@@ -93,7 +93,7 @@
           >
           <div class="signup_link">
             Akkauntingiz bormi?
-            <a href.prevent="#" @click="isRegister = false">Kirish</a>
+            <a href.prevent="#" @click="setData()">Kirish</a>
           </div>
         </form>
       </div>
@@ -146,7 +146,7 @@ export default {
       AccountBookFilled,
       SignalFilled,
       ContactsFilled,
-      isRegister: false,
+      isRegister: JSON.parse(sessionStorage.getItem("isRegister")),
     };
   },
   computed: {
@@ -159,9 +159,14 @@ export default {
     async submit() {
       let res = await this.createUser(this.rForm);
     },
+    setData() {
+      this.isRegister = !this.isRegister;
+      sessionStorage.setItem("isRegister", JSON.stringify(this.isRegister));
+    },
   },
   mounted() {
-    // loadingStore().$patch({loading : false})   
+    // loadingStore().$patch({loading : false})
+    this.isRegister = JSON.parse(sessionStorage.getItem("isRegister"));
   },
   created() {
     this.smallScreen = window.innerWidth < 600;
@@ -295,5 +300,9 @@ input[type="submit"]:hover {
 
 .signup_link a:hover {
   text-decoration: underline;
+}
+.el-input__wrapper {
+  width: 500px;
+  background: red !important;
 }
 </style>
