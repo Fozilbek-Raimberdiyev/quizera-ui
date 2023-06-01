@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- <pre>{{ questions }}</pre> -->
-    <div v-show="questions?.length">
+    <div v-show="questions?.length" id="questions">
       <div class="top flex justify-between">
         <h5>{{ subject?.name }}</h5>
         <div>
@@ -16,6 +16,7 @@
         </div>
       </div>
       <div
+       
         class="questions"
         v-for="(question, index) in questions"
         :key="index"
@@ -24,7 +25,7 @@
           <div class="flex items-center justify-between">
             <div class="flex items-center">
               <h6 class="q-number">{{ question?.number }}.</h6>
-              <h6>{{ question.question }}</h6>
+              <h6 v-html="question?.question"></h6>
             </div>
             <div class="ball" v-if="question.ball">
               {{ question.ball }}
@@ -35,16 +36,12 @@
             v-for="(o, i) in question.options"
             :key="i"
             :class="{ error: !o.isTrue, true: o.isTrue }"
-          >
-            {{ o.optionLabel }}
-          </p>
+            v-html="o?.optionLabel"
+          ></p>
         </div>
       </div>
-      <div class="flex justify-center">
-        <el-button
-          type="info"
-          class="cursor-pointer flex items-center"
-          @click="downloadPDF"
+      <div class="flex justify-center" id="downBtn">
+        <el-button type="info" class="cursor-pointer flex items-center"
           ><i style="margin-right: 5px" class="bi bi-download"></i>Yuklab
           olish</el-button
         >
@@ -96,7 +93,7 @@ export default {
       // pdf.html(document.querySelector(".questions"),{callback : () => {
       //   // pdf.save(`${this.subject.name} savollari.pdf`)
       // }})
-      let pdf = new html2pdf()
+      let pdf = new html2pdf();
       const content = document.querySelector(".questions");
       html2pdf(content, {
         filename: `${this.subject.name} savollari.pdf`,
@@ -106,26 +103,31 @@ export default {
         jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
       });
     },
-    convertHTMLToPDF() {
-      const { jsPDF } = window.jspdf;
-
-      var doc = new jsPDF('l', 'mm', [1200, 1810]);
-      var pdfjs = document.querySelector('#html-template');
-
-      doc.html(pdfjs, {
-          callback: function(doc) {
-              doc.save("output.pdf");
-          },
-          x: 10,
-          y: 10
-      });
-
-      doc.output('dataurlnewwindow');
-  }
   },
   mounted() {
     this.getQuestions(this.$route.params.id, 10, this.currentPage, true);
     this.getById(this.$route.params.id);
+    //
+    const myScript = document.createElement("script");
+    myScript.src =
+      "https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js";
+    myScript.integrity =
+      "sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==";
+    myScript.crossOrigin = "anonymous";
+    myScript.referrerPolicy = "no-referrer";
+    document.head.appendChild(myScript);
+    myScript.onload = () => {
+      function generatePDF() {
+        // Choose the element that your content will be rendered to.
+        const element = document.getElementById("questions");
+        console.log(element);
+        // Choose the element and save the PDF for your user.
+        html2pdf().from(element).save();
+      }
+      const btn = document.getElementById("downBtn");
+      btn.addEventListener("click", generatePDF);
+    };
+    //
   },
 };
 </script>

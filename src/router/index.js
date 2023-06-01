@@ -24,6 +24,13 @@ const routes = [
           public: false,
           isMain: true,
           roles: ["admin", "teacher", "student"],
+          breadcrumbs: [
+            {
+              text: "Dashboard",
+              to: "/",
+              class: "bx bx-home-alt",
+            },
+          ],
         },
       },
       {
@@ -54,6 +61,16 @@ const routes = [
                 component: () => import("../pages/management/users/List.vue"),
                 meta: {
                   roles: ["admin"],
+                  breadcrumbs: [
+                    {
+                      text: "Dashboard",
+                      to: "/",
+                    },
+                    {
+                      text: "Users",
+                      to: "/management/users",
+                    },
+                  ],
                 },
               },
               {
@@ -63,6 +80,20 @@ const routes = [
                   import("../pages/management/users/AddOrUpdate.vue"),
                 meta: {
                   roles: ["admin"],
+                  breadcrumbs: [
+                    {
+                      text: "Dashboard",
+                      to: "/",
+                    },
+                    {
+                      text: "Users",
+                      to: "/management/users",
+                    },
+                    {
+                      text: "Add",
+                      to: "/management/users/add",
+                    },
+                  ],
                 },
               },
 
@@ -73,6 +104,20 @@ const routes = [
                   import("../pages/management/users/AddOrUpdate.vue"),
                 meta: {
                   roles: ["admin"],
+                  breadcrumbs: [
+                    {
+                      text: "Dashboard",
+                      to: "/",
+                    },
+                    {
+                      text: "Users",
+                      to: "/management/users",
+                    },
+                    {
+                      text: "Update",
+                      to: "/management/users/update",
+                    },
+                  ],
                 },
               },
             ],
@@ -95,6 +140,17 @@ const routes = [
                 component: () => import("../pages/management/roles/List.vue"),
                 meta: {
                   roles: ["admin"],
+                  breadcrumbs : [
+                    {
+                      text: "Dashboard",
+                      to: "/",
+                    },
+                    {
+                      text: "Roles",
+                      to: "/management/roles",
+                    },
+
+                  ]
                 },
               },
               {
@@ -104,6 +160,20 @@ const routes = [
                   import("../pages/management/roles/AddOrUpdate.vue"),
                 meta: {
                   roles: ["admin"],
+                  breadcrumbs : [
+                    {
+                      text: "Dashboard",
+                      to: "/",
+                    },
+                    {
+                      text: "Roles",
+                      to: "/management/roles",
+                    },
+                    {
+                      text: "Add",
+                      to: "/management/roles/add",
+                    }
+                  ]
                 },
               },
               {
@@ -113,6 +183,20 @@ const routes = [
                   import("../pages/management/roles/AddOrUpdate.vue"),
                 meta: {
                   roles: ["admin"],
+                  breadcrumbs : [
+                    {
+                      text: "Dashboard",
+                      to: "/",
+                    },
+                    {
+                      text: "Roles",
+                      to: "/management/roles",
+                    },
+                    {
+                      text: "Update",
+                      to: "/management/roles/update",
+                    }
+                  ]
                 },
               },
             ],
@@ -124,6 +208,16 @@ const routes = [
               import("../pages/management/permissions/Permissions.vue"),
             meta: {
               roles: ["admin"],
+              breadcrumbs : [
+                {
+                  text: "Dashboard",
+                  to: "/",
+                },
+                {
+                  text: "Permissions",
+                  to: "/management/permissions",
+                }
+              ]
             },
           },
         ],
@@ -145,11 +239,39 @@ const routes = [
             path: "",
             component: () => import("../pages/quiz/List.vue"),
             name: "",
+            meta : {
+              breadcrumbs : [
+                {
+                  text: "Dashboard",
+                  to: "/",
+                },
+                {
+                  text: "Tests",
+                  to: "/quiz",
+                }
+              ]
+            }
           },
           {
             path: ":id",
             component: () => import("../pages/quiz/QuizRender.vue"),
             name: "",
+            meta : {
+              breadcrumbs : [
+                {
+                  text: "Dashboard",
+                  to: "/",
+                },
+                {
+                  text: "Tests",
+                  to: "/quiz",
+                },
+                {
+                  text: "Quiz",
+                  to: "",
+                }
+              ]
+            }
           },
         ],
       },
@@ -363,7 +485,7 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
-  let userRole =  null
+  let userRole = null;
   try {
     loadingStore().$patch({ loading: true });
     userStore().getCurrentUserRole();

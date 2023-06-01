@@ -1,9 +1,8 @@
 <template>
   <div>
-    <h1>
-    </h1>
+    <h1></h1>
     <!-- <pre>{{ listeningQuiz }}</pre> -->
-    <div v-if="Object.values(listeningQuiz).length" style="position: relative">
+    <div v-if="listeningQuiz" style="position: relative">
       <div
         v-if="!isEnded"
         class="flex header items-center justify-between shadow-md"
@@ -63,10 +62,10 @@
             </audio>
           </vue-plyr> -->
           <vue-plyr>
-              <audio controls crossorigin playsinline>
-                <source :src="listeningQuiz.audioPath" type="audio/mpeg" />
-              </audio>
-            </vue-plyr>
+            <audio controls crossorigin playsinline>
+              <source :src="listeningQuiz.audioPath" type="audio/mpeg" />
+            </audio>
+          </vue-plyr>
         </div>
         <div class="right flex items-center">
           <!-- <n-countdown
@@ -111,47 +110,42 @@
           </span>
         </div>
       </div>
-      <div v-else>
-        <h4>Yakunlandi</h4>
-        <div>
-          <h5>Sizning matningiz</h5>
-          <span v-for="(text, index) in result" :key="index">
+    </div>
+    <div v-else-if="result">
+      <div>
+        <h5 class="font-medium">Sizning matningiz</h5>
+        <div class="flex items-center justify-start flex-wrap">
+          <span v-for="(text, index) in result?.result" :key="index" class="mx-1">
             <span
-              style="
-                font-size: 20px;
-                margin: 0 5px;
-                width: 100%;
-                overflow: auto;
-              "
-              :class="{
-                true: text.isCorrectFilled,
-                error: !text.isVisible && !text.isCorrectFilled,
-              }"
-              ><span style="display: inline-block">
-                {{ text.value || text.label }}
-              </span></span
-            >
+              class="flex items-center justify-start flex-wrap font-normal text-lg font-[SF Pro Display]"
+              :class="[
+                text?.isCorrectFilled
+                  ? 'text-[yellowgreen] border-b-2 border-solid border-[yellowgreen]'
+                  : !text?.isVisible && !text?.isCorrectFilled
+                  ? 'text-[red] border-b-2 border-solid border-[red]'
+                  : '',
+              ]"
+              ><p v-if="text?.value" class="mr-2">
+                {{ text.value }}
+              </p>
+              <p class="mr-2" v-else>{{ text?.label }}</p>
+            </span>
           </span>
         </div>
-        <hr />
-        <div>
-          <h5>Asl matn</h5>
-          <span v-for="(text, index) in result" :key="index">
-            <span
-              style="
-                font-size: 20px;
-                margin: 0 5px;
-                width: 100%;
-                overflow: auto;
-              "
-              ><span style="display: inline-block">
-                {{ text.label }}
-              </span></span
-            >
-          </span>
-        </div>
-        <!-- <pre>{{ result }}</pre> -->
       </div>
+      <hr class="my-3" />
+      <div>
+        <h5>Asl matn</h5>
+        <span v-for="(text, index) in result?.result" :key="index">
+          <span
+            style="font-size: 20px; margin: 0 5px; width: 100%; overflow: auto"
+            ><span style="display: inline-block">
+              {{ text.label }}
+            </span></span
+          >
+        </span>
+      </div>
+      <!-- <pre>{{ result }}</pre> -->
     </div>
     <div v-else-if="loading">
       <a-skeleton :loading="loading" active> </a-skeleton>
@@ -160,7 +154,7 @@
     <div v-else>
       <n-empty description="Sinov yuklanmadi..."></n-empty>
     </div>
-    <el-dialog
+    <!-- <el-dialog
       v-model="isFromNotList"
       title="Parolni kiriting..."
       :width="smallScreen ? '70%' : '30%'"
@@ -188,7 +182,7 @@
           >Kirish</el-button
         >
       </div>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 <script>
@@ -203,6 +197,7 @@ export default {
       quizPassword: "",
       isSticky: false,
       isEnded: false,
+      result: [],
     };
   },
   computed: {
@@ -230,9 +225,11 @@ export default {
       this.isEnded = true;
       let res = await listeningService.checkQuiz(this.listeningQuiz.textArray);
       listeningQuizStore().$patch({ listeningQuiz: null });
+      this.result = res.data;
     },
   },
   mounted() {
+    this.getById(this.$route.params.id);
     window.addEventListener("scroll", (e) => {
       if (top.pageYOffset > 145) {
         this.isSticky = true;
@@ -241,16 +238,16 @@ export default {
       }
     });
   },
-  beforeRouteEnter(to, from, next) {
-    if (from.path === "/listeningQuizzes") {
-      listeningQuizStore().$patch({ loading: true });
-      listeningQuizStore().getById(to.params.id);
-      listeningQuizStore().$patch({ isFromNotList: false });
-      listeningQuizStore().$patch({ loading: false });
-      return next();
-    }
-    next();
-  },
+  // beforeRouteEnter(to, from, next) {
+  //   if (from.path === "/listeningQuizzes") {
+  //     listeningQuizStore().$patch({ loading: true });
+  //     listeningQuizStore().getById(to.params.id);
+  //     listeningQuizStore().$patch({ isFromNotList: false });
+  //     listeningQuizStore().$patch({ loading: false });
+  //     return next();
+  //   }
+  //   next();
+  // },
 };
 </script>
 <style scoped>
@@ -285,19 +282,14 @@ export default {
   transition: all ease-out -4s;
 }
 .true {
-  background: yellowgreen;
-  color: #fff;
-  padding: 1px 5px;
+  border-bottom: 1px solid yellowgreen;
   border-radius: 5px;
-  font-size: 20px;
-  margin: 0 5px;
 }
 .error {
-  background: red;
-  color: #fff;
-  padding: 1px 5px;
+  border-bottom: 1px solid red;
   border-radius: 5px;
-  font-size: 20px;
-  margin: 0 5px;
+}
+p {
+  margin: 0 !important;
 }
 </style>

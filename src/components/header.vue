@@ -83,6 +83,16 @@
       </div>
       <div class="single">
         <router-link
+          to="/listeningQuizzes"
+          @click="setIndex(6)"
+          :class="{ active: currentIndex === 6 }"
+        >
+        <i class="bx bx-news"></i>
+        Eshitish testlari
+        </router-link>
+      </div>
+      <div class="single">
+        <router-link
           to="/todos"
           @click="setIndex(8)"
           :class="{ active: currentIndex === 8 }"
