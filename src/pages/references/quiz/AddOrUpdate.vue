@@ -79,7 +79,7 @@
           id="question"
         >
         </el-input> -->
-        <Editor v-model="form.question"></Editor>
+        <Editor v-model.trim="form.question"></Editor>
         <span class="error" v-if="v$.form.question.$error"
           >Savol kiritilishi shart</span
         >
@@ -104,7 +104,7 @@
                 v-model="option.optionLabel"
                 id="questionLabel"
               ></el-input> -->
-              <Editor v-model="option.optionLabel"></Editor>
+              <Editor v-model.trim="option.optionLabel"></Editor>
             </label>
             <div
               v-for="error in v$.form.options.$each.$response.$errors[index]

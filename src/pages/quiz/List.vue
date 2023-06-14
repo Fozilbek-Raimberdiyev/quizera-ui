@@ -70,7 +70,7 @@
                     ><HistoryOutlined
                       style="margin-right: 5px"
                     ></HistoryOutlined
-                    >Yaratilgan vaqti</span
+                    >Qo'shilgan vaqti</span
                   >
                 </th>
                 <th
@@ -241,10 +241,17 @@
               >Tasodifiy bir martalik test ishlash</a-radio-button
             >
           </a-radio-group>
-          <div class="flex itemcenter justify-center mt-4">
+          <div
+            class="flex itemcenter justify-center mt-4"
+            v-if="valueOptionTypeSolveTest"
+          >
             <a-button
               @click="startSolveTest"
-              :disabled="!valueOptionTypeSolveTest"
+              :disabled="
+                valueOptionTypeSolveTest === 1 &&
+                !valueOfPartTest &&
+                valueOptionTypeSolveTest != 2
+              "
               type="primary"
               >Boshlash</a-button
             >
@@ -280,12 +287,12 @@
           ></a-input>
           <div class="flex items-center justify-center mt-2">
             <el-button
-            class="cursor-pointer"
-            style="margin-left: 1px"
-            type="primary"
-            @click="checkPasswordSubject"
-            >Kirish</el-button
-          >
+              class="cursor-pointer"
+              style="margin-left: 1px"
+              type="primary"
+              @click="checkPasswordSubject"
+              >Kirish</el-button
+            >
           </div>
         </div>
       </div>
@@ -393,10 +400,15 @@ export default {
   methods: {
     ...mapActions(subjectStore, ["getList", "getById"]),
     dateParser,
-    checkingPasswordStatus(subject) {
-      this.getById(subject._id);
+    async checkingPasswordStatus(subject) {
+      await this.getById(subject._id);
       this.subject = subject;
-      if (subject.isHasPassword) {
+      console.log(this.questionsCountInDB, "questionsCountInDB");
+      console.log(subject);
+      if (
+        subject.isHasPassword ||
+        this.questionsCountInDB / subject.quizCount >= 2
+      ) {
         this.isShow = true;
       } else {
         this.$router.push(`/quiz/${subject._id}`);
@@ -408,7 +420,10 @@ export default {
           this.subject,
           this.subjectPassword
         );
-        subjectStore().$patch({partNumberOfTest : this.valueOfPartTest, isFromListOfTestRoute : true});
+        subjectStore().$patch({
+          partNumberOfTest: this.valueOfPartTest,
+          isFromListOfTestRoute: true,
+        });
         this.$router.push(`/quiz/${this.subject._id}`);
       } catch (e) {
         console.log(e);
@@ -418,7 +433,10 @@ export default {
       if (this.subject.isHasPassword) {
         this.isSelectedTypeSolveTest = true;
       } else {
-        subjectStore().$patch({partNumberOfTest : this.valueOfPartTest, isFromListOfTestRoute : true});
+        subjectStore().$patch({
+          partNumberOfTest: this.valueOfPartTest,
+          isFromListOfTestRoute: true,
+        });
         this.$router.push({
           path: `/quiz/${this.subject._id}`,
         });
@@ -432,7 +450,10 @@ export default {
           this.subject,
           this.subjectPassword
         );
-        subjectStore().$patch({partNumberOfTest : this.valueOfPartTest, isFromListOfTestRoute : true});
+        subjectStore().$patch({
+          partNumberOfTest: this.valueOfPartTest,
+          isFromListOfTestRoute: true,
+        });
         this.$router.push({
           path: `/quiz/${this.subject._id}`,
         });

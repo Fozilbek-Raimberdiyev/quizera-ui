@@ -26,7 +26,7 @@ export const subjectStore = defineStore("subject", {
     async getById(id) {
       let res = await subjectService.getById(id);
       this.subject = res.data.result;
-      this.questionsCountInDB = res.data.questionsCountInDB
+      this.questionsCountInDB = res.data.questionsCountInDB;
     },
     updateSubject(body, id) {
       return subjectService.updateSubject(body, id);
