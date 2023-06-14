@@ -226,6 +226,7 @@ export default {
       "inCorrectAnswersCount",
       "notCheckedQuestionsCount",
     ]),
+    ...mapState(subjectStore, ["partNumberOfTest", "isFromListOfTestRoute"]),
   },
   watch: {
     questions: {
@@ -374,13 +375,32 @@ export default {
   },
   async created() {
     this.smallScreen = window.innerWidth < 600;
-    let res = (await subjectService.getById(this.$route.params.id)).data;
+    let res = (await subjectService.getById(this.$route.params.id)).data
+      ?.result;
     this.subject = res;
 
     if (!res.isHasPassword) {
-      this.getQuestions(this.$route.params.id, "", "", "", res);
+      if (this.partNumberOfTest) {
+        this.getQuestions(this.$route.params.id, "", "", "", res, {
+          isHasManyQuetionsPartInDB: true,
+          partNumber: this.partNumberOfTest,
+        });
+      } else {
+        this.getQuestions(this.$route.params.id, "", "", "", res);
+      }
     } else {
-      this.isShow = true;
+      if (this.isFromListOfTestRoute) {
+        if (this.partNumberOfTest) {
+          this.getQuestions(this.$route.params.id, "", "", "", res, {
+            isHasManyQuetionsPartInDB: true,
+            partNumber: this.partNumberOfTest,
+          });
+        } else {
+          this.getQuestions(this.$route.params.id, "", "", "", res);
+        }
+      } else {
+        this.isShow = true;
+      }
     }
   },
 };

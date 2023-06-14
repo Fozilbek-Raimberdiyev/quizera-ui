@@ -401,8 +401,13 @@ export default {
     ]),
     ...mapActions(userStore, ["getAllUsers"]),
     async submit(e) {
-      console.log(e);
+      // console.log(e);
       this.v$.$validate();
+      if (this.sumCountGrades > this.form.quizCount) {
+        return useToast().warning(
+          "Test miqdoridan ballar bo'yicha biriktirilgan savollar soni oshib ketdi!"
+        );
+      }
       if (!this.$route.params.id) {
         if (!this.v$.$error) {
           try{

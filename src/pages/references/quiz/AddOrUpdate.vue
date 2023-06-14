@@ -21,10 +21,16 @@
             />
           </el-select>
         </div>
+        <div>
+          <i
+            class="bx bxs-chevron-down text-lg cursor-pointer transition duration-300 ease-linear"
+          ></i>
+        </div>
         <div
           v-show="subjectId && subject?.isDifferent"
           v-for="(grade, index) in gradesC"
           :key="index"
+          class="h-[65px] overflow-y-hidden mb-4"
         >
           <table>
             <thead>
@@ -65,7 +71,7 @@
         </div>
       </div>
       <div v-if="subjectId">
-        <h6 style="color: #429eef;" for="question">Savolni kiriting</h6>
+        <h6 style="color: #429eef" for="question">Savolni kiriting</h6>
         <!-- <el-input
           type="textarea"
           placeholder="Savolni kiriting..."
@@ -73,103 +79,16 @@
           id="question"
         >
         </el-input> -->
-        <div class="q-pa-md q-gutter-sm">
-          <q-editor
-            v-model="form.question"
-            :dense="$q.screen.lt.md"
-            :toolbar="[
-              [
-                {
-                  label: $q.lang.editor.align,
-                  icon: $q.iconSet.editor.align,
-                  fixedLabel: true,
-                  list: 'only-icons',
-                  options: ['left', 'center', 'right', 'justify'],
-                },
-                {
-                  label: $q.lang.editor.align,
-                  icon: $q.iconSet.editor.align,
-                  fixedLabel: true,
-                  options: ['left', 'center', 'right', 'justify'],
-                },
-              ],
-              [
-                'bold',
-                'italic',
-                'strike',
-                'underline',
-                'subscript',
-                'superscript',
-              ],
-              ['token', 'hr', 'link', 'custom_btn'],
-              ['print', 'fullscreen'],
-              [
-                {
-                  label: $q.lang.editor.formatting,
-                  icon: $q.iconSet.editor.formatting,
-                  list: 'no-icons',
-                  options: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'code'],
-                },
-                {
-                  label: $q.lang.editor.fontSize,
-                  icon: $q.iconSet.editor.fontSize,
-                  fixedLabel: true,
-                  fixedIcon: true,
-                  list: 'no-icons',
-                  options: [
-                    'size-1',
-                    'size-2',
-                    'size-3',
-                    'size-4',
-                    'size-5',
-                    'size-6',
-                    'size-7',
-                  ],
-                },
-                {
-                  label: $q.lang.editor.defaultFont,
-                  icon: $q.iconSet.editor.font,
-                  fixedIcon: true,
-                  list: 'no-icons',
-                  options: [
-                    'default_font',
-                    'arial',
-                    'arial_black',
-                    'comic_sans',
-                    'courier_new',
-                    'impact',
-                    'lucida_grande',
-                    'times_new_roman',
-                    'verdana',
-                  ],
-                },
-                'removeFormat',
-              ],
-              ['quote', 'unordered', 'ordered', 'outdent', 'indent'],
-
-              ['undo', 'redo'],
-              ['viewsource'],
-            ]"
-            :fonts="{
-              arial: 'Arial',
-              arial_black: 'Arial Black',
-              comic_sans: 'Comic Sans MS',
-              courier_new: 'Courier New',
-              impact: 'Impact',
-              lucida_grande: 'Lucida Grande',
-              times_new_roman: 'Times New Roman',
-              verdana: 'Verdana',
-            }"
-          />
-        </div>
+        <Editor v-model="form.question"></Editor>
         <span class="error" v-if="v$.form.question.$error"
           >Savol kiritilishi shart</span
         >
       </div>
       <div v-show="subjectId" class="flex justify-between">
-        <div class="options">
-          <h6 style="color: #429eef;">Variantlarni kiriting</h6>
+        <div class="options mt-16">
+          <h6 style="color: #429eef">Variantlarni kiriting</h6>
           <div
+            class="mb-20"
             for="questionLabel"
             v-for="(option, index) in form.options"
             :key="index"
@@ -185,106 +104,7 @@
                 v-model="option.optionLabel"
                 id="questionLabel"
               ></el-input> -->
-              <div class="q-pa-md q-gutter-sm">
-                <q-editor
-                  class="option"
-                  :class="{ true: option.isTrue, false: !option.isTrue }"
-                  v-model="option.optionLabel"
-                  :dense="$q.screen.lt.md"
-                  :toolbar="[
-                    [
-                      {
-                        label: $q.lang.editor.align,
-                        icon: $q.iconSet.editor.align,
-                        fixedLabel: true,
-                        list: 'only-icons',
-                        options: ['left', 'center', 'right', 'justify'],
-                      },
-                      {
-                        label: $q.lang.editor.align,
-                        icon: $q.iconSet.editor.align,
-                        fixedLabel: true,
-                        options: ['left', 'center', 'right', 'justify'],
-                      },
-                    ],
-                    [
-                      'bold',
-                      'italic',
-                      'strike',
-                      'underline',
-                      'subscript',
-                      'superscript',
-                    ],
-                    ['token', 'hr', 'link', 'custom_btn'],
-                    ['print', 'fullscreen'],
-                    [
-                      {
-                        label: $q.lang.editor.formatting,
-                        icon: $q.iconSet.editor.formatting,
-                        list: 'no-icons',
-                        options: [
-                          'p',
-                          'h1',
-                          'h2',
-                          'h3',
-                          'h4',
-                          'h5',
-                          'h6',
-                          'code',
-                        ],
-                      },
-                      {
-                        label: $q.lang.editor.fontSize,
-                        icon: $q.iconSet.editor.fontSize,
-                        fixedLabel: true,
-                        fixedIcon: true,
-                        list: 'no-icons',
-                        options: [
-                          'size-1',
-                          'size-2',
-                          'size-3',
-                          'size-4',
-                          'size-5',
-                          'size-6',
-                          'size-7',
-                        ],
-                      },
-                      {
-                        label: $q.lang.editor.defaultFont,
-                        icon: $q.iconSet.editor.font,
-                        fixedIcon: true,
-                        list: 'no-icons',
-                        options: [
-                          'default_font',
-                          'arial',
-                          'arial_black',
-                          'comic_sans',
-                          'courier_new',
-                          'impact',
-                          'lucida_grande',
-                          'times_new_roman',
-                          'verdana',
-                        ],
-                      },
-                      'removeFormat',
-                    ],
-                    ['quote', 'unordered', 'ordered', 'outdent', 'indent'],
-
-                    ['undo', 'redo'],
-                    ['viewsource'],
-                  ]"
-                  :fonts="{
-                    arial: 'Arial',
-                    arial_black: 'Arial Black',
-                    comic_sans: 'Comic Sans MS',
-                    courier_new: 'Courier New',
-                    impact: 'Impact',
-                    lucida_grande: 'Lucida Grande',
-                    times_new_roman: 'Times New Roman',
-                    verdana: 'Verdana',
-                  }"
-                />
-              </div>
+              <Editor v-model="option.optionLabel"></Editor>
             </label>
             <div
               v-for="error in v$.form.options.$each.$response.$errors[index]
@@ -404,6 +224,7 @@ import { required, requiredIf, helpers } from "@vuelidate/validators";
 import { questionStore } from "../../../stores/references/questions";
 import { useToast } from "vue-toastification";
 import questionsService from "../../../services/questions.service";
+import Editor from "../../../components/editor.vue";
 export default {
   data() {
     return {
@@ -626,13 +447,14 @@ export default {
   },
   mounted() {
     // this.getList(10, 5, true);
-    this.getList({limit : 20, page : 1, isForReference : true});
+    this.getList({ limit: 20, page: 1, isForReference: true });
     this.$emit("emit", true);
     if (this.$route.params.id) {
       this.getQuestionById();
     }
   },
   created() {},
+  components: { Editor },
 };
 </script>
 <style scoped>

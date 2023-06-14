@@ -1,13 +1,15 @@
 import { defineStore } from "pinia";
 import { useToast } from "vue-toastification";
 import subjectService from "../../services/subject.service";
-import swal from "sweetalert2";
 export const subjectStore = defineStore("subject", {
   state: () => ({
     list: [],
     subject: {},
     total: "",
     loading: false,
+    questionsCountInDB : 0,
+    partNumberOfTest : 0,
+    isFromListOfTestRoute : false
   }),
   getters: {},
   actions: {
@@ -23,7 +25,8 @@ export const subjectStore = defineStore("subject", {
     },
     async getById(id) {
       let res = await subjectService.getById(id);
-      this.subject = res.data;
+      this.subject = res.data.result;
+      this.questionsCountInDB = res.data.questionsCountInDB
     },
     updateSubject(body, id) {
       return subjectService.updateSubject(body, id);

@@ -91,7 +91,7 @@ export default {
           path: "add",
           component: () =>
             import("../pages/references/listening/AddOrUpdate.vue"),
-          name: "Quiz add",
+          name: "Listening quiz add",
           meta: {
             roles: ["admin", "teacher"],
           },
@@ -100,7 +100,7 @@ export default {
           path: ":id/update",
           component: () =>
             import("../pages/references/listening/AddOrUpdate.vue"),
-          name: "Quiz edit",
+          name: "Listening quiz edit",
           meta: {
             roles: ["admin", "teacher"],
           },

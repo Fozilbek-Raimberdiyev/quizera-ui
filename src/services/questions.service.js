@@ -1,12 +1,13 @@
 import { $axios } from "./auth";
 export default {
-  getQuestions(subjectId, limit, page, boolean,subject) {
+  getQuestions(subjectId, limit, page, boolean,subject, config) {
     return $axios.post("/questions", subject,{
       params: {
         subjectId,
         limit,
         page,
         forReference: boolean,
+        config
       },
     });
   },

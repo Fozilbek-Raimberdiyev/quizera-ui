@@ -15,13 +15,14 @@ export const questionStore = defineStore("question", {
     notCheckedQuestionsCount: "",
   }),
   actions: {
-    async getQuestions(subjectId, limit, page, boolean, subject) {
-      let res = await await questionsService.getQuestions(
+    async getQuestions(subjectId, limit, page, boolean, subject, config) {
+      let res =  await questionsService.getQuestions(
         subjectId,
         limit,
         page,
         boolean,
-        subject
+        subject,
+        config
       );
       let questions = res.data?.questions || res.data;
       try {

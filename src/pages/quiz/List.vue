@@ -40,7 +40,9 @@
                   >
                 </th>
                 <th class="text-left" scope="col">
-                  <span style="margin-top: 1rem" class="flex items-center min-w-[150px]"
+                  <span
+                    style="margin-top: 1rem"
+                    class="flex items-center min-w-[150px]"
                     ><BarChartOutlined
                       style="margin-right: 5px; display: inline-block"
                     ></BarChartOutlined
@@ -48,7 +50,9 @@
                   >
                 </th>
                 <th class="text-left" scope="col">
-                  <span style="margin-top: 1rem" class="flex items-center  min-w-[180px]"
+                  <span
+                    style="margin-top: 1rem"
+                    class="flex items-center min-w-[180px]"
                     ><hourglass-outlined
                       style="margin-right: 5px"
                     ></hourglass-outlined
@@ -60,7 +64,9 @@
                   scope="col"
                   v-if="currentUserRole === 'admin'"
                 >
-                  <span style="margin-top: 1rem" class="flex items-center min-w-[150px]"
+                  <span
+                    style="margin-top: 1rem"
+                    class="flex items-center min-w-[150px]"
                     ><HistoryOutlined
                       style="margin-right: 5px"
                     ></HistoryOutlined
@@ -73,7 +79,9 @@
                   style="vertical-align: middle"
                   v-if="currentUserRole === 'admin'"
                 >
-                  <span style="margin-top: 1rem" class="flex items-center min-w-[140px]"
+                  <span
+                    style="margin-top: 1rem"
+                    class="flex items-center min-w-[140px]"
                     ><info-circle-outlined
                       style="margin-right: 5px"
                     ></info-circle-outlined
@@ -91,7 +99,9 @@
                   >
                 </th>
                 <th class="text-left" scope="col">
-                  <span style="margin-top: 1rem" class="flex items-center min-w-[130px]"
+                  <span
+                    style="margin-top: 1rem"
+                    class="flex items-center min-w-[130px]"
                     ><interaction-outlined
                       style="margin-right: 5px"
                     ></interaction-outlined
@@ -186,31 +196,98 @@
 
     <el-dialog
       v-model="isShow"
-      title="Parolni kiriting..."
-      :width="smallScreen ? '70%' : '30%'"
+      :title="
+        subject?.quizCount * 2 >= questionsCountInDB
+          ? 'Parolni kiriting'
+          : 'Tasdiqlash'
+      "
+      :width="smallScreen ? '70%' : '45%'"
       :before-close="handleClose"
     >
-      <div
-        style="
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-        "
-      >
-        <a-input
-          placeholder="Parolni kiriting..."
-          v-model:value="subjectPassword"
-          type="password"
-          show-password
-          @keyup.enter="checkPasswordSubject"
-        ></a-input>
-        <el-button
-          class="cursor-pointer"
-          style="margin-left: 1px"
-          type="primary"
-          @click="checkPasswordSubject"
-          >Kirish</el-button
-        >
+      <div v-if="questionsCountInDB / subject.quizCount >= 2">
+        <div v-if="!isSelectedTypeSolveTest">
+          Ushbu fanda fanga belgilangan savoldan 2 baravar ko'p savol mavjud.
+          Siz bo'limlarga ajratilgan holda yoki tasodifiy bir martalik test
+          ishlashingiz mumkin
+          <a-radio-group
+            size="medium"
+            v-model:value="valueOptionTypeSolveTest"
+            button-style="solid"
+            class="flex flex-col"
+          >
+            <a-radio-button
+              :class="valueOptionTypeSolveTest === 1 ? 'mb-[2px]' : 'mb-2'"
+              class="mt-4 block"
+              :value="1"
+              >Bo'limlarga ajratilgan holda ishlash</a-radio-button
+            >
+            <a-radio-group
+              v-if="valueOptionTypeSolveTest === 1"
+              size="small"
+              v-model:value="valueOfPartTest"
+              button-style="solid"
+              class="block"
+            >
+              <a-radio-button
+                v-for="i in Math.ceil(questionsCountInDB / subject.quizCount)"
+                :key="i"
+                class="my-1"
+                :value="i"
+              >
+                {{ i }}
+              </a-radio-button>
+            </a-radio-group>
+            <a-radio-button class="block" :value="2"
+              >Tasodifiy bir martalik test ishlash</a-radio-button
+            >
+          </a-radio-group>
+          <div class="flex itemcenter justify-center mt-4">
+            <a-button
+              @click="startSolveTest"
+              :disabled="!valueOptionTypeSolveTest"
+              type="primary"
+              >Boshlash</a-button
+            >
+          </div>
+        </div>
+        <div v-if="isSelectedTypeSolveTest">
+          <a-input
+            placeholder="Parolni kiriting..."
+            v-model:value="subjectPassword"
+            type="password"
+            show-password
+            @keyup.enter="checkPasswordSubjectPartTest"
+          ></a-input>
+          <div class="flex items-center justify-center">
+            <el-button
+              class="cursor-pointer mt-1"
+              style="margin-left: 1px"
+              type="primary"
+              @click="checkPasswordSubjectPartTest"
+              >Kirish</el-button
+            >
+          </div>
+        </div>
+      </div>
+      <div v-else>
+        <div>
+          <a-input
+            placeholder="Parolni kiriting..."
+            v-model:value="subjectPassword"
+            type="password"
+            show-password
+            @keyup.enter="checkPasswordSubject"
+          ></a-input>
+          <div class="flex items-center justify-center mt-2">
+            <el-button
+            class="cursor-pointer"
+            style="margin-left: 1px"
+            type="primary"
+            @click="checkPasswordSubject"
+            >Kirish</el-button
+          >
+          </div>
+        </div>
       </div>
     </el-dialog>
   </div>
@@ -267,10 +344,19 @@ export default {
       isShow: false,
       subject: {},
       subjectService,
+      isHasManyQuestionsInDB: false,
+      valueOptionTypeSolveTest: 0,
+      valueOfPartTest: 0,
+      isSelectedTypeSolveTest: false,
     };
   },
   computed: {
-    ...mapState(subjectStore, ["list", "total", "loading"]),
+    ...mapState(subjectStore, [
+      "list",
+      "total",
+      "loading",
+      "questionsCountInDB",
+    ]),
     ...mapState(userStore, ["currentUserRole"]),
     searchSubject() {
       return this.list.filter((subject) =>
@@ -305,9 +391,10 @@ export default {
     },
   },
   methods: {
-    ...mapActions(subjectStore, ["getList"]),
+    ...mapActions(subjectStore, ["getList", "getById"]),
     dateParser,
     checkingPasswordStatus(subject) {
+      this.getById(subject._id);
       this.subject = subject;
       if (subject.isHasPassword) {
         this.isShow = true;
@@ -321,7 +408,34 @@ export default {
           this.subject,
           this.subjectPassword
         );
+        subjectStore().$patch({partNumberOfTest : this.valueOfPartTest, isFromListOfTestRoute : true});
         this.$router.push(`/quiz/${this.subject._id}`);
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    async startSolveTest() {
+      if (this.subject.isHasPassword) {
+        this.isSelectedTypeSolveTest = true;
+      } else {
+        subjectStore().$patch({partNumberOfTest : this.valueOfPartTest, isFromListOfTestRoute : true});
+        this.$router.push({
+          path: `/quiz/${this.subject._id}`,
+        });
+      }
+    },
+
+    //bu funksiya ham fanning parolini tekshiradi, dbdagi savollar quizcountdan kop bolgandagi modaldagi parol content uchun funksiya
+    async checkPasswordSubjectPartTest() {
+      try {
+        let res = await subjectService.checkPasswordSubject(
+          this.subject,
+          this.subjectPassword
+        );
+        subjectStore().$patch({partNumberOfTest : this.valueOfPartTest, isFromListOfTestRoute : true});
+        this.$router.push({
+          path: `/quiz/${this.subject._id}`,
+        });
       } catch (e) {
         console.log(e);
       }

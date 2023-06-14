@@ -12,19 +12,25 @@
         }}</span>
       </div>
       <div class="bar" :class="[smallScreen ? 'small-screen' : 'big-screen']">
-        <div class="teachers shadow-md">
-          <i class="bi bi-briefcase"></i>
-          <span>{{ $t("pages.dashboard.countTeachers") }}</span>
+        <div class="teachers shadow-md h-[130px]">
+          <div class="h-[80px]">
+            <i class="bi bi-briefcase text-xl mr-2"></i>
+          <span class="text-2xl">{{ $t("pages.dashboard.countTeachers") }}</span>
+          </div>
           <p>35</p>
         </div>
-        <div class="students">
-          <i class="bi bi-mortarboard"></i>
-          <span>{{ $t("pages.dashboard.countStudents") }}</span>
+        <div class="students h-[130px]">
+          <div class="h-[80px]">
+            <i class="bi bi-mortarboard text-xl mr-2"></i>
+          <span class="text-2xl">{{ $t("pages.dashboard.countStudents") }}</span>
+          </div>
           <p>75</p>
         </div>
-        <div class="opentests">
-          <i class="bi bi-question-square"></i>
-          <span>{{ $t("pages.dashboard.countOpenTests") }}</span>
+        <div class="opentests h-[130px]">
+          <div class="h-[80px]">
+            <i class="bi bi-question-square text-xl mr-2"></i>
+          <span class="text-2xl">{{ $t("pages.dashboard.countOpenTests") }}</span>
+          </div>
           <p>100</p>
         </div>
       </div>

@@ -216,6 +216,7 @@
 import { mapActions, mapState } from "pinia";
 import { todoStore } from "../../stores/todos.store";
 import FadeLoader from "vue-spinner/src/FadeLoader.vue";
+import editor from "../../components/editor.vue";
 import {
   toDDMMYY,
   minusTwoDates,
@@ -225,6 +226,7 @@ import {io} from "socket.io-client"
 export default {
   components: {
     FadeLoader,
+    editor
   },
   data: () => ({
     page: 1,
@@ -269,9 +271,6 @@ export default {
       await this.deleteById(id);
       this.getList();
     },
-    change() {
-      alert("");
-    },
     defineStatusTodo(todo) {
       let content = document.createElement("div");
       if (todo.isMaked && !todo.isLated) {
@@ -283,10 +282,10 @@ export default {
       }
       return content;
     },
-    sendMessage() {
-      io().emit("chat_message", this.message);
-    }
   },
+  mounted() {
+    this.getList()
+  }
 };
 </script>
 <style scoped>

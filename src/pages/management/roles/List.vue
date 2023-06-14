@@ -48,11 +48,10 @@
 </template>
 <script>
 import { mapActions, mapState } from "pinia";
-import TableLite from "vue3-table-lite";
 import { roleStore } from "../../../stores/management/role.store";
 export default {
   components: {
-    TableLite,
+    
   },
   data() {
     return {roles : []};
