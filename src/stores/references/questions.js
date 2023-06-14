@@ -24,6 +24,7 @@ export const questionStore = defineStore("question", {
         subject,
         config
       );
+      console.log(res, "res")
       let questions = res.data?.questions || res.data;
       try {
         questions.forEach((q, i) => {

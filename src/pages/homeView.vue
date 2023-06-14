@@ -2,6 +2,7 @@
 
 
 <template>
+ 
   <a-layout style="min-height: 100vh">
     <a-layout-sider
       v-if="!smallScreen && !fullScreen && !bigScreen"

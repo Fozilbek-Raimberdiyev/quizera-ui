@@ -384,12 +384,14 @@ export default {
     "form.isForAll"(value) {
       try {
         const members = [...this.form.members];
-      if (value) {
-        this.form.members = [];
-      } else {
-        this.form.members = [...members];
+        if (value) {
+          this.form.members = [];
+        } else {
+          this.form.members = [...members];
+        }
+      } catch (e) {
+        console.log(e);
       }
-      } catch(e) {console.log(e)}
     },
   },
   methods: {
@@ -410,27 +412,35 @@ export default {
       }
       if (!this.$route.params.id) {
         if (!this.v$.$error) {
-          try{
+          try {
             let form = { ...this.form };
-          if (!form.isHasPassword) form.password = undefined;
-          form.point = this.countPointSubject;
-          let members = [...form.members];
-          members = members.map((member) => {
-            return {
-              value: member,
-              label: member,
+            if (!form.isHasPassword) form.password = undefined;
+            form.point = this.countPointSubject;
+            let members = [...form.members];
+            members = members.map((member) => {
+              return {
+                value: member,
+                label: member,
+              };
+            });
+            form.members = members;
+            form.authorId = this.user._id;
+            let formData = new FormData();
+            formData.append("audio", e.srcElement[8].files[0]);
+            formData.append("form", JSON.stringify(form));
+            let res = await this.addSubject(formData);
+            this.$emit("created", res);
+            let params = {
+              isForReference: true,
+              page: 1,
+              limit: 5,
             };
-          });
-          form.members = members;
-          form.authorId = this.user._id;
-          let formData = new FormData();
-          formData.append("audio", e.srcElement[8].files[0]);
-          formData.append("form", JSON.stringify(form));
-          let res = await this.addSubject(formData);
-          this.$emit("created", res);
-          this.$router.push("/references/subject");
-          } catch(e) {console.log(e)}
-        } 
+            this.getList(params);
+            this.$router.push("/references/subject");
+          } catch (e) {
+            console.log(e);
+          }
+        }
       } else {
         if (!this.v$.$error) {
           try {
@@ -450,6 +460,12 @@ export default {
             }
             form.point = this.countPointSubject;
             let res = await this.updateSubject(form, this.$route.params.id);
+            let params = {
+              isForReference: true,
+              page: 1,
+              limit: 5,
+            };
+            this.getList(params);
             this.$router.push("/references/subject");
           } catch (e) {
             console.log(e);

@@ -5,14 +5,15 @@
       <div class="top flex justify-between">
         <h5>{{ subject?.name }}</h5>
         <div>
-          <el-pagination
+          <!-- <el-pagination
             small
             background
             layout="prev, pager, next"
             :total="total"
             :page-size="10"
             v-model:current-page="currentPage"
-          />
+          /> -->
+          <!-- <a-pagination :pageSize="10" v-model:current="currentPage" :total="total" show-less-items /> -->
         </div>
       </div>
       <div

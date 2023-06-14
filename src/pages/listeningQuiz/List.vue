@@ -33,21 +33,13 @@
                     ></number-outlined
                   ></span>
                 </th>
-                <th class="text-left">
+                <th class="text-left min-w-[100px]">
                   <span style="margin-top: 1rem" class="flex items-center"
                     ><FolderOutlined style="margin-right: 5px"></FolderOutlined
                     >Fan</span
                   >
                 </th>
-                <th class="text-left" scope="col">
-                  <span style="margin-top: 1rem" class="flex items-center"
-                    ><BarChartOutlined
-                      style="margin-right: 5px; display: inline-block"
-                    ></BarChartOutlined
-                    >Test savollari soni</span
-                  >
-                </th>
-                <th class="text-left" scope="col">
+                <th class="text-left min-w-[230px]" scope="col">
                   <span style="margin-top: 1rem" class="flex items-center"
                     ><hourglass-outlined
                       style="margin-right: 5px"
@@ -56,7 +48,7 @@
                   >
                 </th>
                 <th
-                  class="text-left"
+                  class="text-left min-w-[200px]"
                   scope="col"
                   v-if="currentUserRole === 'admin'"
                 >
@@ -64,11 +56,11 @@
                     ><HistoryOutlined
                       style="margin-right: 5px"
                     ></HistoryOutlined
-                    >Yaratilgan vaqti</span
+                    >Qo'shilgan vaqti</span
                   >
                 </th>
                 <th
-                  class="text-left"
+                  class="text-left min-w-[150px]"
                   scope="col"
                   style="vertical-align: middle"
                   v-if="currentUserRole === 'admin'"
@@ -81,7 +73,7 @@
                   >
                 </th>
                 <th
-                  class="text-left"
+                  class="text-left min-w-[200px]"
                   style="vertical-align: middle"
                   scope="col"
                 >
@@ -90,7 +82,7 @@
                     >Test muallifi</span
                   >
                 </th>
-                <th class="text-left" scope="col">
+                <th class="text-left min-w-[200px]" scope="col">
                   <span style="margin-top: 1rem" class="flex items-center"
                     ><interaction-outlined
                       style="margin-right: 5px"
@@ -108,7 +100,6 @@
               >
                 <td class="text-left" scope="row">{{ i + 1 }}</td>
                 <td class="text-left data">{{ subject.name }}</td>
-                <td class="text-left data">{{ subject.quizCount }}</td>
                 <td class="text-left data">{{ subject.time }}</td>
                 <td class="text-left data" v-if="currentUserRole === 'admin'">
                   {{ dateParser(subject.createdDate) }}
