@@ -26,7 +26,7 @@
             class="bx bxs-chevron-down text-lg cursor-pointer transition duration-300 ease-linear"
           ></i>
         </div>
-        <div
+        <!-- <div
           v-show="subjectId && subject?.isDifferent"
           v-for="(grade, index) in gradesC"
           :key="index"
@@ -68,7 +68,7 @@
               </tr>
             </tbody>
           </table>
-        </div>
+        </div> -->
       </div>
       <div v-if="subjectId">
         <h6 style="color: #429eef" for="question">Savolni kiriting</h6>
@@ -79,7 +79,10 @@
           id="question"
         >
         </el-input> -->
-        <Editor v-model.trim="form.question"></Editor>
+        <Editor
+          :placeholder="'Savolni kiriting...'"
+          v-model.trim="form.question"
+        ></Editor>
         <span class="error" v-if="v$.form.question.$error"
           >Savol kiritilishi shart</span
         >
@@ -93,7 +96,7 @@
             v-for="(option, index) in form.options"
             :key="index"
           >
-            <label>
+            <label class="w-full">
               <!-- <el-input
                 type="textarea"
                 
@@ -104,7 +107,14 @@
                 v-model="option.optionLabel"
                 id="questionLabel"
               ></el-input> -->
-              <Editor v-model.trim="option.optionLabel"></Editor>
+              <Editor class="w-full" :toolbar="'essential'"
+                :placeholder="
+                  index === 0
+                    ? 'To\'g\'ri javob variantini kiriting...'
+                    : 'Noto\'g\'ri javob variantini kiriting...'
+                "
+                v-model.trim="option.optionLabel"
+              ></Editor>
             </label>
             <div
               v-for="error in v$.form.options.$each.$response.$errors[index]

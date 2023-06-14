@@ -1,12 +1,13 @@
 <template>
+  <pre></pre>
   <div v-if="questions.length">
     <div class="flex items-center justify-between">
-      <h5 class="sub-name">{{ subject?.name }}</h5>
+      <h5 class="sub-name">{{ tempSubject?.name }}</h5>
       <div class="timer flex items-center" v-if="!isEnded">
         <i class="bx bx-time" style="margin-right: 5px"></i>
         <n-countdown
           :on-finish="onFinish"
-          :duration="subject.time * 60 * 1000"
+          :duration="tempSubject.time * 60 * 1000"
         ></n-countdown>
       </div>
     </div>
@@ -73,11 +74,11 @@
       <div class="flex justify-between items-center">
         <span></span>
         <div
-          v-if="subject.isDifferent"
+          v-if="tempSubject.isDifferent"
           class="result-ball"
           :class="{ passed: isPassed, failed: !isPassed }"
         >
-          <h3>{{ sum }} / {{ subject?.point }}</h3>
+          <h3>{{ sum }} / {{ tempSubject?.point }}</h3>
         </div>
         <div v-else class="flex justify-between items-center notDifference">
           <div title="Belgilangan savollar">
@@ -214,6 +215,7 @@ export default {
       subjectService,
       subjectPassword: "",
       workingDurationTime: 0,
+      tempSubject: {},
     };
   },
   computed: {
@@ -244,7 +246,7 @@ export default {
           questions.forEach((question, index) => {
             return (question["number"] = index);
           });
-          let res = this.checkTests({ questions, point: this.subject?.point });
+          let res = this.checkTests({ questions, point: this.tempSubject?.point });
           this.isEnded = true;
           this.currentIndex = 0;
         } catch (e) {}
@@ -288,9 +290,9 @@ export default {
         try {
           let res = await this.checkTests({
             questions,
-            point: this.subject?.point,
+            point: this.tempsubject?.point,
             workingDurationTime: this.workingDurationTime,
-            subject: this.subject,
+            subject: this.tempSubject,
           });
           this.isEnded = true;
           this.currentIndex = 0;
@@ -312,8 +314,8 @@ export default {
       return (this.checkedCount = counts.length);
     },
     async tryAgain() {
-      let res = (await subjectService.getById(this.$route.params.id)).data;
-      this.getQuestions(this.$route.params.id, "", "", "", res);
+      // let res = (await subjectService.getById(this.$route.params.id)).data;
+   await   this.getQuestions(this.$route.params.id, "", "", "", this.tempSubject);
       setTimeout(() => {
         this.isEnded = false;
         this.currentIndex = 0;
@@ -322,10 +324,16 @@ export default {
     async checkPasswordSubject() {
       try {
         let res = await subjectService.checkPasswordSubject(
-          this.subject,
+          subjectStore()?.subject,
           this.subjectPassword
         );
-        this.getQuestions(this.$route.params.id, "", "", "", this.subject);
+        this.getQuestions(
+          this.$route.params.id,
+          "",
+          "",
+          "",
+          subjectStore()?.subject
+        );
         this.isShow = false;
       } catch (e) {
         console.log(e);
@@ -375,28 +383,53 @@ export default {
   },
   async created() {
     this.smallScreen = window.innerWidth < 600;
-    let res = (await subjectService.getById(this.$route.params.id)).data
-      ?.result;
-    this.subject = res;
+    // let res = (await subjectService.getById(this.$route.params.id)).data
+    //   ?.result;
+    // this.subject = res;
 
-    if (!res.isHasPassword) {
+    //agar listdan o'tilmayotgan bo'lsa, fanni backenddan olib keladi , agar listdan o'tilayotgan bo'lsa pinia joriy subject bor, bu sayt tezligi uchun muhim
+    if (!this.isFromListOfTestRoute) {
+      await this.getById(this.$route.params.id);
+    }
+    this.tempSubject = subjectStore()?.subject;
+    if (!subjectStore()?.subject.isHasPassword) {
       if (this.partNumberOfTest) {
-        this.getQuestions(this.$route.params.id, "", "", "", res, {
-          isHasManyQuetionsPartInDB: true,
-          partNumber: this.partNumberOfTest,
-        });
+        this.getQuestions(
+          this.$route.params.id,
+          "",
+          "",
+          "",
+          subjectStore()?.subject,
+          {
+            isHasManyQuetionsPartInDB: true,
+            partNumber: this.partNumberOfTest,
+          }
+        );
       } else {
-        this.getQuestions(this.$route.params.id, "", "", "", res);
+        this.getQuestions(this.$route.params.id, "", "", "", this.tempSubject);
       }
     } else {
       if (this.isFromListOfTestRoute) {
         if (this.partNumberOfTest) {
-          this.getQuestions(this.$route.params.id, "", "", "", res, {
-            isHasManyQuetionsPartInDB: true,
-            partNumber: this.partNumberOfTest,
-          });
+          this.getQuestions(
+            this.$route.params.id,
+            "",
+            "",
+            "",
+            subjectStore()?.subject,
+            {
+              isHasManyQuetionsPartInDB: true,
+              partNumber: this.partNumberOfTest,
+            }
+          );
         } else {
-          this.getQuestions(this.$route.params.id, "", "", "", res);
+          this.getQuestions(
+            this.$route.params.id,
+            "",
+            "",
+            "",
+            subjectStore()?.subject
+          );
         }
       } else {
         this.isShow = true;

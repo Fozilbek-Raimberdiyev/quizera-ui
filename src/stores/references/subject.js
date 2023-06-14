@@ -9,7 +9,7 @@ export const subjectStore = defineStore("subject", {
     loading: false,
     questionsCountInDB : 0,
     partNumberOfTest : 0,
-    isFromListOfTestRoute : false
+    isFromListOfTestRoute : false,
   }),
   getters: {},
   actions: {
