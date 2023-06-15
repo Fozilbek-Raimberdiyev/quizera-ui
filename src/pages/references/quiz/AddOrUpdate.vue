@@ -432,7 +432,7 @@ export default {
             false,
             this.subject
           );
-          this.$router.push(`/references/quiz/${this.question._id}/update`);
+          this.$router.push(`/references/quiz/${this.question._id}/add`);
           let options = [...this.form.options];
           options.forEach((option) => (option.optionLabel = ""));
           this.form = [];

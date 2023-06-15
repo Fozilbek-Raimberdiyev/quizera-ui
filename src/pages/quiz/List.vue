@@ -206,7 +206,7 @@
     >
       <div v-if="questionsCountInDB / subject.quizCount >= 2">
         <div v-if="!isSelectedTypeSolveTest">
-          Ushbu fanda fanga belgilangan savoldan 2 baravar ko'p savol mavjud.
+          Ushbu fanda fanga belgilangan savoldan {{ Math.round(questionsCountInDB / subject.quizCount) }} baravar ko'p savol mavjud.
           Siz bo'limlarga ajratilgan holda yoki tasodifiy bir martalik test
           ishlashingiz mumkin
           <a-radio-group
@@ -344,7 +344,7 @@ export default {
     return {
       search: "",
       page: 1,
-      limit: 5,
+      limit: 10,
       smallScreen: false,
       InputSearch,
       subjectPassword: "",
@@ -392,7 +392,7 @@ export default {
       let params = {
         isForReference: false,
         page: val,
-        limit: 5,
+        limit: this.limit,
       };
       this.getList(params);
     },
@@ -403,8 +403,6 @@ export default {
     async checkingPasswordStatus(subject) {
       await this.getById(subject._id);
       this.subject = subject;
-      console.log(this.questionsCountInDB, "questionsCountInDB");
-      console.log(subject);
       if (
         subject.isHasPassword ||
         this.questionsCountInDB / subject.quizCount >= 2
@@ -434,7 +432,7 @@ export default {
         this.isSelectedTypeSolveTest = true;
       } else {
         subjectStore().$patch({
-          partNumberOfTest: this.valueOfPartTest,
+          partNumberOfTest: this.valueOptionTypeSolveTest===1 ?  this.valueOfPartTest : 0,
           isFromListOfTestRoute: true,
         });
         this.$router.push({
@@ -469,7 +467,7 @@ export default {
     let params = {
       isForReference: false,
       page: 1,
-      limit: 5,
+      limit: this.limit,
     };
     this.getList(params);
     this.smallScreen = window.innerWidth < 600;

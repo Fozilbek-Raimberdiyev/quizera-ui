@@ -7,7 +7,7 @@
         <i class="bx bx-time" style="margin-right: 5px"></i>
         <n-countdown
           :on-finish="onFinish"
-          :duration="tempSubject.time * 60 * 1000"
+          :duration="tempSubject?.time * 60 * 1000"
         ></n-countdown>
       </div>
     </div>
@@ -246,7 +246,7 @@ export default {
           questions.forEach((question, index) => {
             return (question["number"] = index);
           });
-          let res = this.checkTests({ questions, point: this.tempSubject?.point });
+          let res = this.checkTests({ questions, point: this.tempSubject?.point, subject : this.tempSubject });
           this.isEnded = true;
           this.currentIndex = 0;
         } catch (e) {}

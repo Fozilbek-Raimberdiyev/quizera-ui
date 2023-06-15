@@ -433,7 +433,7 @@ export default {
             let params = {
               isForReference: true,
               page: 1,
-              limit: 5,
+              limit: 10,
             };
             this.getList(params);
             this.$router.push("/references/subject");
@@ -463,7 +463,7 @@ export default {
             let params = {
               isForReference: true,
               page: 1,
-              limit: 5,
+              limit: 10,
             };
             this.getList(params);
             this.$router.push("/references/subject");

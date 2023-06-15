@@ -1,60 +1,7 @@
 <template>
   <div>
     <div class="mt-4"><router-view @created="getStat"></router-view></div>
-    <div class="flex justify-between">
-      <!-- <ul>
-        <li v-for="(item, index) in list" :key="item._id">
-        <b style="margin-right: 5px;">{{ index + 1 }}</b>
-        <span>{{ item.name }}</span>
-        </li>
-      </ul> -->
-      <a-list item-layout="horizontal" :data-source="list">
-        <template #renderItem="{ item }">
-          <a-list-item>
-            <div
-              style="
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-              "
-            >
-              <span style="margin-right: 1rem">{{ item.name }}</span>
-              <div class="flex items-center justify-between">
-                <span
-                  @click="updateStatus(item)"
-                  v-if="!item.isStarted"
-                  class="start"
-                  ><i class="bx bx-play"></i>Start</span
-                >
-                <span @click="updateStatus(item)" v-else class="finish"
-                  ><i class="bx bx-stop"></i>Stop</span
-                >
-                <el-button
-                  style="margin-right: 0.5rem"
-                  class="cursor-pointer"
-                  type="text"
-                >
-                  <router-link :to="`/references/subject/${item._id}/update`">
-                    <i class="bx bxs-edit"></i>
-                  </router-link>
-                </el-button>
-                <a-popconfirm
-                  title="Haqiqatdan o'chirmoqchimisiz? Fanga qo'shilib savollari ham o'chib ketadi?"
-                  ok-text="Ha"
-                  cancel-text="Yo'q"
-                  @confirm="deleteSubject(item._id)"
-                  @cancel="cancel"
-                >
-                  <i
-                    style="cursor: pointer; color: #429fff"
-                    class="bi bi-trash"
-                  ></i>
-                </a-popconfirm>
-              </div>
-            </div>
-          </a-list-item>
-        </template>
-      </a-list>
+    <div class="flex items-center justify-end mb-[6px]">
       <el-button
         class="cursor-pointer"
         v-if="!isInAdd"
@@ -62,6 +9,95 @@
         @click="toAddOrUpdate"
         ><i class="bx bx-plus" style="margin-right: 5px"></i>Qo'shish</el-button
       >
+    </div>
+    <q-markup-table class="min-h-[350px]">
+      <thead>
+        <tr>
+          <th class="text-left">#</th>
+          <th class="text-left">Fan nomi</th>
+          <th class="text-left">Fan savollar soni</th>
+          <th class="text-left">Bazadagi savollar soni</th>
+          <th class="text-left">Qo'shilgan vaqti</th>
+          <th class="text-right">Harakatlar</th>
+        </tr>
+      </thead>
+      <tbody v-if="list?.length">
+        <tr v-for="(item, index) in list" :key="index">
+          <td class="text-left">
+            {{ index + 1 }}
+          </td>
+          <td class="text-left">
+            {{ item?.name }}
+          </td>
+          <td class="text-left">
+            {{ item?.quizCount }}
+          </td>
+          <td class="text-left">-</td>
+          <td class="text-left">
+            {{ new Date(item?.createdDate).toLocaleDateString() }}
+          </td>
+          <td class="text-right">
+            <div class="flex items-center justify-between">
+              <span
+                @click="updateStatus(item)"
+                v-if="!item.isStarted"
+                class="start"
+                ><i class="bx bx-play"></i>Start</span
+              >
+              <span @click="updateStatus(item)" v-else class="finish"
+                ><i class="bx bx-stop"></i>Stop</span
+              >
+              <el-button
+                style="margin-right: 0.5rem"
+                class="cursor-pointer"
+                type="text"
+              >
+                <router-link :to="`/references/subject/${item._id}/update`">
+                  <i class="bx bxs-edit"></i>
+                </router-link>
+              </el-button>
+              <a-popconfirm
+                title="Haqiqatdan o'chirmoqchimisiz? Fanga qo'shilib savollari ham o'chib ketadi?"
+                ok-text="Ha"
+                cancel-text="Yo'q"
+                @confirm="deleteSubject(item._id)"
+                @cancel="cancel"
+              >
+                <i
+                  style="cursor: pointer; color: #429fff"
+                  class="bi bi-trash"
+                ></i>
+              </a-popconfirm>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+      <tbody v-else-if="loading" style="position: relative">
+        <tr style="position: absolute; padding: 10px 0; inset: 0">
+          <div
+            class="flex items-center justify-center h-[200px] lg:h-[280px] content-center"
+          >
+            <p>Yuklanmoqda</p>
+          </div>
+        </tr>
+      </tbody>
+      <tbody v-else style="position: relative">
+        <tr class="" style="position: absolute; padding: 10px 0; inset: 0">
+          <div
+            class="flex items-center justify-center h-[200px] lg:h-[280px] content-center"
+          >
+            <n-empty></n-empty>
+          </div>
+        </tr>
+      </tbody>
+    </q-markup-table>
+    <div class="flex justify-between">
+      <!-- <ul>
+        <li v-for="(item, index) in list" :key="item._id">
+        <b style="margin-right: 5px;">{{ index + 1 }}</b>
+        <span>{{ item.name }}</span>
+        </li>
+      </ul> -->
     </div>
     <el-pagination
       small
@@ -86,7 +122,8 @@ export default {
       isInAdd: false,
       subjectService,
       page: 1,
-      limit: 5,
+      limit: 20,
+      loading: false,
       // stat  : false
     };
   },
@@ -94,13 +131,15 @@ export default {
     ...mapState(subjectStore, ["list", "total"]),
   },
   watch: {
-    page(val) {
+    async page(val) {
       let params = {
         isForReference: true,
         page: val,
-        limit: 5,
+        limit: this.limit,
       };
-      this.getList(params);
+      this.loading = true;
+      await this.getList(params);
+      this.loading = false;
     },
   },
   methods: {
@@ -109,14 +148,16 @@ export default {
       "deleteSubjectAndQuestions",
       "updateSubjectStatus",
     ]),
-    getStat(val) {
+    async getStat(val) {
       if (val) {
         let params = {
           isForReference: true,
           page: 1,
-          limit: 5,
+          limit: this.limit,
         };
-        this.getList(params);
+        this.loading = trui;
+        await this.getList(params);
+        this.loading = false;
       }
     },
     toAddOrUpdate() {
@@ -133,25 +174,31 @@ export default {
       let params = {
         isForReference: true,
         page: 1,
-        limit: 5,
+        limit: this.limit,
       };
       this.getList(params);
     },
     async updateStatus(item) {
       await this.updateSubjectStatus({ subjectID: item._id, status: true });
-      await this.getList({ isForReference: true, page: this.page, limit: 5 });
+      await this.getList({
+        isForReference: true,
+        page: this.page,
+        limit: this.limit,
+      });
     },
   },
   beforeRouteLeave() {
     return subjectStore().$patch({ list: [] });
   },
-  mounted() {
+  async mounted() {
     let params = {
       isForReference: true,
       page: 1,
-      limit: 5,
+      limit: this.limit,
     };
-    this.getList(params);
+    this.loading = true;
+    await this.getList(params);
+    this.loading = false;
   },
 };
 </script>
