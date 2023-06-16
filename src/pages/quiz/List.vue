@@ -206,9 +206,10 @@
     >
       <div v-if="questionsCountInDB / subject.quizCount >= 2">
         <div v-if="!isSelectedTypeSolveTest">
-          Ushbu fanda fanga belgilangan savoldan {{ Math.round(questionsCountInDB / subject.quizCount) }} baravar ko'p savol mavjud.
-          Siz bo'limlarga ajratilgan holda yoki tasodifiy bir martalik test
-          ishlashingiz mumkin
+          Ushbu fanda fanga belgilangan savoldan
+          {{ Math.round(questionsCountInDB / subject.quizCount) }} baravar ko'p
+          savol mavjud. Siz bo'limlarga ajratilgan holda yoki tasodifiy bir
+          martalik test ishlashingiz mumkin
           <a-radio-group
             size="medium"
             v-model:value="valueOptionTypeSolveTest"
@@ -237,7 +238,10 @@
                 {{ i }}
               </a-radio-button>
             </a-radio-group>
-            <a-radio-button :class="valueOptionTypeSolveTest === 1 ? 'mt-2' : '0'" class="block" :value="2"
+            <a-radio-button
+              :class="valueOptionTypeSolveTest === 1 ? 'mt-2' : '0'"
+              class="block"
+              :value="2"
               >Tasodifiy bir martalik</a-radio-button
             >
           </a-radio-group>
@@ -296,6 +300,12 @@
           </div>
         </div>
       </div>
+      <template #title>
+        <h1 class="text-2xl font-medium">
+         {{  subject?.quizCount * 2 >= questionsCountInDB ? 'Parolni kiriting' :
+         'Tasdiqlash' }}
+        </h1>
+      </template>
     </el-dialog>
   </div>
 </template>
@@ -432,7 +442,8 @@ export default {
         this.isSelectedTypeSolveTest = true;
       } else {
         subjectStore().$patch({
-          partNumberOfTest: this.valueOptionTypeSolveTest===1 ?  this.valueOfPartTest : 0,
+          partNumberOfTest:
+            this.valueOptionTypeSolveTest === 1 ? this.valueOfPartTest : 0,
           isFromListOfTestRoute: true,
         });
         this.$router.push({
