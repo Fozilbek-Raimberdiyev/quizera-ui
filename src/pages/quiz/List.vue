@@ -165,33 +165,32 @@
             v-model:current-page="page"
           />
         </div>
-
-        <div v-else>
+      </div>
+    </div>
+    <div v-else-if="loading" style="position: absolute; inset: 0">
+      <!-- <a-spin style="position: absolute; top: 50%; left: 50%;"></a-spin> -->
+      <div
+        class="flex items-center justify-center lg:h-[280px] h-[200px] content-center"
+      >
+        <img
+          style="width: 25px"
+          src="../../assets/gif/iphone-spinner.gif"
+          alt="Loading..."
+        />
+      </div>
+    </div>
+    <div v-else>
+      <div class="absolute inset-0">
+        <div
+          class="flex items-center justify-center lg:min-h-[400px] h-[250px] content-center"
+        >
           <n-empty
             size="huge"
-            style="display: flex; justify-content: center; height: 400px"
-            description="Siz biriktirilgan testlar yo'q"
+            description="Test sinovlari topilmadi..."
+            style=""
           ></n-empty>
         </div>
       </div>
-    </div>
-    <div
-      v-else-if="loading"
-      style="position: absolute; left: 50%; top: 40vh; width: 25px"
-    >
-      <!-- <a-spin style="position: absolute; top: 50%; left: 50%;"></a-spin> -->
-      <img
-        style="width: 100%"
-        src="../../assets/gif/iphone-spinner.gif"
-        alt="Loading..."
-      />
-    </div>
-    <div v-else>
-      <n-empty
-        size="huge"
-        description="Test sinovlari topilmadi..."
-        style="position: absolute; left: 50%; margin-top: 40vh"
-      ></n-empty>
     </div>
 
     <el-dialog
@@ -302,8 +301,11 @@
       </div>
       <template #title>
         <h1 class="text-2xl font-medium">
-         {{  subject?.quizCount * 2 >= questionsCountInDB ? 'Parolni kiriting' :
-         'Tasdiqlash' }}
+          {{
+            subject?.quizCount * 2 >= questionsCountInDB
+              ? "Parolni kiriting"
+              : "Tasdiqlash"
+          }}
         </h1>
       </template>
     </el-dialog>
@@ -365,13 +367,14 @@ export default {
       valueOptionTypeSolveTest: 0,
       valueOfPartTest: 0,
       isSelectedTypeSolveTest: false,
+      loading: false,
     };
   },
   computed: {
     ...mapState(subjectStore, [
       "list",
       "total",
-      "loading",
+      // "loading",
       "questionsCountInDB",
     ]),
     ...mapState(userStore, ["currentUserRole"]),
@@ -398,13 +401,15 @@ export default {
     "cancel",
   ],
   watch: {
-    page(val) {
+    async page(val) {
       let params = {
         isForReference: false,
         page: val,
         limit: this.limit,
       };
-      this.getList(params);
+      this.loading = true;
+      await this.getList(params);
+      this.loding = false;
     },
   },
   methods: {
@@ -474,14 +479,21 @@ export default {
   beforeRouteLeave() {
     subjectStore().$patch({ list: [], total: null });
   },
-  mounted() {
-    let params = {
+  async mounted() {
+    try{
+      let params = {
       isForReference: false,
       page: 1,
       limit: this.limit,
     };
-    this.getList(params);
+    this.loading = true;
+    await this.getList(params);
+    this.loading = false;
     this.smallScreen = window.innerWidth < 600;
+    }
+    catch(e) {
+      this.loading = false
+    }
   },
 };
 </script>
