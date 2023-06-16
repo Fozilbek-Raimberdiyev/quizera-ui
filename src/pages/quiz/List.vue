@@ -201,7 +201,7 @@
           ? 'Parolni kiriting'
           : 'Tasdiqlash'
       "
-      :width="smallScreen ? '70%' : '45%'"
+      :width="smallScreen ? '90%' : '45%'"
       :before-close="handleClose"
     >
       <div v-if="questionsCountInDB / subject.quizCount >= 2">
@@ -219,7 +219,7 @@
               :class="valueOptionTypeSolveTest === 1 ? 'mb-[2px]' : 'mb-2'"
               class="mt-4 block"
               :value="1"
-              >Bo'limlarga ajratilgan holda ishlash</a-radio-button
+              >Bo'limlarga ajratilgan holda</a-radio-button
             >
             <a-radio-group
               v-if="valueOptionTypeSolveTest === 1"
@@ -237,8 +237,8 @@
                 {{ i }}
               </a-radio-button>
             </a-radio-group>
-            <a-radio-button class="block" :value="2"
-              >Tasodifiy bir martalik test ishlash</a-radio-button
+            <a-radio-button :class="valueOptionTypeSolveTest === 1 ? 'mt-2' : '0'" class="block" :value="2"
+              >Tasodifiy bir martalik</a-radio-button
             >
           </a-radio-group>
           <div
