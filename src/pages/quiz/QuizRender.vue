@@ -1,5 +1,4 @@
 <template>
-  <pre></pre>
   <div v-if="questions.length">
     <div class="flex items-center justify-between">
       <h5 class="sub-name">{{ tempSubject?.name }}</h5>
@@ -74,11 +73,14 @@
       <div class="flex justify-between items-center">
         <span></span>
         <div
-          v-if="tempSubject.isDifferent"
+          v-if="tempSubject.isDifferent && !partNumberOfTest"
           class="result-ball"
           :class="{ passed: isPassed, failed: !isPassed }"
         >
           <h3>{{ sum }} / {{ tempSubject?.point }}</h3>
+        </div>
+        <div v-else-if="partNumberOfTest">
+          <h3>{{ sum }} / {{ getSummBall() }}</h3>part
         </div>
         <div v-else class="flex justify-between items-center notDifference">
           <div title="Belgilangan savollar">
@@ -246,7 +248,11 @@ export default {
           questions.forEach((question, index) => {
             return (question["number"] = index);
           });
-          let res = this.checkTests({ questions, point: this.tempSubject?.point, subject : this.tempSubject });
+          let res = this.checkTests({
+            questions,
+            point: this.tempSubject?.point,
+            subject: this.tempSubject,
+          });
           this.isEnded = true;
           this.currentIndex = 0;
         } catch (e) {}
@@ -315,7 +321,13 @@ export default {
     },
     async tryAgain() {
       // let res = (await subjectService.getById(this.$route.params.id)).data;
-   await   this.getQuestions(this.$route.params.id, "", "", "", this.tempSubject);
+      await this.getQuestions(
+        this.$route.params.id,
+        "",
+        "",
+        "",
+        this.tempSubject
+      );
       setTimeout(() => {
         this.isEnded = false;
         this.currentIndex = 0;
@@ -338,6 +350,13 @@ export default {
       } catch (e) {
         console.log(e);
       }
+    },
+    getSummBall() {
+      let sum = 0;
+      for (const key of questionStore()?.questions) {
+        sum += key?.ball;
+      }
+      return sum
     },
   },
   // beforeRouteLeave(to, from, next) {
@@ -394,7 +413,7 @@ export default {
     this.tempSubject = subjectStore()?.subject;
     if (!subjectStore()?.subject.isHasPassword) {
       if (this.partNumberOfTest) {
-        this.getQuestions(
+      await  this.getQuestions(
           this.$route.params.id,
           "",
           "",
@@ -405,13 +424,14 @@ export default {
             partNumber: this.partNumberOfTest,
           }
         );
+        this.getSummBall()
       } else {
         this.getQuestions(this.$route.params.id, "", "", "", this.tempSubject);
       }
     } else {
       if (this.isFromListOfTestRoute) {
         if (this.partNumberOfTest) {
-          this.getQuestions(
+          await this.getQuestions(
             this.$route.params.id,
             "",
             "",
@@ -422,6 +442,7 @@ export default {
               partNumber: this.partNumberOfTest,
             }
           );
+          this.getSummBall();
         } else {
           this.getQuestions(
             this.$route.params.id,

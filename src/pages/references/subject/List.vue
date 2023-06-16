@@ -191,17 +191,17 @@ export default {
     return subjectStore().$patch({ list: [] });
   },
   async mounted() {
-    try{
+    try {
       let params = {
-      isForReference: true,
-      page: 1,
-      limit: this.limit,
-    };
-    this.loading = true;
-    await this.getList(params);
-    this.loading = false;
-    } catch(e) {
-      this.loading = false
+        isForReference: true,
+        page: 1,
+        limit: this.limit,
+      };
+      this.loading = true;
+      await this.getList(params);
+      this.loading = false;
+    } catch (e) {
+      this.loading = false;
     }
   },
 };
