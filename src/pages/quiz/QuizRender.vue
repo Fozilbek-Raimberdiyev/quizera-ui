@@ -44,12 +44,36 @@
         >
       </div>
       <div
-        class="questions"
+        class="questions flex"
         v-for="(option, index) in questions[currentIndex]?.options"
         :key="index"
         style="margin-top: 10px"
       >
-        <div class="option">
+        <p
+          class="w-[7%] mt-[3px] py-2 flex items-center justify-center border border-solid border-[#e3e3e9] rounded-tl-md mr-[1px] rounded-bl-md"
+          v-if="index === 0"
+        >
+          A
+        </p>
+        <p
+          class="w-[7%] mt-[3px] py-2 flex items-center justify-center border border-solid border-[#e3e3e9] rounded-tl-md mr-[1px] rounded-bl-md"
+          v-if="index === 1"
+        >
+          B
+        </p>
+        <p
+          class="w-[7%] mt-[3px] py-2 flex items-center justify-center border border-solid border-[#e3e3e9] rounded-tl-md mr-[1px] rounded-bl-md"
+          v-if="index === 2"
+        >
+          C
+        </p>
+        <p
+          class="w-[7%] mt-[3px] py-2 flex items-center justify-center border border-solid border-[#e3e3e9] rounded-tl-md mr-[1px] rounded-bl-md"
+          v-if="index === 3"
+        >
+          D
+        </p>
+        <div class="option w-[92%]">
           <input
             type="radio"
             :id="index"
@@ -79,8 +103,9 @@
         >
           <h3>{{ sum }} / {{ tempSubject?.point }}</h3>
         </div>
-        <div v-else-if="partNumberOfTest">
-          <h3>{{ sum }} / {{ getSummBall() }}</h3>part
+        <div class="flex items-center" v-else-if="partNumberOfTest">
+          <h3 :class="getPercent() >=60 ? 'text-[yellowgreen]' : 'text-[red]'">{{ sum }} / {{ getSummBall() }}</h3>
+          <h3 class="ml-3 border border-solid border-[#78A8FC] py-1 px-3" :class="getPercent() >=60 ? 'text-[yellowgreen]' : 'text-[red]'">{{Math.floor(getPercent() * 10) / 10  + '%'}}</h3>
         </div>
         <div v-else class="flex justify-between items-center notDifference">
           <div title="Belgilangan savollar">
@@ -132,7 +157,31 @@
         :key="index"
         style="margin-top: 10px"
       >
-        <div class="option">
+        <div class="option flex items-center">
+          <p
+            class="w-[70px] py-2 flex items-center justify-center border border-solid border-[#e3e3e9] rounded-tl-sm rounded-bl-md"
+            v-if="index === 0"
+          >
+            A
+          </p>
+          <p
+            class="w-[70px] py-2 flex items-center justify-center border border-solid border-[#e3e3e9] rounded-tl-sm rounded-bl-md"
+            v-if="index === 1"
+          >
+            B
+          </p>
+          <p
+            class="w-[70px] py-2 flex items-center justify-center border border-solid border-[#e3e3e9] rounded-tl-sm rounded-bl-md"
+            v-if="index === 2"
+          >
+            C
+          </p>
+          <p
+            class="w-[70px] py-2 flex items-center justify-center border border-solid border-[#e3e3e9] rounded-tl-sm rounded-bl-md"
+            v-if="index === 3"
+          >
+            D
+          </p>
           <p
             :class="{
               true: option.isTrue,
@@ -356,8 +405,11 @@ export default {
       for (const key of questionStore()?.questions) {
         sum += key?.ball;
       }
-      return sum
+      return sum;
     },
+    getPercent() {
+      return (this.sum / this.getSummBall()) * 100;
+    }
   },
   // beforeRouteLeave(to, from, next) {
   //   if (!this.isEnded && this.questions.length) {
@@ -413,7 +465,7 @@ export default {
     this.tempSubject = subjectStore()?.subject;
     if (!subjectStore()?.subject.isHasPassword) {
       if (this.partNumberOfTest) {
-      await  this.getQuestions(
+        await this.getQuestions(
           this.$route.params.id,
           "",
           "",
@@ -424,7 +476,7 @@ export default {
             partNumber: this.partNumberOfTest,
           }
         );
-        this.getSummBall()
+        this.getSummBall();
       } else {
         this.getQuestions(this.$route.params.id, "", "", "", this.tempSubject);
       }
@@ -470,8 +522,8 @@ export default {
 .question-tab {
   border: 1px solid #e3e5e9 !important;
   cursor: pointer;
-  padding: 2px 15px;
-  border-radius: 5px;
+  padding: 6px 20px;
+  border-radius: 8px;
   /* height: 110%; */
   overflow-x: auto;
 }
@@ -486,7 +538,7 @@ export default {
 }
 
 .tabs::-webkit-scrollbar {
-  width: 1em;
+  width: 10px;
 }
 
 .tabs::-webkit-scrollbar-track {
@@ -511,9 +563,8 @@ input[type="radio"] {
   display: none;
 }
 input[type="radio"]:checked + label {
-  font-weight: 600;
+ /* font-weight: 600; */
   background: rgb(226, 222, 222);
-  color: #000;
 }
 
 .option p {
