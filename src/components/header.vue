@@ -28,136 +28,7 @@
         <breadCrumbs></breadCrumbs>
       </div>
     </div>
-    <div class="flex items-center big-screen-size" v-if="bigScreen">
-      <div class="flex" v-if="currentUserRole === 'admin'">
-        <el-dropdown>
-          <span
-            style="font-size: 18px"
-            :class="{
-              active:
-                currentIndex === 2 || currentIndex === 3 || currentIndex === 4,
-            }"
-            class="el-dropdown-link no-single"
-          >
-            <i class="bx bx-cog"></i>
-            Boshqarish
-          </span>
-          <template #dropdown>
-            <el-dropdown-menu>
-              <el-dropdown-item
-                @click="setIndex(2)"
-                :class="{ active: currentIndex === 2 || currentIndex === 1 }"
-              >
-                <router-link to="/management/users"
-                  ><i class="bx bx-user"></i>Foydalanuvchilar</router-link
-                >
-              </el-dropdown-item>
-              <el-dropdown-item
-                @click="setIndex(3)"
-                :class="{ active: currentIndex === 3 || currentIndex === 1 }"
-              >
-                <router-link to="/management/roles">
-                  <i class="bx bx-group"></i>Rollar
-                </router-link>
-              </el-dropdown-item>
-              <el-dropdown-item
-                @click="setindex(4)"
-                :class="{ active: currentIndex === 4 || currentIndex === 1 }"
-              >
-                <router-link to="/management/permissions">
-                  <i class="bx bxs-key"></i>Ruxsatlar
-                </router-link>
-              </el-dropdown-item>
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
-      </div>
-      <div class="single">
-        <router-link
-          to="/quiz"
-          @click="setIndex(5)"
-          :class="{ active: currentIndex === 5 }"
-        >
-          <i class="bx bxs-flag-checkered"></i>Test ishlash
-        </router-link>
-      </div>
-      <div class="single">
-        <router-link
-          to="/listeningQuizzes"
-          @click="setIndex(6)"
-          :class="{ active: currentIndex === 6 }"
-        >
-        <i class="bx bx-news"></i>
-        Eshitish testlari
-        </router-link>
-      </div>
-      <div class="single">
-        <router-link
-          to="/todos"
-          @click="setIndex(8)"
-          :class="{ active: currentIndex === 8 }"
-        >
-          <i class="bx bx-task"></i>Eslatmalar
-        </router-link>
-      </div>
-      <div class="single">
-        <router-link
-          to="/statistic"
-          @click="setIndex(12)"
-          :class="{ active: currentIndex === 12 }"
-        >
-          <i class="bx bx-bar-chart-alt-2"></i>Statistika
-        </router-link>
-      </div>
-      <div
-        class="flex"
-        v-if="currentUserRole === 'admin' || currentUserRole === 'teacher'"
-      >
-        <el-dropdown>
-          <span
-            style="font-size: 18px"
-            class="el-dropdown-link no-single"
-            :class="{
-              active:
-                currentIndex === 9 ||
-                currentIndex === 10 ||
-                currentIndex === 11 ||
-                currentIndex === 18,
-            }"
-          >
-            <i class="bx bx-building"></i>Ma'lumotnomalar
-          </span>
-          <template #dropdown>
-            <el-dropdown-menu>
-              <el-dropdown-item
-                @click="setIndex(9)"
-                :class="{ active: currentIndex === 9 }"
-              >
-                <router-link to="/references/quiz">
-                  <i class="bx bx-question-mark"></i>Savollar
-                </router-link>
-              </el-dropdown-item>
-              <el-dropdown-item
-                @click="setIndex(10)"
-                :class="{ active: currentIndex === 10 }"
-              >
-                <router-link to="/references/subject">
-                  <i class="bx bx-folder-plus"></i>Fanlar
-                </router-link>
-              </el-dropdown-item>
-              <el-dropdown-item
-                @click="setIndex(18)"
-                :class="{ active: currentIndex === 18 }"
-              >
-                <router-link to="/references/listening">
-                  <i class="bx bx-folder-plus"></i>Eshitish sinovlari
-                </router-link>
-              </el-dropdown-item>
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
-      </div>
-    </div>
+ 
     <div class="flex items-center justify-between">
       <div
         class="flex"
@@ -478,12 +349,8 @@ export default {
 .big-screen-size > div {
   margin: 0 0.5rem;
 }
-.big-screen-size > div.single {
-  // margin-top: -25px;
-}
-.big-screen-size > div.no-single {
-  // margin-bottom: -25px;
-}
+
+
 a {
   text-decoration: none;
   color: #000;

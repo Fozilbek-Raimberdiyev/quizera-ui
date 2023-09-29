@@ -488,7 +488,7 @@ router.beforeEach(async (to, from, next) => {
   let userRole = null;
   try {
     loadingStore().$patch({ loading: true });
-    userStore().getCurrentUserRole();
+   await userStore().getCurrentUserRole();
     userRole = userStore().currentUserRole;
     loadingStore().$patch({ loading: false });
   } catch (e) {

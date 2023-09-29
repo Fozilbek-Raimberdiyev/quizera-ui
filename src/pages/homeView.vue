@@ -1,8 +1,4 @@
-
-
-
 <template>
- 
   <a-layout style="min-height: 100vh">
     <a-layout-sider
       v-if="!smallScreen && !fullScreen && !bigScreen"
@@ -16,7 +12,9 @@
       "
     >
       <div class="logo" style="color: #fff; font-size: 18px; padding: 25px">
-        <router-link v-if="!smallScreen" to="/"> Quizera.uz</router-link>
+        <router-link v-if="!smallScreen" to="/">
+          <img src="../assets/image/logo.png" alt="logo">
+        </router-link>
         <!-- <router-link v-else to="/"> <i class='bx bx-briefcase'></i></router-link> -->
       </div>
       <a-menu theme="dark" mode="inline">
@@ -125,7 +123,6 @@
       >
         <header-menu
           @getFullscreen="getFullscreen"
-          @getBigscreen="getBigscreen"
           :smallScreen="smallScreen"
           :fullScreen="fullScreen"
         ></header-menu>
@@ -136,10 +133,26 @@
           :style="[smallScreen ? `padding:15px;` : `padding: 24px;`]"
         >
           <div>
-            <div class="load" style="position: absolute; left: 50%; top: 50%;" v-if="loading">
-              <img v-if="$i18n.locale==='Gb'" src="../assets/gif/loading-Gb.gif" alt="Loading..." />
-              <img v-if="$i18n.locale==='Ru'" src="../assets/gif/loading-Ru.gif" alt="Погрузка..." />
-              <img v-if="$i18n.locale==='Uz'" src="../assets/gif/loading-Uz.gif" alt="Yuklanmoqda..." />
+            <div
+              class="load"
+              style="position: absolute; left: 50%; top: 50%"
+              v-if="loading"
+            >
+              <img
+                v-if="$i18n.locale === 'Gb'"
+                src="../assets/gif/loading-Gb.gif"
+                alt="Loading..."
+              />
+              <img
+                v-if="$i18n.locale === 'Ru'"
+                src="../assets/gif/loading-Ru.gif"
+                alt="Погрузка..."
+              />
+              <img
+                v-if="$i18n.locale === 'Uz'"
+                src="../assets/gif/loading-Uz.gif"
+                alt="Yuklanmoqda..."
+              />
             </div>
             <!-- <router-view v-else v-slot="{ Component }">
               <transition class="animate__animated animate__animated animate__fadeInLeft">
@@ -151,12 +164,6 @@
           </div>
         </div>
       </a-layout-content>
-      <a-layout-footer style="text-align: center">
-       <div class="flex items-center justify-center">
-        <CopyrightCircleOutlined></CopyrightCircleOutlined> <span class="ml-2">Fozilbek
-        Raimberdiyev 2023-yil</span>
-       </div>
-      </a-layout-footer>
     </a-layout>
   </a-layout>
 </template>
@@ -172,10 +179,10 @@ import breadCrumbs from "../components/breadCrumbs.vue";
 import headerMenu from "../components/header.vue";
 import { subject } from "@casl/ability";
 import { userStore } from "../stores/management/user.store";
-import {useI18n} from "vue-i18n"
+import { useI18n } from "vue-i18n";
 import { CopyrightCircleOutlined } from "@ant-design/icons-vue";
 import { NotificationStore } from "../stores/notifications.store";
-import gsap from "gsap"
+import gsap from "gsap";
 export default {
   components: {
     Sidebar,
@@ -192,7 +199,9 @@ export default {
       smallScreen: false,
       fullScreen: false,
       bigScreen: false,
-      useI18n
+      useI18n,
+      value1: null,
+      value2: null,
     };
   },
   computed: {

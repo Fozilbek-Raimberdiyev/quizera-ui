@@ -1,4 +1,3 @@
-
 <template>
   <div>
     <a-button
@@ -50,10 +49,10 @@
         <div>
           <label for="email"><b>Tug'ilgan kun</b></label>
           <el-date-picker
-              placeholder="Tu'gilgan kuningizmi kiriting"
-              size="middle"
-              v-model="form.birthData"
-            />
+            placeholder="Tu'gilgan kuningizmi kiriting"
+            size="middle"
+            v-model="form.birthData"
+          />
           <span class="error" v-if="v$.form.birthData.$error"
             >Maydon to'ldirlishi shart!</span
           >
@@ -64,15 +63,15 @@
             placeholder="Select the role"
             size="middle"
             v-model:value="form.role"
-            :options="roles"
             id="role"
           >
-            <!-- <el-option
-              v-for="role in roles"
-              :key="role"
-              :label="role.name"
-              :value="role"
-            /> -->
+            <a-select-option
+              v-for="(role, index) in roles"
+              :key="index"
+              :value="role.name"
+              @click="currentRole = role"
+              >{{ role.name }}</a-select-option
+            >
           </a-select>
           <span class="error" v-if="v$.form.role.$error"
             >Maydon to'ldirlishi shart!</span
@@ -134,7 +133,7 @@ import auth from "../../../services/auth";
 import CInput from "../../../components/form/CInput.vue";
 export default {
   // setup: () => ({ v$: useVuelidate() }),
-  components: {CInput},
+  components: { CInput },
   data: () => ({
     v$: useVuelidate(),
     auth,
@@ -143,14 +142,14 @@ export default {
       lastName: "",
       role: null,
       password: "",
-      rules: [],
-      birthData : ''
+      birthData: "",
     },
-    roles: [
-      { label: "admin", value: "admin" },
-      { label: "teacher", value: "teacher" },
-      { label: "student", value: "student" },
-    ],
+    currentRole: {},
+    // roles: [
+    //   { label: "admin", value: "admin" },
+    //   { label: "teacher", value: "teacher" },
+    //   { label: "student", value: "student" },
+    // ],
   }),
   props: [
     "size",
@@ -188,8 +187,8 @@ export default {
           required,
         },
         birthData: {
-          required
-        }
+          required,
+        },
       },
     };
   },
@@ -199,22 +198,21 @@ export default {
   },
   methods: {
     ...mapActions(userStore, ["createUser"]),
+    ...mapActions(roleStore, ["getList"]),
     async submit() {
       this.v$.$validate();
       if (!this.$route.params.id) {
-        console.log(this.v$)
         if (!this.v$.$error) {
           let body = { ...this.form };
-          body.role = this.form.role.name;
-          body.rules = this.form.role.rules;
-          // console.log(body)
-          let res = await this.createUser(body);
+          body.role = this.form.role;
+          body.permissions = this.currentRole.permissions;
+          await this.createUser(body);
           this.$router.push("/management/users");
         } else {
           this.v$.$touch();
         }
       } else {
-        let form = {...this.form}
+        let form = { ...this.form };
         let res = await auth.updateUser(form);
         this.$router.push("/management/users");
       }
@@ -227,6 +225,7 @@ export default {
   },
   mounted() {
     this.setFormData();
+    this.getList();
   },
 };
 </script>
