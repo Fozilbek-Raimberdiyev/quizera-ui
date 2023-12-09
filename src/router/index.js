@@ -480,24 +480,35 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
-  let userRole = null;
-  try {
-    loadingStore().$patch({ loading: true });
-    await userStore().getCurrentUserRole();
-    userRole = userStore().currentUserRole;
-    loadingStore().$patch({ loading: false });
-  } catch (e) {
-    userRole = "student";
-  } finally {
-    loadingStore().$patch({ loading: false });
-  }
-  const requiredRoles = to.meta.roles;
-  const token = localStorage.getItem("token");
-  if (!token && to.name != "login") {
-    next("/login");
+  // let userRole = null;
+  // try {
+  //   loadingStore().$patch({ loading: true });
+  //   await userStore().getCurrentUserRole();
+  //   userRole = userStore().currentUserRole;
+  //   loadingStore().$patch({ loading: false });
+  // } catch (e) {
+  //   userRole = "student";
+  // } finally {
+  //   loadingStore().$patch({ loading: false });
+  // }
+  // const requiredRoles = to.meta.roles;
+  // const token = localStorage.getItem("token");
+  // if (!token && to.name != "login") {
+  //   next("/login");
+  // } else {
+  //   if (!requiredRoles?.some((role) => role === userRole) && to.path != "/") {
+  //     next("/");
+  //   } else {
+  //     next();
+  //   }
+  // }
+  userStore().getCurrentUserRole();
+  if (to.meta.public) {
+    next();
   } else {
-    if (!requiredRoles?.some((role) => role === userRole) && to.path != "/") {
-      next("/");
+    const token = localStorage.getItem("token");
+    if (!token) {
+      next("/login");
     } else {
       next();
     }

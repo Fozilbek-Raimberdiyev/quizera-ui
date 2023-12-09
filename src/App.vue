@@ -24,7 +24,7 @@
   </n-back-top>
 </template>
 <script setup lang="ts">
-import NProgress from "nprogress"
+import NProgress from "nprogress";
 import { useRouter } from "vue-router";
 import "./assets/css/nprogress.css";
 const router = useRouter();
@@ -32,7 +32,7 @@ router.beforeEach(() => {
   NProgress.start();
 });
 router.afterEach(() => {
- NProgress.done();
+  NProgress.done();
 });
 </script>
 <style scoped>
