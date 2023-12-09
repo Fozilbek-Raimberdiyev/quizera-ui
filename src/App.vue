@@ -1,10 +1,6 @@
- <template>
+<template>
   <div class="back bg-slate-700">
-    <!-- <h1 style="position: absolute; top: 50%; left: 50%; z-index: 99;"><pre>{{ loading }}</pre></h1> -->
-    <q-inner-loading v-if="loading" :showing="loading">
-        <q-spinner-gears size="50px" color="primary" />
-      </q-inner-loading>
-    <router-view v-else></router-view>
+    <router-view></router-view>
   </div>
   <n-back-top
     :bottom="100"
@@ -27,35 +23,17 @@
     </div>
   </n-back-top>
 </template>
-<script>
-import { mapActions, mapState, mapStores } from "pinia";
-import { loadingStore } from "./stores/loading.store";
-import { useLoading } from "vue-loading-overlay";
-import Loading from "vue-loading-overlay";
-import "vue-loading-overlay/dist/css/index.css";
-export default {
-  data() {
-    return {
-      isMounted: false,
-      loader: null,
-      isLoaded: false,
-    };
-  },
-  methods: {
-    ...mapActions(loadingStore, ["setLoader", "startLoading", "hideLoading"]),
-  },
-  computed: {
-    ...mapState(loadingStore, ["loading"]),
-  },
-  watch: {},
-  async mounted() {
-    // setTimeout(() => {
-    //   (this.isMounted = true)
-    // }, 100);
-    this.isMounted = true
-  },
-  created() {},
-};
+<script setup lang="ts">
+import NProgress from "nprogress"
+import { useRouter } from "vue-router";
+import "./assets/css/nprogress.css";
+const router = useRouter();
+router.beforeEach(() => {
+  NProgress.start();
+});
+router.afterEach(() => {
+ NProgress.done();
+});
 </script>
 <style scoped>
 * {

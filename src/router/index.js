@@ -2,11 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import { loadingStore } from "../stores/loading.store";
 import { userStore } from "../stores/management/user.store";
 import { h, resolveComponent } from "vue";
-import jwtDecode from "jwt-decode";
 import references from "./references";
-let token =
-  localStorage.getItem("token") ||
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
 const routes = [
   {
     path: "/",
@@ -140,7 +136,7 @@ const routes = [
                 component: () => import("../pages/management/roles/List.vue"),
                 meta: {
                   roles: ["admin"],
-                  breadcrumbs : [
+                  breadcrumbs: [
                     {
                       text: "Dashboard",
                       to: "/",
@@ -149,8 +145,7 @@ const routes = [
                       text: "Roles",
                       to: "/management/roles",
                     },
-
-                  ]
+                  ],
                 },
               },
               {
@@ -160,7 +155,7 @@ const routes = [
                   import("../pages/management/roles/AddOrUpdate.vue"),
                 meta: {
                   roles: ["admin"],
-                  breadcrumbs : [
+                  breadcrumbs: [
                     {
                       text: "Dashboard",
                       to: "/",
@@ -172,8 +167,8 @@ const routes = [
                     {
                       text: "Add",
                       to: "/management/roles/add",
-                    }
-                  ]
+                    },
+                  ],
                 },
               },
               {
@@ -183,7 +178,7 @@ const routes = [
                   import("../pages/management/roles/AddOrUpdate.vue"),
                 meta: {
                   roles: ["admin"],
-                  breadcrumbs : [
+                  breadcrumbs: [
                     {
                       text: "Dashboard",
                       to: "/",
@@ -195,8 +190,8 @@ const routes = [
                     {
                       text: "Update",
                       to: "/management/roles/update",
-                    }
-                  ]
+                    },
+                  ],
                 },
               },
             ],
@@ -208,7 +203,7 @@ const routes = [
               import("../pages/management/permissions/Permissions.vue"),
             meta: {
               roles: ["admin"],
-              breadcrumbs : [
+              breadcrumbs: [
                 {
                   text: "Dashboard",
                   to: "/",
@@ -216,8 +211,8 @@ const routes = [
                 {
                   text: "Permissions",
                   to: "/management/permissions",
-                }
-              ]
+                },
+              ],
             },
           },
         ],
@@ -239,8 +234,8 @@ const routes = [
             path: "",
             component: () => import("../pages/quiz/List.vue"),
             name: "",
-            meta : {
-              breadcrumbs : [
+            meta: {
+              breadcrumbs: [
                 {
                   text: "Dashboard",
                   to: "/",
@@ -248,16 +243,16 @@ const routes = [
                 {
                   text: "Tests",
                   to: "/quiz",
-                }
-              ]
-            }
+                },
+              ],
+            },
           },
           {
             path: ":id",
             component: () => import("../pages/quiz/QuizRender.vue"),
             name: "",
-            meta : {
-              breadcrumbs : [
+            meta: {
+              breadcrumbs: [
                 {
                   text: "Dashboard",
                   to: "/",
@@ -269,9 +264,9 @@ const routes = [
                 {
                   text: "Quiz",
                   to: "",
-                }
-              ]
-            }
+                },
+              ],
+            },
           },
         ],
       },
@@ -488,7 +483,7 @@ router.beforeEach(async (to, from, next) => {
   let userRole = null;
   try {
     loadingStore().$patch({ loading: true });
-   await userStore().getCurrentUserRole();
+    await userStore().getCurrentUserRole();
     userRole = userStore().currentUserRole;
     loadingStore().$patch({ loading: false });
   } catch (e) {
@@ -497,16 +492,13 @@ router.beforeEach(async (to, from, next) => {
     loadingStore().$patch({ loading: false });
   }
   const requiredRoles = to.meta.roles;
-  let { exp } = jwtDecode(token) || null;
-  let current = Math.floor(Date.now() / 1000);
-  let isValid = current <= exp;
-  if (!isValid && to.name != "login") {
+  const token = localStorage.getItem("token");
+  if (!token && to.name != "login") {
     next("/login");
   } else {
     if (!requiredRoles?.some((role) => role === userRole) && to.path != "/") {
       next("/");
     } else {
-      // performance.mark('next')`
       next();
     }
   }

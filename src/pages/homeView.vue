@@ -13,7 +13,7 @@
     >
       <div class="logo" style="color: #fff; font-size: 18px; padding: 25px">
         <router-link v-if="!smallScreen" to="/">
-          <img src="../assets/image/logo.png" alt="logo">
+          <img src="../assets/image/logo.png" alt="logo" />
         </router-link>
         <!-- <router-link v-else to="/"> <i class='bx bx-briefcase'></i></router-link> -->
       </div>
@@ -133,32 +133,6 @@
           :style="[smallScreen ? `padding:15px;` : `padding: 24px;`]"
         >
           <div>
-            <div
-              class="load"
-              style="position: absolute; left: 50%; top: 50%"
-              v-if="loading"
-            >
-              <img
-                v-if="$i18n.locale === 'Gb'"
-                src="../assets/gif/loading-Gb.gif"
-                alt="Loading..."
-              />
-              <img
-                v-if="$i18n.locale === 'Ru'"
-                src="../assets/gif/loading-Ru.gif"
-                alt="Погрузка..."
-              />
-              <img
-                v-if="$i18n.locale === 'Uz'"
-                src="../assets/gif/loading-Uz.gif"
-                alt="Yuklanmoqda..."
-              />
-            </div>
-            <!-- <router-view v-else v-slot="{ Component }">
-              <transition class="animate__animated animate__animated animate__fadeInLeft">
-                <component :is="Component" />
-              </transition>
-            </router-view> -->
             <router-view class="animate__animated animate__fadeIn main">
             </router-view>
           </div>
