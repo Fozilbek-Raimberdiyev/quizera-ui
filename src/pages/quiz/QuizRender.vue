@@ -104,8 +104,15 @@
           <h3>{{ sum }} / {{ tempSubject?.point }}</h3>
         </div>
         <div class="flex items-center" v-else-if="partNumberOfTest">
-          <h3 :class="getPercent() >=60 ? 'text-[yellowgreen]' : 'text-[red]'">{{ sum }} / {{ getSummBall() }}</h3>
-          <h3 class="ml-3 border border-solid border-[#78A8FC] py-1 px-3" :class="getPercent() >=60 ? 'text-[yellowgreen]' : 'text-[red]'">{{Math.floor(getPercent() * 10) / 10  + '%'}}</h3>
+          <h3 :class="getPercent() >= 60 ? 'text-[yellowgreen]' : 'text-[red]'">
+            {{ sum }} / {{ getSummBall() }}
+          </h3>
+          <h3
+            class="ml-3 border border-solid border-[#78A8FC] py-1 px-3"
+            :class="getPercent() >= 60 ? 'text-[yellowgreen]' : 'text-[red]'"
+          >
+            {{ Math.floor(getPercent() * 10) / 10 + "%" }}
+          </h3>
         </div>
         <div v-else class="flex justify-between items-center notDifference">
           <div title="Belgilangan savollar">
@@ -409,7 +416,7 @@ export default {
     },
     getPercent() {
       return (this.sum / this.getSummBall()) * 100;
-    }
+    },
   },
   // beforeRouteLeave(to, from, next) {
   //   if (!this.isEnded && this.questions.length) {
@@ -516,7 +523,8 @@ export default {
   /* width: 100%; */
   overflow-x: auto;
   background: 1px solid navy;
-  padding: 5px 0;
+  height: 100px;
+  padding-top: 2rem;
   /* height: 100%; */
 }
 .question-tab {
@@ -563,7 +571,7 @@ input[type="radio"] {
   display: none;
 }
 input[type="radio"]:checked + label {
- /* font-weight: 600; */
+  /* font-weight: 600; */
   background: rgb(226, 222, 222);
 }
 
