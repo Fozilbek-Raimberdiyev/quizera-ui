@@ -28,6 +28,7 @@ import NProgress from "nprogress";
 import { useRouter } from "vue-router";
 import "./assets/css/nprogress.css";
 const router = useRouter();
+NProgress.settings.showSpinner = false;
 router.beforeEach(() => {
   NProgress.start();
 });
