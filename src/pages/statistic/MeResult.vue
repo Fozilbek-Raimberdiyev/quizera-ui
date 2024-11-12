@@ -184,8 +184,11 @@ import { subject } from "@casl/ability";
 import { parseDate } from "element-plus";
 import { mapActions, mapState } from "pinia";
 import { resultStore } from "../../stores/references/result.store";
-
+import {QMarkupTable} from "quasar"
 export default {
+  components : {
+    QMarkupTable
+  },
   data() {
     return {
       currentStatus: "Passed",

@@ -312,6 +312,7 @@
   </div>
 </template>
 <script>
+import {QMarkupTable} from "quasar"
 import { mapActions, mapState } from "pinia";
 import { subjectStore } from "../../stores/references/subject";
 import notFound from "../notFound.vue";
@@ -351,6 +352,7 @@ export default {
     HistoryOutlined,
     InfoCircleOutlined,
     FadeLoader,
+    QMarkupTable,
   },
   data() {
     return {

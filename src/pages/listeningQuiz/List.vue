@@ -209,6 +209,7 @@
   <script>
 import { mapActions, mapState } from "pinia";
 import { subjectStore } from "../../stores/references/subject";
+import {QMarkupTable} from "quasar"
 import notFound from "../notFound.vue";
 import { InputSearch } from "ant-design-vue";
 import { userStore } from "../../stores/management/user.store";
@@ -248,6 +249,7 @@ export default {
     HistoryOutlined,
     InfoCircleOutlined,
     FadeLoader,
+    QMarkupTable
   },
   data() {
     return {

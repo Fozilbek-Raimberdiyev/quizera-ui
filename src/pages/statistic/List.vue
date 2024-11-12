@@ -38,6 +38,7 @@ import { userStore } from "../../stores/management/user.store";
 import All from "./AllResult.vue";
 import Me from "./MeResult.vue";
 import Students from "./StudentsResult.vue";
+import {QMarkupTable} from "quasar"
 import mySubjects from "./mySubjects.vue";
 import { resultStore } from '../../stores/references/result.store';
 export default {
@@ -46,6 +47,7 @@ export default {
     Students,
     All,
     mySubjects,
+    QMarkupTable
   },
   data() {
     return {

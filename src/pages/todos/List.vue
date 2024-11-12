@@ -217,16 +217,17 @@ import { mapActions, mapState } from "pinia";
 import { todoStore } from "../../stores/todos.store";
 import FadeLoader from "vue-spinner/src/FadeLoader.vue";
 import editor from "../../components/editor.vue";
+import {QMarkupTable} from "quasar"
 import {
   toDDMMYY,
   minusTwoDates,
   subtractDates,
 } from "../utils/date.formatter";
-import {io} from "socket.io-client"
 export default {
   components: {
     FadeLoader,
-    editor
+    editor,
+    QMarkupTable
   },
   data: () => ({
     page: 1,

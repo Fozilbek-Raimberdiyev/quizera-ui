@@ -28,7 +28,7 @@
         <breadCrumbs></breadCrumbs>
       </div>
     </div>
- 
+
     <div class="flex items-center justify-between">
       <div
         class="flex"
@@ -49,14 +49,14 @@
 
         <el-dropdown placement="bottom-start" trigger="click">
           <img
-            v-if="user.pathImage && !loadingImage"
             style="
               width: 35px;
               object-fit: cover;
               border-radius: 50%;
               height: 35px;
             "
-            :src="user.pathImage"
+            :src="mainPath + user.pathImage"
+            :alt="user.firstName"
           />
           <i
             v-if="!loadingImage && !user.pathImage"
@@ -243,21 +243,14 @@
 </template>
 <script>
 import { mapState, mapStores } from "pinia";
+import {QMarkupTable} from "quasar"
 import breadCrumbs from "./breadCrumbs.vue";
 import { userStore } from "../stores/management/user.store";
 import { authStore } from "../stores/counter";
 import mobileMenu from "./mobileMenu.vue";
 import { NIcon } from "naive-ui";
 import { h } from "vue";
-import {
-  DashboardOutlined,
-  FlagOutlined,
-  KeyOutlined,
-  SettingOutlined,
-  TeamOutlined,
-  UserOutlined,
-  BellOutlined,
-} from "@ant-design/icons-vue";
+import { BellOutlined } from "@ant-design/icons-vue";
 import { NotificationStore } from "../stores/notifications.store";
 import axios from "axios";
 export default {
@@ -276,6 +269,7 @@ export default {
     breadCrumbs,
     mobileMenu,
     BellOutlined,
+    QMarkupTable
   },
   computed: {
     ...mapState(userStore, ["user", "currentUserRole"]),
@@ -285,7 +279,7 @@ export default {
       return this.menuOptions;
     },
     mainPath() {
-      return import.meta.MAIN_PATH;
+      return import.meta.env.VITE_API_BASE_URL;
     },
   },
   props: {
@@ -349,7 +343,6 @@ export default {
 .big-screen-size > div {
   margin: 0 0.5rem;
 }
-
 
 a {
   text-decoration: none;

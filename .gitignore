@@ -28,3 +28,15 @@ config
 *.njsproj
 *.sln
 *.sw?
+
+yarn.lock
+package-lock.json
+
+.env
+.env.local
+.env.development
+.env.development.local
+.env.test
+.env.test.local
+.env.production
+.env.production.local

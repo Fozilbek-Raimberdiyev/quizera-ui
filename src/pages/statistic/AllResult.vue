@@ -1,5 +1,5 @@
 <template>
-  <div class="lg:q-pa-md wrapper" :class="{loading : loading}">
+  <div class="lg:q-pa-md wrapper" :class="{ loading: loading }">
     <div class="bar flex justify-between items-center">
       <div class="tabs flex items-center tabs">
         <span
@@ -124,10 +124,14 @@
       </tbody>
       <tbody v-else-if="loading" style="position: relative">
         <tr
-          style="position: absolute; padding: 10px 0; width: 25px;"
+          style="position: absolute; padding: 10px 0; width: 25px"
           :style="[bigScreen ? 'left : 50%' : 'left : 40%']"
         >
-          <img src="../../assets/gif/iphone-spinner.gif" alt="Loading..." style="width: 100%;">
+          <img
+            src="../../assets/gif/iphone-spinner.gif"
+            alt="Loading..."
+            style="width: 100%"
+          />
         </tr>
       </tbody>
       <tbody v-else style="position: relative">
@@ -186,13 +190,14 @@
     </el-dialog>
   </div>
 </template>
-  <script>
+<script>
 import { subject } from "@casl/ability";
 import { parseDate } from "element-plus";
 import { mapActions, mapState } from "pinia";
 import { resultStore } from "../../stores/references/result.store";
-
+import { QMarkupTable } from "quasar";
 export default {
+  components: { QMarkupTable },
   data() {
     return {
       currentStatus: "Passed",
@@ -238,9 +243,9 @@ export default {
   },
   watch: {
     page(val) {
-      this.loading = true
+      this.loading = true;
       this.getList(this.query, val, this.limit);
-      this.loading = false
+      this.loading = false;
     },
   },
   methods: {
@@ -292,7 +297,7 @@ export default {
   },
 };
 </script>
-  <style scoped>
+<style scoped>
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css");
 .tabs {
   margin: 10px 0;
