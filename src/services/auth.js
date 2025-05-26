@@ -2,7 +2,8 @@ import axios from "axios";
 import { useRoute } from "vue-router";
 import router from "../router/index"
 import { loadingStore } from "../stores/loading.store";
-let path = import.meta.env.VITE_SERVER_URL;
+// let path = import.meta.env.VITE_SERVER_URL;
+const path = "https://quizera-api-production.up.railway.app/api"
 export const $axios = axios.create({
   baseURL: path,
   headers: {

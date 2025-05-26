@@ -296,7 +296,7 @@ const routes = [
               },
               {
                 path: "/groups",
-                name: "Guruhlar",
+                name: "cabinet.groups",
                 component: {
                   render() {
                     return h(resolveComponent("router-view"));
@@ -306,7 +306,7 @@ const routes = [
                   {
                     path: "",
                     component: () => import("../pages/cabinet/groups/List.vue"),
-                    name: "Guruhlar",
+                    name: "cabinet.groups.index",
                   },
                 ],
               },
