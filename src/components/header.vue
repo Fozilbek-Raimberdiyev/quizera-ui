@@ -79,7 +79,7 @@
           </template>
         </el-dropdown>
       </div>
-      <el-dropdown
+      <el-dropdown v-if="false"
         trigger="click"
         style="margin: 0 5px; font-size: 16px"
         :style="[smallScreen ? 'margin-right : 1rem' : 'margin-right : 3rem']"

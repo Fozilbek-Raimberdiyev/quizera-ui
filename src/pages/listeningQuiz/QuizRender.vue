@@ -9,12 +9,12 @@
         :class="{ sticky: isSticky }"
       >
         <div class="left">
-          <h5>{{ listeningQuiz.name }}</h5>
+          <h5>{{ listeningQuiz.name }}</h5> 
         </div>
-        <div class="center">
-          <vue-plyr>
-            <audio controls crossorigin playsinline>
-              <source :src="listeningQuiz.audioPath" type="audio/mpeg" />
+        <div class="center" > 
+          <vue-plyr v-if="listeningQuiz.audioPath">
+            <audio controls  playsinline>
+              <source :src=" apiBaseUrl + listeningQuiz.audioPath" type="audio/mpeg" />
             </audio>
           </vue-plyr>
         </div>
@@ -103,7 +103,7 @@
                 display: inline-block;
                 margin-right: 5px;
               "
-              :src="listeningQuiz.authorPathImage"
+              :src="apiBaseUrl + listeningQuiz.authorPathImage"
               alt="author"
             />
             <span>{{ listeningQuiz.authorFullName }}</span>
@@ -189,7 +189,6 @@
 import { mapActions, mapState } from "pinia";
 import { listeningQuizStore } from "../../stores/references/listeningQuiz.store";
 import listeningService from "../../services/listening.service";
-import { useToast } from "vue-toastification";
 export default {
   data() {
     return {
@@ -206,6 +205,9 @@ export default {
       "loading",
       "isFromNotList",
     ]),
+    apiBaseUrl() {
+      return import.meta.env.VITE_API_BASE_URL
+    }
   },
   methods: {
     ...mapActions(listeningQuizStore, ["getById"]),

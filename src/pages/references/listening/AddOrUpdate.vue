@@ -100,10 +100,12 @@
             >Maydon to'ldirilishi shart...</span
           >
           <span style="color: red" v-if="v$.form.text.maxLength.$invalid"
-            >{{ v$.form.text.minLength.$params.max }} tadan ortiq belgi kiritsh mumkin emas...</span
+            >{{ v$.form.text.minLength.$params.max }} tadan ortiq belgi kiritsh
+            mumkin emas...</span
           >
-          <span style="color: red" v-if="v$.form.text.minLength.$invalid"
-            > {{ v$.form.text.minLength.$params.min }} tadan kam belgi kiritish mumkin emas</span
+          <span style="color: red" v-if="v$.form.text.minLength.$invalid">
+            {{ v$.form.text.minLength.$params.min }} tadan kam belgi kiritish
+            mumkin emas</span
           >
         </label>
         <label v-if="form.textArray.length && isStartedFill">
@@ -190,6 +192,7 @@
         style="margin-top: 5px"
         class="cursor-pointer"
         native-type="submit"
+        :loading="isLoadingSubmit"
       >
         Yangilash
       </el-button>
@@ -199,21 +202,19 @@
         style="margin-top: 5px"
         class="cursor-pointer"
         native-type="submit"
+        :loading="isLoadingSubmit"
       >
         Kiritish
       </el-button>
     </form>
   </div>
 </template>
-  <script>
+<script>
 import { mapActions, mapState } from "pinia";
-import { subjectStore } from "../../../stores/references/subject";
 import { useVuelidate } from "@vuelidate/core";
 import { email, maxLength, minLength, required } from "@vuelidate/validators";
-import { useToast } from "vue-toastification";
 import { userStore } from "../../../stores/management/user.store";
 import AsyncMulSelect from "../../../components/form/AsyncMulSelect.vue";
-import auth, { $axios } from "../../../services/auth";
 import { CloseBold, Select } from "@element-plus/icons-vue";
 import {
   InfoCircleOutlined,
@@ -259,6 +260,7 @@ export default {
         isHasPassword: false,
       },
       smallScreen: false,
+      isLoadingSubmit: false,
     };
   },
   props: [
@@ -343,67 +345,77 @@ export default {
     ]),
     ...mapActions(userStore, ["getAllUsers"]),
     async submit(e) {
-      if (this.isIncorrectFile) {
-        this.isNoAccesFileSelected = true;
-        return 0;
-      }
-      this.form.authorFullName = this.user.firstName + " " + this.user.lastName;
-      this.v$.$validate();
-      if (!this.$route.params.id) {
-        if (!this.v$.$error) {
-          let form = { ...this.form };
-          if (!form.isHasPassword) form.password = undefined;
-          form.textString = undefined;
-          form.finalyTextArray = undefined;
-          form.text = form.textArray.map((text) => text.label).join(" ");
-          form["authorPathImage"] = this.user.pathImage;
-          let members = [...form.members];
-          members = members.map((member) => {
-            return {
-              value: member,
-              label: member,
-            };
-          });
-          form.members = members;
-          form.fileSelected = undefined;
-          form.authorId = this.user._id;
-          let formData = new FormData();
-          formData.append("audio", e.srcElement[7].files[0]);
-          formData.append("form", JSON.stringify(form));
-          let res = await this.addQuiz(formData);
-          this.$emit("created", res);
-          this.$router.push("/references/listening");
-          this.getList(10, 5, true);
+      try {
+        if (this.isIncorrectFile) {
+          this.isNoAccesFileSelected = true;
+          return 0;
         }
-      } else {
-        if (!this.v$.$error) {
-          let form = { ...this.form };
-          let quizID = form._id;
-          form._id = undefined;
-          if (!form.isHasPassword) form.password = undefined;
-          form.textString = undefined;
-          form.finalyTextArray = undefined;
-          form.text = form.textArray.map((text) => text.label).join(" ");
-          form["authorPathImage"] = this.user.pathImage;
-          let members = [...form.members];
-          members = members.map((member) => {
-            return {
-              value: member,
-              label: member,
-            };
-          });
-          form.members = members;
-          form.fileSelected = undefined;
-          form.authorId = this.user._id;
-          form.__v = undefined;
+        this.form.authorFullName =
+          this.user.firstName + " " + this.user.lastName;
+        this.v$.$validate();
+        if (!this.$route.params.id) {
+          if (!this.v$.$error) {
+            let form = { ...this.form };
+            if (!form.isHasPassword) form.password = undefined;
+            form.textString = undefined;
+            form.finalyTextArray = undefined;
+            form.text = form.textArray.map((text) => text.label).join(" ");
+            form["authorPathImage"] = this.user.pathImage;
+            let members = [...form.members];
+            members = members.map((member) => {
+              return {
+                value: member,
+                label: member,
+              };
+            });
+            form.members = members;
+            form.fileSelected = undefined;
+            form.authorId = this.user._id;
+            let formData = new FormData();
+            formData.append("audio", e.srcElement[7].files[0]);
+            formData.append("form", JSON.stringify(form));
+            this.isLoadingSubmit = true;
+            let res = await this.addQuiz(formData);
+            this.isLoadingSubmit = false;
+            this.$emit("created", res);
+            this.$router.push("/references/listening");
+            this.getList(10, 5, true);
+          }
+        } else {
+          if (!this.v$.$error) {
+            let form = { ...this.form };
+            let quizID = form._id;
+            form._id = undefined;
+            if (!form.isHasPassword) form.password = undefined;
+            form.textString = undefined;
+            form.finalyTextArray = undefined;
+            form.text = form.textArray.map((text) => text.label).join(" ");
+            form["authorPathImage"] = this.user.pathImage;
+            let members = [...form.members];
+            members = members.map((member) => {
+              return {
+                value: member,
+                label: member,
+              };
+            });
+            form.members = members;
+            form.fileSelected = undefined;
+            form.authorId = this.user._id;
+            form.__v = undefined;
 
-          let formData = new FormData();
-          formData.append("audio", e.srcElement[7].files[0]);
-          formData.append("form", JSON.stringify(form));
-          let res = await this.updateQuiz(formData, quizID);
-          this.$router.push("/references/listening");
-          this.getList(10, 1, true);
+            let formData = new FormData();
+            formData.append("audio", e.srcElement[7].files[0]);
+            formData.append("form", JSON.stringify(form));
+            this.isLoadingSubmit = true;
+            let res = await this.updateQuiz(formData, quizID);
+            this.isLoadingSubmit = false;
+            this.$router.push("/references/listening");
+            this.getList(10, 1, true);
+          }
         }
+      } catch (error) {
+        this.isLoadingSubmit = false;
+        console.error("Error submitting form:", error);
       }
     },
     async setFormData(val) {
@@ -413,7 +425,7 @@ export default {
         return member.value;
       });
       this.form = form;
-      let textArray = []
+      let textArray = [];
       this.form.textString = [...this.form.textArray].filter((text, index) => {
         if (text.isVisible) {
           textArray[index] = text.label;
@@ -483,8 +495,8 @@ export default {
   },
   mounted() {
     // this.v$.$validate();
-    if(this.$route.params.id) {
-      this.isStartedFill = true
+    if (this.$route.params.id) {
+      this.isStartedFill = true;
     }
   },
   beforeRouteLeave() {
@@ -510,7 +522,7 @@ export default {
   },
 };
 </script>
-  <style scoped lang="scss">
+<style scoped lang="scss">
 input:active {
   border: 1px solid #409eef !important;
 }
