@@ -60,7 +60,7 @@
                 title="Haqiqatdan o'chirmoqchimisiz? Fanga qo'shilib savollari ham o'chib ketadi?"
                 ok-text="Ha"
                 cancel-text="Yo'q"
-                @confirm="deleteSubject(item._id)"
+                @confirm="deleteQuizP(item._id)"
                 @cancel="cancel"
               >
                 <i
@@ -106,6 +106,7 @@
 import { mapActions, mapState } from "pinia";
 import subjectService from "../../../services/subject.service";
 import { listeningQuizStore } from "../../../stores/references/listeningQuiz.store";
+
 import {QMarkupTable} from "quasar"
 export default {
   components: {
@@ -154,11 +155,7 @@ export default {
     toList() {
       this.isInAdd = false;
       this.$router.push("/references/listening");
-    },
-    async deleteQuiz(id) {
-      let res = await this.deleteQuizP(id);
-      this.$router.push("/references/listening");
-    },
+    }
   },
   beforeRouteLeave() {
     return listeningQuizStore().$patch({ list: [] });
