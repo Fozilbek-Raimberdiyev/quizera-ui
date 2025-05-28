@@ -1,4 +1,4 @@
-import { $axios } from "../auth";
+import { $axios } from "../api.service";
 export default {
     async getList() {
         return $axios.get("/roles")

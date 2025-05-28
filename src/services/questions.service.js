@@ -1,4 +1,4 @@
-import { $axios } from "./auth";
+import { $axios } from "./api.service";
 export default {
   getQuestions(subjectId, limit, page, boolean,subject, config) {
     return $axios.post("/questions", subject,{

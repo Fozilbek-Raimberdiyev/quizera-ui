@@ -85,7 +85,6 @@
         :style="[smallScreen ? 'margin-right : 1rem' : 'margin-right : 3rem']"
       >
         <span class="el-dropdown-link">
-          <flag style="width: 50px" :iso="this.$i18n.locale"></flag>
           <span
             style="margin-left: -13px"
             v-if="$i18n.locale === 'Uz' && !smallScreen"
@@ -109,7 +108,6 @@
               @click="$i18n.locale = 'Gb'"
               style="cursor: pointer"
             >
-              <flag iso="gb"></flag>
               <span style="margin-left: 5px">English</span>
             </el-dropdown-item>
             <el-dropdown-item
@@ -117,7 +115,6 @@
               @click="$i18n.locale = 'Ru'"
               style="cursor: pointer"
             >
-              <flag iso="ru"></flag>
               <span style="margin-left: 5px">Rus</span>
             </el-dropdown-item>
             <el-dropdown-item
@@ -125,7 +122,6 @@
               @click="$i18n.locale = 'Uz'"
               style="cursor: pointer"
             >
-              <flag iso="uz"></flag>
               <span style="margin-left: 5px">O'zbek</span>
             </el-dropdown-item>
           </el-dropdown-menu>

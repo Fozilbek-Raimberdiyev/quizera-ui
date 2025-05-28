@@ -1,4 +1,4 @@
-import { $axios } from "./auth";
+import { $axios } from "./api.service";
 export default {
   getResult(query, page,limit) {
     return $axios.get("/results", {

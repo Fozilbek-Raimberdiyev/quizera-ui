@@ -1,15 +1,9 @@
-import axios from "axios";
+import {$axios} from "./api.service";
 import { useRoute } from "vue-router";
 import router from "../router/index"
 import { loadingStore } from "../stores/loading.store";
 // let path = import.meta.env.VITE_SERVER_URL;
-const path = "https://quizera-api-production.up.railway.app/api"
-export const $axios = axios.create({
-  baseURL: path,
-  headers: {
-    Authorization: localStorage.getItem("token"),
-  },
-});
+
 
 export default {
   getAllUsers() {
@@ -17,7 +11,7 @@ export default {
   },
   register(form) {
     return $axios.post(`/auth/register`, form);
-  },
+  },  
   login(form) {
     return $axios.post(`/auth/login`, form)
   },

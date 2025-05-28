@@ -1,4 +1,4 @@
-import { $axios } from "./auth";
+import { $axios } from "./api.service";
 export default {
   getList(params) {
     return $axios.get(`/todos`, { params });

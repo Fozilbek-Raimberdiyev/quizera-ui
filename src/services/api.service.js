@@ -1,42 +1,32 @@
-import { $axios } from "./auth";
+import axios from "axios";
 import { ElNotification } from "element-plus";
-import auth from "./auth";
-// import { loadingStore } from "../stores/loading.store";
+const path = "https://quizera-api-production.up.railway.app/api";
+import router from "../router";
+export const $axios = axios.create({
+  baseURL: path,
+  headers: {
+    Authorization: localStorage.getItem("token"),
+  },
+});
 
-export const reqinterceptor = $axios.interceptors.request.use(
+$axios.interceptors.request.use(
   function (config) {
-    // config.url != "/auth/user" ? loadingStore().$patch({ loading: true }) : "";
-    if (config.url.indexOf("uploads") > -1) {
-      document.body.style.opacity = "0.2";
-      // document.body.style.pointerEvents = "none";
-    }
-
-    //
     return config;
   },
   function (error) {
-    alert(error);
-    document.body.style.opacity = "1";
     return Promise.reject(error);
   }
 );
-``;
-export const resInterceptor = $axios.interceptors.response.use(
+$axios.interceptors.response.use(
   function (response) {
-    // loadingStore().$patch({ loading: false });
-    response.data.message
-      ? ElNotification({
-          title: response?.message || response.data.message,
-          type: "success",
-          transition: true,
-        })
-      : "";
-    auth.setHeader(response?.data?.token);
     return response;
   },
   function (error) {
-    // loadingStore().$patch({ loading: false });
-    document.body.style.opacity = "1";
+    if (error?.response?.status === 401) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      router.push("/login");
+    }
     error
       ? ElNotification({
           title: error?.response?.data.message || error?.message,
