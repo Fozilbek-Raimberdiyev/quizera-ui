@@ -205,10 +205,10 @@
     >
       <div v-if="questionsCountInDB / subject.quizCount >= 2">
         <div v-if="!isSelectedTypeSolveTest">
-          Ushbu fanda fanga belgilangan savoldan
+          <p>Ushbu fanda fanga belgilangan savoldan
           {{ Math.round(questionsCountInDB / subject.quizCount) }} baravar ko'p
           savol mavjud. Siz bo'limlarga ajratilgan holda yoki tasodifiy bir
-          martalik test ishlashingiz mumkin
+          martalik test ishlashingiz mumkin</p>
           <a-radio-group
             size="medium"
             v-model:value="valueOptionTypeSolveTest"

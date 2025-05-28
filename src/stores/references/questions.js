@@ -13,27 +13,33 @@ export const questionStore = defineStore("question", {
     correctAnswersCount: "",
     inCorrectAnswersCount: "",
     notCheckedQuestionsCount: "",
+    loading: false,
+    loadingById: false,
   }),
   actions: {
     async getQuestions(subjectId, limit, page, boolean, subject, config) {
-      let res =  await questionsService.getQuestions(
-        subjectId,
-        limit,
-        page,
-        boolean,
-        subject,
-        config
-      );
-      console.log(res, "res")
-      let questions = res.data?.questions || res.data;
+      let questions = [];
+      let res = {};
       try {
+        this.loading = true;
+         res = await questionsService.getQuestions(
+          subjectId,
+          limit,
+          page,
+          boolean,
+          subject,
+          config
+        );
+        questions = res.data?.questions || res.data;
         questions.forEach((q, i) => {
           return (q["number"] = i + 1);
         });
+        this.loading = false;
       } catch (e) {
+        this.loading = false;
         console.log(e);
       }
-      this.questions = questions.filter(question => question);
+      this.questions = questions.filter((question) => question);
       this.total = res.data?.total;
     },
     async addQuestion(body) {
@@ -49,8 +55,15 @@ export const questionStore = defineStore("question", {
       this.notCheckedQuestionsCount = res.data.notCheckedQuestionsCount;
     },
     async getById(id) {
-      let res = await questionsService.getById(id);
-      this.question = res.data.question;
+      try {
+        this.loadingById = true;
+        let res = await questionsService.getById(id);
+        this.question = res.data.question;
+        this.loadingById = false;
+      } catch (e) {
+        this.loadingById = false;
+        console.error(e);
+      }
     },
     async updateQuestion(id, data) {
       let res = await questionsService.updateQuestion(id, data);

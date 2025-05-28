@@ -15,7 +15,7 @@
         >
       </div>
       <div>
-        <a-list item-layout="horizontal" :data-source="listC">
+        <a-list item-layout="horizontal" :data-source="listC" :loading>
           <template #renderItem="{ item }">
             <a-list-item class=""
               ><router-link class="no-underline" :to="`/references/quiz/${item._id}`">
@@ -27,7 +27,7 @@
       </div>
     </div>
     <el-pagination
-      small
+      small 
       background
       layout="prev, pager, next"
       :total="total"
@@ -54,12 +54,16 @@ export default {
       this.getQuestions(val);
     },
     page(val) {
-      this.getList(this.limit, val);
+      const params = {
+        limit: this.limit,
+        page: val,
+      };
+      this.getList(params);
     },
   },
   props : ["size", "large","small", "default", "type", "primart", "info", "succes", "text", "native-type", "submit", "cancel"],
   computed: {
-    ...mapState(subjectStore, ["list", "total"]),
+    ...mapState(subjectStore, ["list", "total", "loading"]),
     ...mapState(questionStore, ["questions"]),
     listC() {
       return this.list.filter((el) => el.name.toLocaleLowerCase().includes(this.search.toLocaleLowerCase()))

@@ -1,5 +1,6 @@
 <template>
-  <div v-if="questions.length">
+  <BaseLoading v-if="loading"></BaseLoading>
+  <div v-if="!loading && questions.length">
     <div class="flex items-center justify-between">
       <h5 class="sub-name">{{ tempSubject?.name }}</h5>
       <div class="timer flex items-center" v-if="!isEnded">
@@ -213,7 +214,7 @@
       </div>
     </div>
   </div>
-  <div v-else>
+  <div v-else-if="!loading && !questions.length">
     <div class="flex justify-center content-center" style="height: 300px">
       <n-empty
         description="Ushbu fanga test savollari hali kiritilmagan..."
@@ -252,12 +253,13 @@
   </div>
 </template>
 <script>
-import Swal from "sweetalert2";
+import BaseLoading from "../../components/BaseLoading.vue"
 import { mapActions, mapState } from "pinia";
 import { questionStore } from "../../stores/references/questions";
 import { subjectStore } from "../../stores/references/subject";
 import subjectService from "../../services/subject.service";
 export default {
+  components : {BaseLoading},
   data() {
     return {
       currentIndex: 0,
@@ -285,6 +287,7 @@ export default {
       "correctAnswersCount",
       "inCorrectAnswersCount",
       "notCheckedQuestionsCount",
+      "loading"
     ]),
     ...mapState(subjectStore, ["partNumberOfTest", "isFromListOfTestRoute"]),
   },
@@ -418,30 +421,6 @@ export default {
       return (this.sum / this.getSummBall()) * 100;
     },
   },
-  // beforeRouteLeave(to, from, next) {
-  //   if (!this.isEnded && this.questions.length) {
-  //     Swal.fire({
-  //       title:
-  //         "<span style='font-size : 18px'>Agar sahidan chiqsangiz test yakunlanadi. Davom etasizmi?</span>",
-  //       showDenyButton: true,
-  //       // showCancelButton: true,
-  //       confirmButtonText: "<span>Ha</span>",
-  //       denyButtonText: `<span>Yo'q</span>`,
-  //       currentProgressStep: true,
-  //     }).then(async (result) => {
-  //       if (result.isConfirmed) {
-  //         let res = await this.endTest();
-  //         Swal.fire({
-  //           html: "<span>Test yakunlandi. Natijangizni statistika bo'limidan ko'rishingiz mumkin!</span>",
-  //         });
-  //         next();
-  //       } else if (result.isDenied) {
-  //       }
-  //     });
-  //   } else {
-  //     next();
-  //   }
-  // },
   mounted() {
     setInterval(() => {
       this.workingDurationTime++;
@@ -467,6 +446,7 @@ export default {
 
     //agar listdan o'tilmayotgan bo'lsa, fanni backenddan olib keladi , agar listdan o'tilayotgan bo'lsa pinia joriy subject bor, bu sayt tezligi uchun muhim
     if (!this.isFromListOfTestRoute) {
+      this.loading = true
       await this.getById(this.$route.params.id);
     }
     this.tempSubject = subjectStore()?.subject;

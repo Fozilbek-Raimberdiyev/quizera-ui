@@ -208,7 +208,6 @@
 </template>
   <script>
 import { mapActions, mapState } from "pinia";
-import { subjectStore } from "../../stores/references/subject";
 import {QMarkupTable} from "quasar"
 import notFound from "../notFound.vue";
 import { InputSearch } from "ant-design-vue";
@@ -228,9 +227,7 @@ import {
   HistoryOutlined,
   InfoCircleOutlined,
 } from "@ant-design/icons-vue";
-import auth from "../../services/auth";
 import subjectService from "../../services/subject.service";
-import { useToast } from "vue-toastification";
 import { listeningQuizStore } from "../../stores/references/listeningQuiz.store";
 import listeningService from '../../services/listening.service';
 
@@ -330,33 +327,6 @@ export default {
   <style scoped>
 @import url("https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css");
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css");
-/* #list {
-    font-family: Arial, Helvetica, sans-serif;
-    border-collapse: collapse;
-    width: 100%;
-  } */
-/* .table {
-    min-height: 350px;
-  } */
-
-/* #list td,
-  #list th {
-    padding: 8px;
-  } */
-
-/* #list tr:nth-child(even){background-color: #f2f2f2;} */
-
-/* #list tbody tr:hover {
-    background-color: #ecf3f3;
-  }
-  
-  #list th {
-    padding-top: 12px;
-    padding-bottom: 12px;
-    text-align: left;
-    color: #000;
-    border-bottom: 2px solid #f7f8fc;
-  } */
 .container {
   position: relative;
 }

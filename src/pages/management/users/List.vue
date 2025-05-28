@@ -65,11 +65,13 @@
 import { mapActions, mapState, mapStores } from "pinia";
 import { userStore } from "../../../stores/management/user.store";
 import { dateParser } from "../../utils/date.formatter";
-import { ElMessage, ElMessageBox } from 'element-plus'
+import {  ElMessageBox } from 'element-plus'
 import { useToast } from 'vue-toastification';
 import auth from '../../../services/auth';
+import {QMarkupTable} from "quasar"
+
 export default {
-  components: {},
+  components: {QMarkupTable},
   data() {
     return {
       dialogVisible: false,

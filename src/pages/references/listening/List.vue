@@ -106,7 +106,11 @@
 import { mapActions, mapState } from "pinia";
 import subjectService from "../../../services/subject.service";
 import { listeningQuizStore } from "../../../stores/references/listeningQuiz.store";
+import {QMarkupTable} from "quasar"
 export default {
+  components: {
+    QMarkupTable,
+  },
   data() {
     return {
       subjectId: "",

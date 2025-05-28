@@ -114,7 +114,11 @@
 import { mapActions, mapState } from "pinia";
 import { subjectStore } from "../../../stores/references/subject";
 import subjectService from "../../../services/subject.service";
+import {QMarkupTable} from "quasar"
 export default {
+  components: {
+    QMarkupTable,
+  },
   data() {
     return {
       subjectId: "",

@@ -1,7 +1,6 @@
 <template>
   <div>
-    <h1></h1>
-    <!-- <pre>{{ listeningQuiz }}</pre> -->
+    <BaseLoading v-if="loading"></BaseLoading>
     <div v-if="listeningQuiz" style="position: relative">
       <div
         v-if="!isEnded"
@@ -9,12 +8,15 @@
         :class="{ sticky: isSticky }"
       >
         <div class="left">
-          <h5>{{ listeningQuiz.name }}</h5> 
+          <h5>{{ listeningQuiz.name }}</h5>
         </div>
-        <div class="center" > 
+        <div class="center">
           <vue-plyr v-if="listeningQuiz.audioPath">
-            <audio controls  playsinline>
-              <source :src=" apiBaseUrl + listeningQuiz.audioPath" type="audio/mpeg" />
+            <audio controls playsinline>
+              <source
+                :src="apiBaseUrl + listeningQuiz.audioPath"
+                type="audio/mpeg"
+              />
             </audio>
           </vue-plyr>
         </div>
@@ -115,7 +117,11 @@
       <div>
         <h5 class="font-medium">Sizning matningiz</h5>
         <div class="flex items-center justify-start flex-wrap">
-          <span v-for="(text, index) in result?.result" :key="index" class="mx-1">
+          <span
+            v-for="(text, index) in result?.result"
+            :key="index"
+            class="mx-1"
+          >
             <span
               class="flex items-center justify-start flex-wrap font-normal text-lg font-[SF Pro Display]"
               :class="[
@@ -150,46 +156,20 @@
     <div v-else-if="loading">
       <a-skeleton :loading="loading" active> </a-skeleton>
     </div>
-    <!-- <pre>{{ listeningQuiz }}</pre> -->
     <div v-else>
       <n-empty description="Sinov yuklanmadi..."></n-empty>
     </div>
-    <!-- <el-dialog
-      v-model="isFromNotList"
-      title="Parolni kiriting..."
-      :width="smallScreen ? '70%' : '30%'"
-      :before-close="handleClose"
-    >
-      <div
-        style="
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-        "
-      >
-        <a-input
-          placeholder="Parolni kiriting..."
-          v-model:value="quizPassword"
-          type="password"
-          show-password
-          @keyup.enter="checkPasswordQuiz"
-        ></a-input>
-        <el-button
-          class="cursor-pointer"
-          style="margin-left: 1px"
-          type="primary"
-          @click="checkPasswordQuiz"
-          >Kirish</el-button
-        >
-      </div>
-    </el-dialog> -->
   </div>
 </template>
 <script>
 import { mapActions, mapState } from "pinia";
 import { listeningQuizStore } from "../../stores/references/listeningQuiz.store";
 import listeningService from "../../services/listening.service";
+import BaseLoading from "../../components/BaseLoading.vue";
 export default {
+  components: {
+    BaseLoading,
+  },
   data() {
     return {
       listeningService,
@@ -206,8 +186,8 @@ export default {
       "isFromNotList",
     ]),
     apiBaseUrl() {
-      return import.meta.env.VITE_API_BASE_URL
-    }
+      return import.meta.env.VITE_API_BASE_URL;
+    },
   },
   methods: {
     ...mapActions(listeningQuizStore, ["getById"]),
@@ -240,16 +220,6 @@ export default {
       }
     });
   },
-  // beforeRouteEnter(to, from, next) {
-  //   if (from.path === "/listeningQuizzes") {
-  //     listeningQuizStore().$patch({ loading: true });
-  //     listeningQuizStore().getById(to.params.id);
-  //     listeningQuizStore().$patch({ isFromNotList: false });
-  //     listeningQuizStore().$patch({ loading: false });
-  //     return next();
-  //   }
-  //   next();
-  // },
 };
 </script>
 <style scoped>
