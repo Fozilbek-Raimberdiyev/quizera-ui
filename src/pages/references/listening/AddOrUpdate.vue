@@ -124,32 +124,6 @@
             {{ form.textString }}
           </div>
         </label>
-
-        <label for="password">
-          <span class="title">Parolni kiriting</span>
-          <div style="display: flex">
-            <a-input
-              placeholder="Parol kiriting..."
-              v-model:value="form.password"
-              name="password"
-              :value="form.password"
-              size="middle"
-              id="password"
-              :disabled="!form.isHasPassword"
-            >
-            </a-input>
-            <span style="margin-left: 5px">
-              <el-checkbox
-                style="display: inline-block; margin-top: 0"
-                size="large"
-                name="isHasPassword"
-                :value="form.isHasPassword"
-                v-model="form.isHasPassword"
-                >Parol qo'yish</el-checkbox
-              >
-            </span>
-          </div>
-        </label>
         <label>
           <span class="title">Audioni tanlang<i class="bx bxs-star"></i></span>
           <input
@@ -209,319 +183,337 @@
     </form>
   </div>
 </template>
-<script>
-import { mapActions, mapState } from "pinia";
+
+<script setup>
+import { ref, reactive, computed, watch, onMounted, onUpdated } from "vue";
+import { useRoute, useRouter, onBeforeRouteLeave } from "vue-router";
+import { storeToRefs } from "pinia";
 import { useVuelidate } from "@vuelidate/core";
-import { email, maxLength, minLength, required } from "@vuelidate/validators";
+import { maxLength, minLength, required } from "@vuelidate/validators";
 import { userStore } from "../../../stores/management/user.store";
-import AsyncMulSelect from "../../../components/form/AsyncMulSelect.vue";
-import { CloseBold, Select } from "@element-plus/icons-vue";
-import {
-  InfoCircleOutlined,
-  InfoCircleFilled,
-  CheckOutlined,
-} from "@ant-design/icons-vue";
 import { listeningQuizStore } from "../../../stores/references/listeningQuiz.store";
-export default {
-  components: {
-    AsyncMulSelect,
-    CloseBold,
-    Select,
-    InfoCircleOutlined,
-    InfoCircleFilled,
-    CheckOutlined,
+import { InfoCircleOutlined, CheckOutlined } from "@ant-design/icons-vue";
+
+// Emits
+const emit = defineEmits(["created"]);
+
+// Router
+const route = useRoute();
+const router = useRouter();
+
+// Stores
+const userStoreInstance = userStore();
+const listeningQuizStoreInstance = listeningQuizStore();
+
+// Store state
+const { users, user } = storeToRefs(userStoreInstance);
+const { listeningQuiz } = storeToRefs(listeningQuizStoreInstance);
+const { getAllUsers } = userStoreInstance;
+const { addQuiz, getById, getList, updateQuiz } = listeningQuizStoreInstance;
+
+// Refs
+const formEl = ref(null);
+const isNoAccesFileSelected = ref(false);
+const isIncorrectFile = ref(false);
+const isDefined = ref(false);
+const usersList = ref([]);
+const isStartedFill = ref(false);
+const fileSelected = ref(false);
+const smallScreen = ref(false);
+const isLoadingSubmit = ref(false);
+const loading = ref(false);
+
+// Reactive form data
+const form = reactive({
+  text: "",
+  textArray: [],
+  textString: "",
+  finalyTextArray: [],
+  name: "",
+  time: "",
+  isStarted: false,
+  members: [],
+  isForAll: false,
+});
+
+// Validation rules
+const validationRules = computed(() => ({
+  form: {
+    name: {
+      required,
+    },
+    time: {
+      required,
+    },
+    textArray: {
+      required,
+    },
+    text: {
+      required,
+      maxLength: maxLength(5000),
+      minLength: minLength(500),
+    },
   },
-  data() {
-    return {
-      v$: useVuelidate(),
-      Select,
-      CloseBold,
-      currentIndex: "",
-      isNoAccesFileSelected: false,
-      isIncorrectFile: false,
-      isDefined: false,
-      isEnterednumber: false,
-      isClickedSave: false,
-      usersList: [],
-      isStartedFill: false,
-      fileSelected: false,
-      search: "",
-      form: {
-        text: "",
-        textArray: [],
-        textString: "",
-        finalyTextArray: [],
+}));
+
+// Vuelidate
+const v$ = useVuelidate(validationRules, { form });
+
+// Watchers
+watch(
+  () => form.quizCount,
+  (val) => {
+    if (val) {
+      isDefined.value = true;
+      return;
+    }
+    isDefined.value = false;
+  }
+);
+
+watch(
+  () => route.params.id,
+  (val) => {
+    if (val) {
+      setFormData(val);
+    } else {
+      Object.assign(form, {
         name: "",
         time: "",
-        isStarted: false,
-        members: [],
-        isForAll: false,
-        password: "",
-        isHasPassword: false,
-      },
-      smallScreen: false,
-      isLoadingSubmit: false,
-    };
-  },
-  props: [
-    "size",
-    "large",
-    "small",
-    "default",
-    "type",
-    "primary",
-    "info",
-    "succes",
-    "text",
-    "native-type",
-    "submit",
-    "cancel",
-  ],
-  validations() {
-    return {
-      form: {
-        name: {
-          required,
-        },
-        time: {
-          required,
-        },
-        textArray: {
-          required,
-        },
-        text: {
-          required,
-          maxLength: maxLength(5000),
-          minLength: minLength(500),
-        },
-      },
-    };
-  },
-  computed: {
-    ...mapState(listeningQuizStore, ["list", "listeningQuiz"]),
-    ...mapState(userStore, ["users", "user"]),
-  },
-  watch: {
-    "form.quizCount"(val) {
-      if (val) return (this.isDefined = true);
-      this.isDefined = false;
-    },
-    "$route.params.id"(val) {
-      if (val) {
-        this.setFormData(val);
-      } else {
-        this.form = {
-          name: "",
-          time: "",
-          quizCount: "",
-        };
-      }
-    },
-    "form.isForAll"(value) {
-      if (this.$route.params.id) {
-        let members = [...this.listeningQuiz?.members] || [
-          ...this.form.members,
-        ];
-        if (value) {
-          this.form.members = [];
-        } else {
-          this.form.members = [...members];
-        }
-      }
-    },
-  },
-  methods: {
-    ...mapActions(listeningQuizStore, [
-      // "addSubject",
-      // "updateSubject",
-      // "getById",
-      // "getList",
-      "addQuiz",
-      "getById",
-      "getList",
-      "updateQuiz",
-      "updateQuizStatus",
-      "deleteQuiz",
-    ]),
-    ...mapActions(userStore, ["getAllUsers"]),
-    async submit(e) {
-      try {
-        if (this.isIncorrectFile) {
-          this.isNoAccesFileSelected = true;
-          return 0;
-        }
-        this.form.authorFullName =
-          this.user.firstName + " " + this.user.lastName;
-        this.v$.$validate();
-        if (!this.$route.params.id) {
-          if (!this.v$.$error) {
-            let form = { ...this.form };
-            if (!form.isHasPassword) form.password = undefined;
-            form.textString = undefined;
-            form.finalyTextArray = undefined;
-            form.text = form.textArray.map((text) => text.label).join(" ");
-            form["authorPathImage"] = this.user.pathImage;
-            let members = [...form.members];
-            members = members.map((member) => {
-              return {
-                value: member,
-                label: member,
-              };
-            });
-            form.members = members;
-            form.fileSelected = undefined;
-            form.authorId = this.user._id;
-            let formData = new FormData();
-            formData.append("audio", e.srcElement[7].files[0]);
-            formData.append("form", JSON.stringify(form));
-            this.isLoadingSubmit = true;
-            let res = await this.addQuiz(formData);
-            this.isLoadingSubmit = false;
-            this.$emit("created", res);
-            this.$router.push("/references/listening");
-            this.getList(10, 5, true);
-          }
-        } else {
-          if (!this.v$.$error) {
-            let form = { ...this.form };
-            let quizID = form._id;
-            form._id = undefined;
-            if (!form.isHasPassword) form.password = undefined;
-            form.textString = undefined;
-            form.finalyTextArray = undefined;
-            form.text = form.textArray.map((text) => text.label).join(" ");
-            form["authorPathImage"] = this.user.pathImage;
-            let members = [...form.members];
-            members = members.map((member) => {
-              return {
-                value: member,
-                label: member,
-              };
-            });
-            form.members = members;
-            form.fileSelected = undefined;
-            form.authorId = this.user._id;
-            form.__v = undefined;
+        quizCount: "",
+      });
+    }
+  }
+);
 
-            let formData = new FormData();
-            formData.append("audio", e.srcElement[7].files[0]);
-            formData.append("form", JSON.stringify(form));
-            this.isLoadingSubmit = true;
-            let res = await this.updateQuiz(formData, quizID);
-            this.isLoadingSubmit = false;
-            this.$router.push("/references/listening");
-            this.getList(10, 1, true);
-          }
-        }
-      } catch (error) {
-        this.isLoadingSubmit = false;
-        console.error("Error submitting form:", error);
+watch(
+  () => form.isForAll,
+  (value) => {
+    if (route.params.id) {
+      let members = [...(listeningQuiz.value?.members || form.members)];
+      if (value) {
+        form.members = [];
+      } else {
+        form.members = [...members];
       }
-    },
-    async setFormData(val) {
-      await this.getById(val);
-      let form = { ...this.listeningQuiz };
-      form.members = form.members.map((member) => {
-        return member.value;
-      });
-      this.form = form;
-      let textArray = [];
-      this.form.textString = [...this.form.textArray].filter((text, index) => {
-        if (text.isVisible) {
-          textArray[index] = text.label;
-        } else {
-          textArray[index] = "________";
-        }
-      });
-      this.form.textString = textArray.join(" ");
-    },
-    remoteMethod(query) {
-      if (query) {
-        this.usersList = this.users.filter((user) => {
-          return user.email
-            .toLocaleLowerCase()
-            .includes(query.toLocaleLowerCase());
-        });
-        this.usersList = this.usersList.map((user) => {
+    }
+  }
+);
+
+// Audio file ref
+const audioFile = ref(null);
+
+// Methods
+const submit = async (e) => {
+  try {
+    if (isIncorrectFile.value) {
+      isNoAccesFileSelected.value = true;
+      return 0;
+    }
+
+    // Audio faylni olish - avval audioFile.value dan, keyin form elementidan
+    let selectedAudioFile = audioFile.value;
+    if (!selectedAudioFile) {
+      const audioFileInput = e.target.querySelector(
+        'input[type="file"][name="audio"]'
+      );
+      selectedAudioFile = audioFileInput?.files[0];
+    }
+
+    if (!selectedAudioFile && !route.params.id) {
+      console.error("Audio file not selected");
+      return;
+    }
+
+    form.authorFullName = user.value.firstName + " " + user.value.lastName;
+    await v$.value.$validate();
+
+    if (!route.params.id) {
+      if (!v$.value.$error) {
+        let formData = { ...form };
+        formData.textString = undefined;
+        formData.finalyTextArray = undefined;
+        formData.text = formData.textArray.map((text) => text.label).join(" ");
+        formData["authorPathImage"] = user.value.pathImage;
+        let members = [...formData.members];
+        members = members.map((member) => {
           return {
-            value: user.email,
-            label: user.email,
+            value: member,
+            label: member,
           };
         });
-      }
-    },
-    changeText(e) {
-      this.isStartedFill = true;
-      this.form.textString = "";
-      this.form.textArray = [];
-      this.form.finalyTextArray = [];
-      let array = e.target.value.trim().split(" ");
-      array = array.filter((el) => el);
-      this.form.textArray = array.map((el) => {
-        return {
-          label: el,
-          isVisible: true,
-          value: "",
-        };
-      });
-    },
-    closeTag(index) {
-      this.form.textArray[index].isVisible = false;
-      this.form.textString = this.form.textArray.filter((text, index) => {
-        if (text.isVisible) {
-          this.form.finalyTextArray[index] = text.label;
-        } else {
-          this.form.finalyTextArray[index] = "________";
+        formData.members = members;
+        formData.fileSelected = undefined;
+        formData.authorId = user.value._id;
+        let formDataToSend = new FormData();
+        if (selectedAudioFile) {
+          formDataToSend.append("audio", selectedAudioFile);
         }
-      });
-      this.form.textString = this.form.finalyTextArray.join(" ");
-    },
-    changeFile(e) {
-      let types = [
-        "audio/mpeg",
-        "audio/wav",
-        "audio/ogg",
-        "audio/midi",
-        "audio/webm",
-      ];
-      if (!types.some((type) => type === e.target.files[0].type)) {
-        this.isNoAccesFileSelected = true;
-        this.isIncorrectFile = true;
-      } else {
-        this.isIncorrectFile = false;
+        formDataToSend.append("form", JSON.stringify(formData));
+        isLoadingSubmit.value = true;
+        let res = await addQuiz(formDataToSend);
+        isLoadingSubmit.value = false;
+        emit("created", res);
+        router.push("/references/listening");
+        getList(10, 5, true);
       }
-      this.fileSelected = e.target.files[0] ? true : false;
-    },
-  },
-  mounted() {
-    // this.v$.$validate();
-    if (this.$route.params.id) {
-      this.isStartedFill = true;
-    }
-  },
-  beforeRouteLeave() {
-    listeningQuizStore().$patch({ list: [], total: null });
-  },
-  created() {
-    this.getAllUsers();
-    if (this.$route.params.id) {
-      this.setFormData(this.$route.params.id);
-    }
-    this.smallScreen = window.innerWidth < 600;
+    } else {
+      if (!v$.value.$error) {
+        let formData = { ...form };
+        let quizID = formData._id;
+        formData._id = undefined;
+        formData.textString = undefined;
+        formData.finalyTextArray = undefined;
+        formData.text = formData.textArray.map((text) => text.label).join(" ");
+        formData["authorPathImage"] = user.value.pathImage;
+        let members = [...formData.members];
+        members = members.map((member) => {
+          return {
+            value: member,
+            label: member,
+          };
+        });
+        formData.members = members;
+        formData.fileSelected = undefined;
+        formData.authorId = user.value._id;
+        formData.__v = undefined;
 
-    // this.getById(this.$route.params.id)
-  },
-  updated() {
-    if (this.$route.params.id) {
-      if (this.form.audioPath) {
-        this.fileSelected = true;
-      } else {
-        this.fileSelected = false;
+        let formDataToSend = new FormData();
+        if (selectedAudioFile) {
+          formDataToSend.append("audio", selectedAudioFile);
+        }
+        formDataToSend.append("form", JSON.stringify(formData));
+        isLoadingSubmit.value = true;
+        let res = await updateQuiz(formDataToSend, quizID);
+        isLoadingSubmit.value = false;
+        router.push("/references/listening");
+        getList(10, 1, true);
       }
     }
-  },
+  } catch (error) {
+    isLoadingSubmit.value = false;
+    console.error("Error submitting form:", error);
+  }
 };
+
+const setFormData = async (val) => {
+  await getById(val);
+  let formData = { ...listeningQuiz.value };
+  formData.members = formData.members.map((member) => {
+    return member.value;
+  });
+  Object.assign(form, formData);
+  let textArray = [];
+  form.textString = [...form.textArray].filter((text, index) => {
+    if (text.isVisible) {
+      textArray[index] = text.label;
+    } else {
+      textArray[index] = "________";
+    }
+  });
+  form.textString = textArray.join(" ");
+};
+
+const remoteMethod = (query) => {
+  if (query) {
+    usersList.value = users.value.filter((user) => {
+      return user.email.toLocaleLowerCase().includes(query.toLocaleLowerCase());
+    });
+    usersList.value = usersList.value.map((user) => {
+      return {
+        value: user.email,
+        label: user.email,
+      };
+    });
+  }
+};
+
+const changeText = (e) => {
+  isStartedFill.value = true;
+  form.textString = "";
+  form.textArray = [];
+  form.finalyTextArray = [];
+  let array = e.target.value.trim().split(" ");
+  array = array.filter((el) => el);
+  form.textArray = array.map((el) => {
+    return {
+      label: el,
+      isVisible: true,
+      value: "",
+      ball : 1
+    };
+  });
+};
+
+const closeTag = (index) => {
+  form.textArray[index].isVisible = false;
+  form.textString = form.textArray.filter((text, index) => {
+    if (text.isVisible) {
+      form.finalyTextArray[index] = text.label;
+    } else {
+      form.finalyTextArray[index] = "________";
+    }
+  });
+  form.textString = form.finalyTextArray.join(" ");
+};
+
+const changeFile = (e) => {
+  const file = e.target.files[0];
+
+  if (!file) {
+    fileSelected.value = false;
+    audioFile.value = null;
+    return;
+  }
+
+  let types = [
+    "audio/mpeg",
+    "audio/wav",
+    "audio/ogg",
+    "audio/midi",
+    "audio/webm",
+  ];
+
+  if (!types.some((type) => type === file.type)) {
+    isNoAccesFileSelected.value = true;
+    isIncorrectFile.value = true;
+    fileSelected.value = false;
+    audioFile.value = null;
+  } else {
+    isIncorrectFile.value = false;
+    fileSelected.value = true;
+    audioFile.value = file;
+  }
+};
+
+// Lifecycle hooks
+onMounted(() => {
+  if (route.params.id) {
+    isStartedFill.value = true;
+  }
+  getAllUsers();
+  if (route.params.id) {
+    setFormData(route.params.id);
+  }
+  smallScreen.value = window.innerWidth < 600;
+});
+
+onUpdated(() => {
+  if (route.params.id) {
+    if (form.audioPath) {
+      fileSelected.value = true;
+    } else {
+      fileSelected.value = false;
+    }
+  }
+});
+
+// Route guards
+onBeforeRouteLeave(() => {
+  listeningQuizStoreInstance.$patch({ list: [], total: null });
+});
 </script>
+
 <style scoped lang="scss">
 input:active {
   border: 1px solid #409eef !important;

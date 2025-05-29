@@ -39,12 +39,12 @@
           <td class="text-right">
             <div class="flex items-center justify-between">
               <span
-                @click="updateStatus(item)"
+                @click="updateQuizStatus({quiz: item?._id, status: true})"
                 v-if="!item.isStarted"
                 class="start"
                 ><i class="bx bx-play"></i>Start</span
               >
-              <span @click="updateStatus(item)" v-else class="finish"
+              <span @click="updateQuizStatus({quiz: item?._id, status: false})" v-else class="finish"
                 ><i class="bx bx-stop"></i>Stop</span
               >
               <el-button
@@ -140,6 +140,7 @@ export default {
       "deleteQuizP",
       "updateQuiz",
       "updateQuizStatus",
+      "updateQuizStatus"
     ]),
     async getStat(val) {
       if (val) {

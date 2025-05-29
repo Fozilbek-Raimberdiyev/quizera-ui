@@ -9,6 +9,10 @@
 *{
     /* font-family: 'Montserrat', sans-serif; */
     /* font-family: 'Bariol', sans-serif; */
-    font-family: 'Morrison', sans-serif;
-                                                
+    font-family: 'Morrison', sans-serif;                                         
+}
+
+.q-table__card {
+    box-shadow: none !important;
+    border-radius: 0 !important;
 }
