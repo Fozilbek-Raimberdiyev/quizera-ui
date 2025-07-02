@@ -1,7 +1,7 @@
 import axios from "axios";
 import { ElNotification } from "element-plus";
-// const path = "https://quizera-api-production.up.railway.app/api";
-const path = "http://localhost:4001/api";
+const path = "https://quizera-api-production.up.railway.app/api";
+// const path = "http://localhost:4001/api";
 import router from "../router";
 export const $axios = axios.create({
   baseURL: path,
