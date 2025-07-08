@@ -54,3 +54,9 @@ export default {
     :toolbar="toolbar"
   />
 </template>
+
+<style>
+.ql-editor {
+  min-height: 300px;
+}
+</style>

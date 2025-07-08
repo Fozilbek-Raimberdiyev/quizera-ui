@@ -26,59 +26,10 @@
             class="bx bxs-chevron-down text-lg cursor-pointer transition duration-300 ease-linear"
           ></i>
         </div>
-        <!-- <div
-          v-show="subjectId && subject?.isDifferent"
-          v-for="(grade, index) in gradesC"
-          :key="index"
-          class="h-[65px] overflow-y-hidden mb-4"
-        >
-          <table>
-            <thead>
-              <tr>
-                <th>Ball :</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>{{ grade.grade }}</td>
-              </tr>
-            </tbody>
-          </table>
-          <table>
-            <thead>
-              <tr>
-                <th>Test bo'lishi kerak :</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>{{ grade.count }}</td>
-              </tr>
-            </tbody>
-          </table>
-          <table>
-            <thead>
-              <tr>
-                <th>Kiritilgan savollar soni</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>{{ grade.countQuestions }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div> -->
+        
       </div>
       <div v-if="subjectId">
         <h6 style="color: #429eef" for="question">Savolni kiriting</h6>
-        <!-- <el-input
-          type="textarea"
-          placeholder="Savolni kiriting..."
-          v-model="form.question"
-          id="question"
-        >
-        </el-input> -->
         <Editor
           :placeholder="'Savolni kiriting...'"
           v-model.trim="form.question"
@@ -96,17 +47,14 @@
             v-for="(option, index) in form.options"
             :key="index"
           >
+          <span v-if="index === 0">
+            <i class="bx bxs-check-circle text-green-500"></i>
+            To'g'ri javob
+          </span>
+          <span v-else><i class="bx bxs-x-circle text-red-500"></i>
+            Noto'g'ri javob
+          </span>
             <label class="w-full">
-              <!-- <el-input
-                type="textarea"
-                
-                class="option"
-                rows="1"
-                cols="100"
-                :placeholder="option.placeholder"
-                v-model="option.optionLabel"
-                id="questionLabel"
-              ></el-input> -->
               <Editor class="w-full" :toolbar="'essential'"
                 :placeholder="
                   index === 0
