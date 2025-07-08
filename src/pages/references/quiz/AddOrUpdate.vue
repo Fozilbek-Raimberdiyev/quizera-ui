@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-loading="isLoading">
     <form id="#form" @submit.prevent="submit">
       <div
         class="flex justify-between items-center"
@@ -94,14 +94,14 @@
           >
         </div>
       </div>
-      <el-button
+      <el-button :loading="isLoading"
         class="cursor-pointer"
         v-if="!$route.params.id && subjectId"
         native-type="submit"
         type="primary"
         >Saqlash</el-button
       >
-      <el-button
+      <el-button :loading="isLoading"
         class="cursor-pointer"
         native-type="submit"
         type="primary"
@@ -183,10 +183,12 @@ import { questionStore } from "../../../stores/references/questions";
 import { useToast } from "vue-toastification";
 import questionsService from "../../../services/questions.service";
 import Editor from "../../../components/editor.vue";
+import BaseLoading from "../../../components/BaseLoading.vue";
 export default {
   data() {
     return {
       v$: useVuelidate(),
+      isLoading: false,
       question: "",
       isSaved: false,
       currentPage: 1,
@@ -359,7 +361,9 @@ export default {
           let body = { ...this.form };
           body.subjectId = this.subjectId;
           try {
+            this.isLoading = true;
             let res = await this.addQuestion(body);
+            this.isLoading = false;
             this.form.options.map((el) => (el.optionLabel = ""));
             this.form.question = null;
             this.form.ball = null;
@@ -367,12 +371,15 @@ export default {
             this.getById(this.subjectId);
             useToast().success(res.data.message);
           } catch (e) {
+            this.isLoading = false;
             useToast().error(e.data.message);
           }
         }
       } else {
         try {
+          this.isLoading = true;
           let res = await this.updateQuestion(this.question._id, this.form);
+          this.isLoading = false
           this.getQuestions(
             this.subjectId,
             5,
@@ -386,6 +393,7 @@ export default {
           this.form = [];
           this.form.options = options;
         } catch (e) {
+          this.isLoading = false
           useToast().error(e.data.message || "Error");
         }
       }
@@ -412,7 +420,7 @@ export default {
     }
   },
   created() {},
-  components: { Editor },
+  components: { Editor, BaseLoading },
 };
 </script>
 <style scoped>
