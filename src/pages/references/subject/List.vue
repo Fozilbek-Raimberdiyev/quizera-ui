@@ -39,12 +39,12 @@
           <td class="text-right">
             <div class="flex items-center justify-between">
               <span
-                @click="updateStatus(true)"
+                @click="updateStatus(item,true)"
                 v-if="!item.isStarted"
                 class="start"
                 ><i class="bx bx-play"></i>Start</span
               >
-              <span @click="updateStatus(false)" v-else class="finish"
+              <span @click="updateStatus(item,false)" v-else class="finish"
                 ><i class="bx bx-stop"></i>Stop</span
               >
               <el-button
@@ -182,8 +182,8 @@ export default {
       };
       this.getList(params);
     },
-    async updateStatus(item) {
-      await this.updateSubjectStatus({ subjectID: item._id, status: true });
+    async updateStatus(item, value) {
+      await this.updateSubjectStatus({ subjectID: item._id, status: value });
       await this.getList({
         isForReference: true,
         page: this.page,
