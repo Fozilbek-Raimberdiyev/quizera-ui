@@ -1,5 +1,5 @@
 <template>
-  <BaseLoading v-if="loading"></BaseLoading>
+  <BaseLoading v-if="isLoadingEnding"></BaseLoading>
   <div v-if="!loading && questions.length">
     <div class="flex items-center justify-between">
       <h5 class="sub-name">{{ tempSubject?.name }}</h5>
@@ -258,7 +258,6 @@ import { mapActions, mapState } from "pinia";
 import { questionStore } from "../../stores/references/questions";
 import { subjectStore } from "../../stores/references/subject";
 import subjectService from "../../services/subject.service";
-import { is } from "quasar";
 export default {
   components : {BaseLoading},
   data() {
