@@ -258,6 +258,7 @@ import { mapActions, mapState } from "pinia";
 import { questionStore } from "../../stores/references/questions";
 import { subjectStore } from "../../stores/references/subject";
 import subjectService from "../../services/subject.service";
+import { is } from "quasar";
 export default {
   components : {BaseLoading},
   data() {
@@ -276,6 +277,7 @@ export default {
       subjectPassword: "",
       workingDurationTime: 0,
       tempSubject: {},
+      isLoadingEnding: false,
     };
   },
   computed: {
@@ -347,6 +349,7 @@ export default {
       this.countSelectedQuestions();
     },
     endTest() {
+      this.isLoadingEnding =true
       setTimeout(async () => {
         let questions = [...this.questions];
         questions.forEach((question, index) => {
@@ -359,9 +362,13 @@ export default {
             workingDurationTime: this.workingDurationTime,
             subject: this.tempSubject,
           });
+          this.isLoadingEnding = false
           this.isEnded = true;
           this.currentIndex = 0;
-        } catch (e) {}
+        } catch (e) {
+          this.isLoadingEnding = false
+          console.log(e);
+        }
       }, 1000);
     },
     markNumberQuestion() {

@@ -39,12 +39,12 @@
           <td class="text-right">
             <div class="flex items-center justify-between">
               <span
-                @click="updateStatus(item)"
+                @click="updateStatus(true)"
                 v-if="!item.isStarted"
                 class="start"
                 ><i class="bx bx-play"></i>Start</span
               >
-              <span @click="updateStatus(item)" v-else class="finish"
+              <span @click="updateStatus(false)" v-else class="finish"
                 ><i class="bx bx-stop"></i>Stop</span
               >
               <el-button
